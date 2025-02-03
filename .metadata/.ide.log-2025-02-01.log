@@ -1,0 +1,152 @@
+2025-02-01 00:48:06,830 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] java.lang.Error: no ComponentUI class for: com.st.microxplorer.plugins.ip.nvic.CheckBoxHeader[,0,0,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=,flags=0,maximumSize=,minimumSize=,preferredSize=,defaultIcon=,disabledIcon=,disabledSelectedIcon=,margin=null,paintBorder=true,paintFocus=true,pressedIcon=,rolloverEnabled=false,rolloverIcon=,rolloverSelectedIcon=,selectedIcon=,text=]
+2025-02-01 00:48:06,848 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.UIDefaults.getUIError(UIDefaults.java:763)
+2025-02-01 00:48:06,850 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.MultiUIDefaults.getUIError(MultiUIDefaults.java:144)
+2025-02-01 00:48:06,851 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.UIDefaults.getUI(UIDefaults.java:793)
+2025-02-01 00:48:06,854 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.UIManager.getUI(UIManager.java:1070)
+2025-02-01 00:48:06,855 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JCheckBox.updateUI(JCheckBox.java:228)
+2025-02-01 00:48:06,856 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.AbstractButton.init(AbstractButton.java:2141)
+2025-02-01 00:48:06,858 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JToggleButton.<init>(JToggleButton.java:187)
+2025-02-01 00:48:06,859 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JCheckBox.<init>(JCheckBox.java:176)
+2025-02-01 00:48:06,860 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JCheckBox.<init>(JCheckBox.java:97)
+2025-02-01 00:48:06,862 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.CheckBoxHeader.<init>(CheckBoxHeader.java:55)
+2025-02-01 00:48:06,863 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicCodeSelectionTable.<init>(NvicCodeSelectionTable.java:75)
+2025-02-01 00:48:06,865 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicCodePanel.initComponents(NvicCodePanel.java:102)
+2025-02-01 00:48:06,866 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicCodePanel.<init>(NvicCodePanel.java:78)
+2025-02-01 00:48:06,868 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicTabbedPanel.<init>(NvicTabbedPanel.java:57)
+2025-02-01 00:48:06,869 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.Nvic.getUI(Nvic.java:73)
+2025-02-01 00:48:06,871 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.createIpPanel(BlockDiagram.java:424)
+2025-02-01 00:48:06,873 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.getIPConfigPanel(BlockDiagram.java:574)
+2025-02-01 00:48:06,874 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.getIPConfigPanel(BlockDiagram.java:480)
+2025-02-01 00:48:06,876 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.propertyChange(BlockDiagram.java:1410)
+2025-02-01 00:48:06,877 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.beans.PropertyChangeSupport.fire(PropertyChangeSupport.java:343)
+2025-02-01 00:48:06,879 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:335)
+2025-02-01 00:48:06,881 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:268)
+2025-02-01 00:48:06,883 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.util.MXPropertyChangeSupport.firePropertyChange(MXPropertyChangeSupport.java:54)
+2025-02-01 00:48:06,884 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.mxsystem.MxSystem.firePropertyChange(MxSystem.java:357)
+2025-02-01 00:48:06,886 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.pinoutconfig.guiV5.PeripheralsSelectionPanel.selectIP(PeripheralsSelectionPanel.java:409)
+2025-02-01 00:48:06,888 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.pinoutconfig.guiV5.PeripheralsListListener.mouseClicked(PeripheralsListListener.java:103)
+2025-02-01 00:48:06,890 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.AWTEventMulticaster.mouseClicked(AWTEventMulticaster.java:278)
+2025-02-01 00:48:06,891 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6624)
+2025-02-01 00:48:06,892 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3398)
+2025-02-01 00:48:06,893 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.processEvent(Component.java:6386)
+2025-02-01 00:48:06,894 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+2025-02-01 00:48:06,895 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4996)
+2025-02-01 00:48:06,896 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+2025-02-01 00:48:06,898 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+2025-02-01 00:48:06,899 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+2025-02-01 00:48:06,900 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4584)
+2025-02-01 00:48:06,902 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+2025-02-01 00:48:06,903 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+2025-02-01 00:48:06,905 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+2025-02-01 00:48:06,906 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
+2025-02-01 00:48:06,908 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+2025-02-01 00:48:06,909 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+2025-02-01 00:48:06,910 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+2025-02-01 00:48:06,912 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+2025-02-01 00:48:06,913 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+2025-02-01 00:48:06,914 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
+2025-02-01 00:48:06,915 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+2025-02-01 00:48:06,917 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+2025-02-01 00:48:06,918 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+2025-02-01 00:48:06,920 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
+2025-02-01 00:48:06,921 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+2025-02-01 00:48:06,923 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+2025-02-01 00:48:06,924 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+2025-02-01 00:48:06,925 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+2025-02-01 00:48:06,926 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+2025-02-01 00:48:06,927 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-02-01 00:48:06,933 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] java.lang.Error: no ComponentUI class for: com.st.microxplorer.plugins.ip.nvic.CheckBoxHeader[,0,0,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=,flags=0,maximumSize=,minimumSize=,preferredSize=,defaultIcon=,disabledIcon=,disabledSelectedIcon=,margin=null,paintBorder=true,paintFocus=true,pressedIcon=,rolloverEnabled=false,rolloverIcon=,rolloverSelectedIcon=,selectedIcon=,text=]
+2025-02-01 00:48:06,934 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.UIDefaults.getUIError(UIDefaults.java:763)
+2025-02-01 00:48:06,935 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.MultiUIDefaults.getUIError(MultiUIDefaults.java:144)
+2025-02-01 00:48:06,936 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.UIDefaults.getUI(UIDefaults.java:793)
+2025-02-01 00:48:06,937 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.UIManager.getUI(UIManager.java:1070)
+2025-02-01 00:48:06,938 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JCheckBox.updateUI(JCheckBox.java:228)
+2025-02-01 00:48:06,939 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.AbstractButton.init(AbstractButton.java:2141)
+2025-02-01 00:48:06,941 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JToggleButton.<init>(JToggleButton.java:187)
+2025-02-01 00:48:06,942 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JCheckBox.<init>(JCheckBox.java:176)
+2025-02-01 00:48:06,943 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JCheckBox.<init>(JCheckBox.java:97)
+2025-02-01 00:48:06,944 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.CheckBoxHeader.<init>(CheckBoxHeader.java:55)
+2025-02-01 00:48:06,945 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicCodeSelectionTable.<init>(NvicCodeSelectionTable.java:78)
+2025-02-01 00:48:06,947 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicCodePanel.initComponents(NvicCodePanel.java:102)
+2025-02-01 00:48:06,948 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicCodePanel.<init>(NvicCodePanel.java:78)
+2025-02-01 00:48:06,949 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.NvicTabbedPanel.<init>(NvicTabbedPanel.java:57)
+2025-02-01 00:48:06,950 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ip.nvic.Nvic.getUI(Nvic.java:73)
+2025-02-01 00:48:06,951 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.createIpPanel(BlockDiagram.java:424)
+2025-02-01 00:48:06,954 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.getIPConfigPanel(BlockDiagram.java:574)
+2025-02-01 00:48:06,955 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.getIPConfigPanel(BlockDiagram.java:480)
+2025-02-01 00:48:06,957 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.ipmanager.gui.BlockDiagram.propertyChange(BlockDiagram.java:1410)
+2025-02-01 00:48:06,958 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.beans.PropertyChangeSupport.fire(PropertyChangeSupport.java:343)
+2025-02-01 00:48:06,959 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:335)
+2025-02-01 00:48:06,961 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.beans.PropertyChangeSupport.firePropertyChange(PropertyChangeSupport.java:268)
+2025-02-01 00:48:06,962 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.util.MXPropertyChangeSupport.firePropertyChange(MXPropertyChangeSupport.java:54)
+2025-02-01 00:48:06,963 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.mxsystem.MxSystem.firePropertyChange(MxSystem.java:357)
+2025-02-01 00:48:06,965 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.pinoutconfig.guiV5.PeripheralsSelectionPanel.selectIP(PeripheralsSelectionPanel.java:409)
+2025-02-01 00:48:06,966 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at com.st.microxplorer.plugins.pinoutconfig.guiV5.PeripheralsListListener.mouseClicked(PeripheralsListListener.java:103)
+2025-02-01 00:48:06,968 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.AWTEventMulticaster.mouseClicked(AWTEventMulticaster.java:278)
+2025-02-01 00:48:06,969 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6624)
+2025-02-01 00:48:06,971 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3398)
+2025-02-01 00:48:06,972 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.processEvent(Component.java:6386)
+2025-02-01 00:48:06,973 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+2025-02-01 00:48:06,974 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4996)
+2025-02-01 00:48:06,975 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+2025-02-01 00:48:06,976 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+2025-02-01 00:48:06,977 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+2025-02-01 00:48:06,978 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4584)
+2025-02-01 00:48:06,979 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+2025-02-01 00:48:06,981 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+2025-02-01 00:48:06,982 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+2025-02-01 00:48:06,983 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
+2025-02-01 00:48:06,984 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+2025-02-01 00:48:06,984 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+2025-02-01 00:48:06,986 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+2025-02-01 00:48:06,988 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+2025-02-01 00:48:06,989 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+2025-02-01 00:48:06,990 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
+2025-02-01 00:48:06,991 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+2025-02-01 00:48:06,992 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+2025-02-01 00:48:06,994 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+2025-02-01 00:48:06,995 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
+2025-02-01 00:48:06,996 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+2025-02-01 00:48:06,997 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+2025-02-01 00:48:06,999 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+2025-02-01 00:48:07,000 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+2025-02-01 00:48:07,001 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+2025-02-01 00:48:07,003 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-02-01 00:52:01,299 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 862604552 Bytes (870318080)
+2025-02-01 00:52:02,878 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 468330424 Bytes (874512384)
+2025-02-01 00:52:05,962 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 556937144 Bytes (874512384)
+2025-02-01 00:52:06,324 [INFO] BlockDiagram:2766 - set Specific Code input for plugin: NVIC
+2025-02-01 00:52:06,324 [INFO] BlockDiagram:2766 - set Specific Code input for plugin: USART
+2025-02-01 00:52:06,324 [INFO] BlockDiagram:2766 - set Specific Code input for plugin: SYS
+2025-02-01 00:52:06,325 [INFO] BlockDiagram:2766 - set Specific Code input for plugin: GPIO
+2025-02-01 00:52:06,325 [INFO] BlockDiagram:2766 - set Specific Code input for plugin: RCC
+2025-02-01 00:52:06,326 [INFO] CodeGenerator:896 - code generatio: config db path: C:\ST\STM32CubeIDE_1.17.0\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.13.0.202411220809\\db\
+2025-02-01 00:52:06,483 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\MXTmpFiles\license.tmp_save
+2025-02-01 00:52:06,765 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\MXTmpFiles\license.tmp
+2025-02-01 00:52:06,798 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\MXTmpFiles\gpio.tmp_save
+2025-02-01 00:52:06,963 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\MXTmpFiles\gpio.tmp
+2025-02-01 00:52:07,030 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Src\stm32f1xx_it.c_save
+2025-02-01 00:52:07,207 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Src\stm32f1xx_it.c
+2025-02-01 00:52:07,226 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Inc\stm32f1xx_it.h_save
+2025-02-01 00:52:07,348 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Inc\stm32f1xx_it.h
+2025-02-01 00:52:07,379 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Src\stm32f1xx_hal_msp.c_save
+2025-02-01 00:52:07,531 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Src\stm32f1xx_hal_msp.c
+2025-02-01 00:52:07,537 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\MXTmpFiles\system.tmp_save
+2025-02-01 00:52:07,635 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\MXTmpFiles\system.tmp
+2025-02-01 00:52:07,659 [INFO] CodeEngine:311 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Inc\stm32f1xx_hal_conf.h_save
+2025-02-01 00:52:07,793 [INFO] CodeEngine:335 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Inc\stm32f1xx_hal_conf.h
+2025-02-01 00:52:07,846 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Inc\main.h_save
+2025-02-01 00:52:07,969 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Inc\main.h
+2025-02-01 00:52:07,988 [INFO] CodeEngine:255 - oldGeneratedFile, C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Src\main.c_save
+2025-02-01 00:52:08,127 [INFO] CodeEngine:279 - Generated code: C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\02_GPIO_Read\Core\Src\main.c
+2025-02-01 00:52:08,472 [INFO] ProjectBuilder:3289 - Time for Copy HAL[1] : 184mS.
+2025-02-01 00:52:08,476 [INFO] ProjectBuilder:4876 - Project Generator version: 4.5.0-RC5
+2025-02-01 00:52:08,544 [INFO] ConfigFileManager:1579 - The Die is : DIE410
+2025-02-01 00:52:10,250 [INFO] ProjectBuilder:5154 - Time for Generating toolchain IDE Files: 1774mS.
+2025-02-01 00:52:10,261 [INFO] ProjectBuilder:3146 - Time for Copy CMSIS : 1mS.
+2025-02-01 00:52:10,275 [INFO] ProjectBuilder:3146 - Time for Copy CMSIS : 0mS.
+2025-02-01 01:09:27,686 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 1:09:27.684 ERROR Chromium process exit code: 1
+2025-02-01 01:09:27,687 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-02-01 01:09:27,689 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 1:09:27.687 ERROR Crash dump dir: C:\Users\PanTalir\AppData\Local\JxBrowser\7.39.2\CrashReports
+2025-02-01 01:09:27,689 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-02-01 01:09:27,691 [ERROR] WebApp:398 - JxBrowser engine crashed! Exit code: 1

@@ -1,0 +1,72 @@
+/*
+ * Timer_Delay.h
+ *
+ *  Created on: Feb 3, 2025
+ *      Author: PanTalir
+ */
+
+#ifndef SRC_UTIL_TIMER_DELAY_H_
+#define SRC_UTIL_TIMER_DELAY_H_
+
+
+void TimerDelay_Init(void);
+void delay_us(uint16_t au16_us);
+void delay_ms(uint16_t au16_ms);
+
+void TimerDelay_Init(void)
+{
+	gu32_ticks = (HAL_RCC_GetHCLKFreq() / 1000000 );
+
+	TIM_ClockCOnfigTypeDef sClockSourceConfig = {0};
+	TIM_MasterConfiogTypeDef sMasterConfig = {0};
+
+	HTIMx.Instance = TIMER;
+	HTIMx.Init.Prescaler = gu32_ticks - 1;
+	HTIMx.Init.CounterMode = TIM_COUNTERMODE_UP;
+	HTIMx.Init.Period = 65535;
+	HTIMx.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	HTIMx.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+	if(HAL_TIM_Base_Init(&HTIMx) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	sClockSOurceConfig.CLockSource TIM_CLOCKSOURCE_INTERNAL;
+	if(HAL_TIM_ConfigClockSource(&HTIMx, &sClockSourceConfig) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	if( HAL_TIMEx_MasterConfigSynchronization( &HTIMx, &sMasterConfig) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	HAL_TIM_Base_Start(&HTIMx);
+}
+
+
+void delay_us(uint16_t au16_us)
+{
+	HTIMx.Instance->CNT = 0;
+	while ( HTIMx.Instance->CNT < au16_us);
+}
+
+
+void delay_ms(uint16_t au16_ms)
+{
+	while(au16_ms  > 0)
+	{
+		HTIMx.Instance->CNT = 0;
+		au16_ms--;
+		while ( HTIMx.Instance->CNT < 1000 );
+	}
+}
+
+
+
+
+
+#endif /* SRC_UTIL_TIMER_DELAY_H_ */

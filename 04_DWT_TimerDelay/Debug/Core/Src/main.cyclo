@@ -1,0 +1,5 @@
+../Core/Src/Util/DWT_Delay.h:30:22:DWT_Delay_ms	2
+../Core/Src/main.c:33:5:main	1
+../Core/Src/main.c:59:6:SystemClock_Config	3
+../Core/Src/main.c:98:13:MX_GPIO_Init	1
+../Core/Src/main.c:140:6:Error_Handler	1

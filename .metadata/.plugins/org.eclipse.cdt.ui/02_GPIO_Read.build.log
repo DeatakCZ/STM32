@@ -1,0 +1,10 @@
+00:59:17 **** Incremental Build of configuration Debug for project 02_GPIO_Read ****
+make -j4 all 
+arm-none-eabi-size  02_GPIO_Read.elf 
+   text	   data	    bss	    dec	    hex	filename
+   4892	     12	   1572	   6476	   194c	02_GPIO_Read.elf
+Finished building: default.size.stdout
+ 
+
+00:59:17 Build Finished. 0 errors, 0 warnings. (took 308ms)
+
