@@ -7,8 +7,7 @@
 #include "main.h"
 
 
-	int LED_State = 0;
-
+	uint32_t LED_State = 0;
 
 
 #define GPIO_SET_PIN(port, pin)		((port)->BSRR = (pin))
@@ -62,12 +61,10 @@ int main(void)
   {
 	  GPIO_SET_PIN(LD2_GPIO_Port, LD2_Pin);
 	  LED_State = 1;
-	  //DELAY_MS(50);
-	  DELAY_US(100);
+	  DELAY_MS(50);
 	  GPIO_CLEAR_PIN(LD2_GPIO_Port, LD2_Pin);
 	  LED_State = 0;
-	  //DELAY_MS(50);
-	  DELAY_US(100);
+	  DELAY_MS(50);
   }
 }
 

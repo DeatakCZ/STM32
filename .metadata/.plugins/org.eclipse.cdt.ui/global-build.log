@@ -33,3 +33,217 @@ arm-none-eabi-size  05_SysTick_Timer.elf
    4980	     12	   1572	   6564	   19a4	05_SysTick_Timer.elf
 Finished building: default.size.stdout
  
+17:36:48 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:46:18: warning: variable 'LED_State' set but not used [-Wunused-but-set-variable]
+   46 |         uint32_t LED_State = 0;
+      |                  ^~~~~~~~~
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   4992	     12	   1572	   6576	   19b0	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
+17:38:07 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   4992	     12	   1572	   6576	   19b0	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:38:40 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   4996	     12	   1572	   6580	   19b4	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
+17:41:54 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   4996	     12	   1572	   6580	   19b4	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:42:47 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   4996	     12	   1572	   6580	   19b4	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:44:09 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
+17:45:17 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:49:46 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
+17:50:50 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:51:34 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:53:28 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:54:11 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:55:01 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:55:49 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:58:26 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:59:20 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+17:59:48 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5000	     12	   1572	   6584	   19b8	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+18:00:23 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   4996	     12	   1572	   6580	   19b4	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
+18:02:44 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   4960	     12	   1572	   6544	   1990	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
+18:06:18 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   4956	     12	   1572	   6540	   198c	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
+18:06:58 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+   text	   data	    bss	    dec	    hex	filename
+   4956	     12	   1572	   6540	   198c	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+18:09:21 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 05_SysTick_Timer.elf
+ 
+arm-none-eabi-size  05_SysTick_Timer.elf 
+arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   4956	     12	   1572	   6540	   198c	05_SysTick_Timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 05_SysTick_Timer.list
+ 
