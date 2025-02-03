@@ -12,5 +12,6 @@ org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:04_DWT_TimerDelay\ Debug/active
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:05_SysTick_Timer\ Debug/activeLaunchMode=debug
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:06_Debugging_with_PrintF\ Debug/activeLaunchMode=debug
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:07_Debugging_with_Serial\ Debug/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:08_Interrupts\ Debug/activeLaunchMode=debug
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:HelloWorld\ Debug/activeLaunchMode=debug
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:HelloWorld\ Debug/activeLaunchTarget=null\:---
