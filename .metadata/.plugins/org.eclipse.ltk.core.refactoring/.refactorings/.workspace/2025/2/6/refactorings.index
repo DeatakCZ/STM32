@@ -6,3 +6,7 @@
 1738590600101	Delete resource '01_GPIO'
 1738593454256	Delete resource '01_GPIO_Write'
 1738602708163	Delete resource '05_SysTick_Timer'
+1738604221658	Delete resource '01_GPIO_Write'
+1738604968660	Delete resource '05_SysTick_Timer'
+1738605255628	Delete resource '05_SysTick_Timer'
+1738605513611	Delete resource '06_Debugging_with_PrintF'

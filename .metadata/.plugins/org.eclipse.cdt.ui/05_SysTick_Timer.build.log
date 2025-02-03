@@ -1,17 +1,32 @@
-18:09:21 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
+18:44:58 **** Incremental Build of configuration Debug for project 05_SysTick_Timer ****
 make -j4 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:85:11: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+   85 |           printf("Hello World!!\n");
+      |           ^~~~~~
+../Core/Src/main.c:8:1: note: include '<stdio.h>' or provide a declaration of 'printf'
+    7 | #include "main.h"
+  +++ |+#include <stdio.h>
+    8 | 
+../Core/Src/main.c:85:11: warning: incompatible implicit declaration of built-in function 'printf' [-Wbuiltin-declaration-mismatch]
+   85 |           printf("Hello World!!\n");
+      |           ^~~~~~
+../Core/Src/main.c:85:11: note: include '<stdio.h>' or provide a declaration of 'printf'
+../Core/Src/main.c:75:8: warning: unused variable 'MSG' [-Wunused-variable]
+   75 |   char MSG[] = "What's UP ?!";
+      |        ^~~
 arm-none-eabi-g++ -o "05_SysTick_Timer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\05_SysTick_Timer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="05_SysTick_Timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 Finished building target: 05_SysTick_Timer.elf
  
 arm-none-eabi-size  05_SysTick_Timer.elf 
 arm-none-eabi-objdump -h -S 05_SysTick_Timer.elf  > "05_SysTick_Timer.list"
    text	   data	    bss	    dec	    hex	filename
-   4956	     12	   1572	   6540	   198c	05_SysTick_Timer.elf
+   7752	    104	   1912	   9768	   2628	05_SysTick_Timer.elf
 Finished building: default.size.stdout
  
 Finished building: 05_SysTick_Timer.list
  
 
-18:09:22 Build Finished. 0 errors, 0 warnings. (took 831ms)
+18:44:59 Build Finished. 0 errors, 3 warnings. (took 894ms)
 

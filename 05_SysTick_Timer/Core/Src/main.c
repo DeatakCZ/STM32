@@ -7,8 +7,7 @@
 #include "main.h"
 
 
-	int LED_State = 0;
-
+int LED_State = 0;
 
 
 #define GPIO_SET_PIN(port, pin)		((port)->BSRR = (pin))
@@ -44,6 +43,13 @@ static void MX_GPIO_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+
+
+
+
+
+
+
 int main(void)
 {
   /* MCU Configuration--------------------------------------------------------*/
@@ -62,12 +68,13 @@ int main(void)
   {
 	  GPIO_SET_PIN(LD2_GPIO_Port, LD2_Pin);
 	  LED_State = 1;
-	  //DELAY_MS(50);
-	  DELAY_US(100);
+	  DELAY_MS(500);
+	  //DELAY_US(100);
+
 	  GPIO_CLEAR_PIN(LD2_GPIO_Port, LD2_Pin);
 	  LED_State = 0;
-	  //DELAY_MS(50);
-	  DELAY_US(100);
+	  DELAY_MS(500);
+	  //DELAY_US(100);
   }
 }
 
