@@ -1,0 +1,28 @@
+21:18:28 **** Incremental Build of configuration Debug for project 09_Timer_interrupt ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:114:1: warning: return type defaults to 'int' [-Wimplicit-int]
+  114 | HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:114:1: warning: conflicting types for 'HAL_TIM_PeriodElapsedCallback'
+In file included from ../Core/Inc/stm32f1xx_hal_conf.h:334,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:2069:6: note: previous declaration of 'HAL_TIM_PeriodElapsedCallback' with type 'void(TIM_HandleTypeDef *)'
+ 2069 | void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "09_Timer_interrupt.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\09_Timer_interrupt\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="09_Timer_interrupt.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 09_Timer_interrupt.elf
+ 
+arm-none-eabi-size  09_Timer_interrupt.elf 
+arm-none-eabi-objdump -h -S 09_Timer_interrupt.elf  > "09_Timer_interrupt.list"
+   text	   data	    bss	    dec	    hex	filename
+   7164	     12	   1644	   8820	   2274	09_Timer_interrupt.elf
+Finished building: default.size.stdout
+ 
+Finished building: 09_Timer_interrupt.list
+ 
+
+21:18:28 Build Finished. 0 errors, 2 warnings. (took 875ms)
+
