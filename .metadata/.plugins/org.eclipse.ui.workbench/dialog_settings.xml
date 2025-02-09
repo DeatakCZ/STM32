@@ -25,18 +25,22 @@
 		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_SIZE" value="true"/>
 		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_LOCATION" value="false"/>
 		<list key="orderedElements">
+			<item value="org.eclipse.ui.console.ConsoleView"/>
 			<item value="com.st.stm32cube.ide.mcu.debug.swv.core.itmtrace"/>
 			<item value="com.st.stm32cube.ide.mcu.debug.swv.core.SWVDatatraceTimeline"/>
 		</list>
 		<list key="orderedProviders">
 			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
 		</list>
 		<list key="textEntries">
+			<item value="1"/>
 			<item value="1"/>
 			<item value="2"/>
 		</list>
 		<list key="textArray">
+			<item value="conso"/>
 			<item value="sw"/>
 			<item value="data"/>
 			<item value="li"/>

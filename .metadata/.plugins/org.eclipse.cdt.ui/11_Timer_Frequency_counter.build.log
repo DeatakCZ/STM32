@@ -1,0 +1,41 @@
+14:53:29 **** Incremental Build of configuration Debug for project 11_Timer_Frequency_counter ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'HAL_TIM_PeriodElapsedCallback':
+../Core/Src/main.c:128:17: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+  128 |                 sprintf(gu8_MSG, "Frequency = %d Hz \n\r", gu32_Freq);
+      |                 ^~~~~~~
+../Core/Src/main.c:21:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+   20 | #include "main.h"
+  +++ |+#include <stdio.h>
+   21 | 
+../Core/Src/main.c:128:17: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+  128 |                 sprintf(gu8_MSG, "Frequency = %d Hz \n\r", gu32_Freq);
+      |                 ^~~~~~~
+../Core/Src/main.c:128:17: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:128:25: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+  128 |                 sprintf(gu8_MSG, "Frequency = %d Hz \n\r", gu32_Freq);
+      |                         ^~~~~~~
+      |                         |
+      |                         uint8_t * {aka unsigned char *}
+../Core/Src/main.c:128:25: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:128:48: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  128 |                 sprintf(gu8_MSG, "Frequency = %d Hz \n\r", gu32_Freq);
+      |                                               ~^           ~~~~~~~~~
+      |                                                |           |
+      |                                                int         uint32_t {aka long unsigned int}
+      |                                               %ld
+arm-none-eabi-g++ -o "11_Timer_Frequency_counter.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\11_Timer_Frequency_counter\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="11_Timer_Frequency_counter.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 11_Timer_Frequency_counter.elf
+ 
+arm-none-eabi-size  11_Timer_Frequency_counter.elf 
+arm-none-eabi-objdump -h -S 11_Timer_Frequency_counter.elf  > "11_Timer_Frequency_counter.list"
+   text	   data	    bss	    dec	    hex	filename
+  11524	     92	   2164	  13780	   35d4	11_Timer_Frequency_counter.elf
+Finished building: default.size.stdout
+ 
+Finished building: 11_Timer_Frequency_counter.list
+ 
+
+14:53:30 Build Finished. 0 errors, 4 warnings. (took 1s.26ms)
+

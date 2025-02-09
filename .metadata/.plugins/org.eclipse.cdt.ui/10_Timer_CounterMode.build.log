@@ -1,0 +1,10 @@
+21:54:28 **** Incremental Build of configuration Debug for project 10_Timer_CounterMode ****
+make -j4 all 
+arm-none-eabi-size  10_Timer_CounterMode.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11216	    128	   2048	  13392	   3450	10_Timer_CounterMode.elf
+Finished building: default.size.stdout
+ 
+
+21:54:28 Build Finished. 0 errors, 0 warnings. (took 320ms)
+
