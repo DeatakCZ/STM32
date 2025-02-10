@@ -1,0 +1,44 @@
+19:40:25 **** Incremental Build of configuration Debug for project 14_Timer_Encoder_mode_Dimmer ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:123:27: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+  123 |                           sprintf(MSG, "%d\n\r", LED_DutyCycle);
+      |                           ^~~~~~~
+../Core/Src/main.c:21:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+   20 | #include "main.h"
+  +++ |+#include <stdio.h>
+   21 | 
+../Core/Src/main.c:123:27: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+  123 |                           sprintf(MSG, "%d\n\r", LED_DutyCycle);
+      |                           ^~~~~~~
+../Core/Src/main.c:123:27: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:123:35: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+  123 |                           sprintf(MSG, "%d\n\r", LED_DutyCycle);
+      |                                   ^~~
+      |                                   |
+      |                                   uint8_t * {aka unsigned char *}
+../Core/Src/main.c:123:35: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:123:41: warning: '%d' directive writing between 1 and 5 bytes into a region of size 4 [-Wformat-overflow=]
+  123 |                           sprintf(MSG, "%d\n\r", LED_DutyCycle);
+      |                                         ^~
+../Core/Src/main.c:123:40: note: directive argument in the range [0, 65535]
+  123 |                           sprintf(MSG, "%d\n\r", LED_DutyCycle);
+      |                                        ^~~~~~~~
+../Core/Src/main.c:123:27: note: 'sprintf' output between 4 and 8 bytes into a destination of size 4
+  123 |                           sprintf(MSG, "%d\n\r", LED_DutyCycle);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "14_Timer_Encoder_mode_Dimmer.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\14_Timer_Encoder_mode_Dimmer\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="14_Timer_Encoder_mode_Dimmer.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 14_Timer_Encoder_mode_Dimmer.elf
+ 
+arm-none-eabi-size  14_Timer_Encoder_mode_Dimmer.elf 
+arm-none-eabi-objdump -h -S 14_Timer_Encoder_mode_Dimmer.elf  > "14_Timer_Encoder_mode_Dimmer.list"
+   text	   data	    bss	    dec	    hex	filename
+  13308	     92	   2116	  15516	   3c9c	14_Timer_Encoder_mode_Dimmer.elf
+Finished building: default.size.stdout
+ 
+Finished building: 14_Timer_Encoder_mode_Dimmer.list
+ 
+
+19:40:26 Build Finished. 0 errors, 4 warnings. (took 1s.43ms)
+

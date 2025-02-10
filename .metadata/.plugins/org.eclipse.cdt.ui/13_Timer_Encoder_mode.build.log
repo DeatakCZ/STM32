@@ -1,0 +1,74 @@
+18:20:21 **** Incremental Build of configuration Debug for project 13_Timer_Encoder_mode ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:110:19: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+  110 |                   sprintf(MSG, "Encoder switch released, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                   ^~~~~~~
+../Core/Src/main.c:21:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+   20 | #include "main.h"
+  +++ |+#include <stdio.h>
+   21 | 
+../Core/Src/main.c:110:19: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+  110 |                   sprintf(MSG, "Encoder switch released, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                   ^~~~~~~
+../Core/Src/main.c:110:19: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:110:27: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+  110 |                   sprintf(MSG, "Encoder switch released, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                           ^~~
+      |                           |
+      |                           uint8_t * {aka unsigned char *}
+../Core/Src/main.c:110:27: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:110:75: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  110 |                   sprintf(MSG, "Encoder switch released, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                                                                          ~^        ~~~~~~~~~~~~~~~~
+      |                                                                           |                    |
+      |                                                                           int                  uint32_t {aka long unsigned int}
+      |                                                                          %ld
+../Core/Src/main.c:115:19: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+  115 |                   sprintf(MSG, "Encoder switch pressed, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                   ^~~~~~~
+../Core/Src/main.c:115:19: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:115:27: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+  115 |                   sprintf(MSG, "Encoder switch pressed, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                           ^~~
+      |                           |
+      |                           uint8_t * {aka unsigned char *}
+../Core/Src/main.c:115:27: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:115:74: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                   sprintf(MSG, "Encoder switch pressed, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                                                                         ~^        ~~~~~~~~~~~~~~~~
+      |                                                                          |                    |
+      |                                                                          int                  uint32_t {aka long unsigned int}
+      |                                                                         %ld
+../Core/Src/main.c:115:75: warning: ' 
+
+' directive writing 3 bytes into a region of size between 0 and 9 [-Wformat-overflow=]
+  115 |                   sprintf(MSG, "Encoder switch pressed, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                                                                           ^~~~~
+../Core/Src/main.c:115:19: note: 'sprintf' output between 45 and 54 bytes into a destination of size 50
+  115 |                   sprintf(MSG, "Encoder switch pressed, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:110:74: warning: '%d' directive writing between 1 and 10 bytes into a region of size 9 [-Wformat-overflow=]
+  110 |                   sprintf(MSG, "Encoder switch released, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                                                                          ^~
+../Core/Src/main.c:110:32: note: directive argument in the range [0, 1073741823]
+  110 |                   sprintf(MSG, "Encoder switch released, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:110:19: note: 'sprintf' output between 46 and 55 bytes into a destination of size 50
+  110 |                   sprintf(MSG, "Encoder switch released, encoder ticks = %d \n\r", ((TIM1->CNT)>>2));
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "13_Timer_Encoder_mode.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\13_Timer_Encoder_mode\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="13_Timer_Encoder_mode.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 13_Timer_Encoder_mode.elf
+ 
+arm-none-eabi-size  13_Timer_Encoder_mode.elf 
+arm-none-eabi-objdump -h -S 13_Timer_Encoder_mode.elf  > "13_Timer_Encoder_mode.list"
+   text	   data	    bss	    dec	    hex	filename
+  10444	     92	   2044	  12580	   3124	13_Timer_Encoder_mode.elf
+Finished building: default.size.stdout
+ 
+Finished building: 13_Timer_Encoder_mode.list
+ 
+
+18:20:22 Build Finished. 0 errors, 9 warnings. (took 973ms)
+
