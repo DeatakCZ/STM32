@@ -84,8 +84,8 @@ all: main-build
 main-build: 22_UART.elf secondary-outputs
 
 # Tool invocations
-22_UART.elf 22_UART.map: $(OBJS) $(USER_OBJS) C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\22_UART\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "22_UART.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\22_UART\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="22_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+22_UART.elf 22_UART.map: $(OBJS) $(USER_OBJS) C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\Nucleo_64\22_UART\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "22_UART.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\Nucleo_64\22_UART\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="22_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -84,8 +84,8 @@ all: main-build
 main-build: Test_PWM_Generation.elf secondary-outputs
 
 # Tool invocations
-Test_PWM_Generation.elf Test_PWM_Generation.map: $(OBJS) $(USER_OBJS) C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\Test_PWM_Generation\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "Test_PWM_Generation.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\Test_PWM_Generation\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Test_PWM_Generation.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Test_PWM_Generation.elf Test_PWM_Generation.map: $(OBJS) $(USER_OBJS) C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\BlackPill\Test_PWM_Generation\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "Test_PWM_Generation.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\BlackPill\Test_PWM_Generation\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Test_PWM_Generation.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

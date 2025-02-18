@@ -1,10 +1,10 @@
-15:29:34 **** Incremental Build of configuration Debug for project 22_UART ****
+17:07:34 **** Incremental Build of configuration Debug for project 22_UART ****
 make -j4 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function 'main':
 ../Core/Src/main.c:96:30: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-   96 |   HAL_UART_Transmit(&huart2, "Start of transmittion", sizeof("Start of transmittion"), 100);
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~
+   96 |   HAL_UART_Transmit(&huart2, "Start of transmission\r\n", sizeof("Start of transmission\r\n"), 100);
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
       |                              |
       |                              char *
 In file included from ../Core/Inc/stm32f1xx_hal_conf.h:338,
@@ -14,17 +14,17 @@ In file included from ../Core/Inc/stm32f1xx_hal_conf.h:338,
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:749:79: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'char *'
   749 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~~~~~~~^~~~~
-arm-none-eabi-g++ -o "22_UART.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\22_UART\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="22_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+arm-none-eabi-g++ -o "22_UART.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\Nucleo_64\22_UART\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="22_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 Finished building target: 22_UART.elf
  
 arm-none-eabi-size  22_UART.elf 
 arm-none-eabi-objdump -h -S 22_UART.elf  > "22_UART.list"
    text	   data	    bss	    dec	    hex	filename
-   6652	     12	   1652	   8316	   207c	22_UART.elf
+   6652	     12	   1660	   8324	   2084	22_UART.elf
 Finished building: default.size.stdout
  
 Finished building: 22_UART.list
  
 
-15:29:35 Build Finished. 0 errors, 1 warnings. (took 903ms)
+17:07:34 Build Finished. 0 errors, 1 warnings. (took 939ms)
 

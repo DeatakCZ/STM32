@@ -44,7 +44,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 
-	uint8_t UART2_rxBuffer[12] = {0};
+	uint8_t UART2_rxBuffer[20] = {0};
 
 /* USER CODE END PV */
 
@@ -93,7 +93,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_UART_Transmit(&huart2, "Start of transmittion", sizeof("Start of transmittion"), 100);
+  HAL_UART_Transmit(&huart2, "Start of transmission\r\n", sizeof("Start of transmission\r\n"), 100);
 
 
 
@@ -104,9 +104,9 @@ int main(void)
   while (1)
   {
 
-	  HAL_UART_Receive(&huart2, UART2_rxBuffer, sizeof(UART2_rxBuffer), 5000);
-	    HAL_UART_Transmit(&huart2, UART2_rxBuffer, sizeof(UART2_rxBuffer), 100);
-	    HAL_Delay(100);
+	  HAL_UART_Receive(&huart2, UART2_rxBuffer, sizeof(UART2_rxBuffer), 1000);
+	  HAL_UART_Transmit(&huart2, UART2_rxBuffer, sizeof(UART2_rxBuffer), 100);
+	  HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -121,7 +121,7 @@ int main(void)
 	  }
 
 
-	  sprintf(UART1_txBuffer,"Hello World!\n\r", CH1_DC);
+	  sprintf(UART1_txBuffer,"Hello World!\r\n", CH1_DC);
 	  HAL_UART_Transmit(&huart1, UART1_txBuffer, sizeof(UART1_txBuffer), 100);
 
 
