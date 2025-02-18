@@ -1,0 +1,10 @@
+22:44:02 **** Incremental Build of configuration Debug for project 17_PWM_DeadTime ****
+make -j4 all 
+arm-none-eabi-size  17_PWM_DeadTime.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9660	     12	   1716	  11388	   2c7c	17_PWM_DeadTime.elf
+Finished building: default.size.stdout
+ 
+
+22:44:03 Build Finished. 0 errors, 0 warnings. (took 575ms)
+

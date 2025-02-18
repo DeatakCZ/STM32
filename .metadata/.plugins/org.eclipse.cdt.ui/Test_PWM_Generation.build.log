@@ -1,0 +1,46 @@
+15:27:57 **** Incremental Build of configuration Debug for project Test_PWM_Generation ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:124:11: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+  124 |           sprintf(UART1_txBuffer,"Hello World!\n\r", CH1_DC);
+      |           ^~~~~~~
+../Core/Src/main.c:21:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+   20 | #include "main.h"
+  +++ |+#include <stdio.h>
+   21 | 
+../Core/Src/main.c:124:11: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+  124 |           sprintf(UART1_txBuffer,"Hello World!\n\r", CH1_DC);
+      |           ^~~~~~~
+../Core/Src/main.c:124:11: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:124:19: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+  124 |           sprintf(UART1_txBuffer,"Hello World!\n\r", CH1_DC);
+      |                   ^~~~~~~~~~~~~~
+      |                   |
+      |                   uint8_t * {aka unsigned char *}
+../Core/Src/main.c:124:19: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:124:34: warning: too many arguments for format [-Wformat-extra-args]
+  124 |           sprintf(UART1_txBuffer,"Hello World!\n\r", CH1_DC);
+      |                                  ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:124:47: warning: 'Hello World!
+
+' directive writing 14 bytes into a region of size 12 [-Wformat-overflow=]
+  124 |           sprintf(UART1_txBuffer,"Hello World!\n\r", CH1_DC);
+      |                                   ~~~~~~~~~~~~^~~~
+../Core/Src/main.c:124:11: note: 'sprintf' output 15 bytes into a destination of size 12
+  124 |           sprintf(UART1_txBuffer,"Hello World!\n\r", CH1_DC);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "Test_PWM_Generation.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\Test_PWM_Generation\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Test_PWM_Generation.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Test_PWM_Generation.elf
+ 
+arm-none-eabi-size  Test_PWM_Generation.elf 
+arm-none-eabi-objdump -h -S Test_PWM_Generation.elf  > "Test_PWM_Generation.list"
+   text	   data	    bss	    dec	    hex	filename
+  14636	     92	   2060	  16788	   4194	Test_PWM_Generation.elf
+Finished building: default.size.stdout
+ 
+Finished building: Test_PWM_Generation.list
+ 
+
+15:27:58 Build Finished. 0 errors, 5 warnings. (took 983ms)
+

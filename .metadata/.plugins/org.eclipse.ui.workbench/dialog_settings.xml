@@ -14,7 +14,7 @@
 	</section>
 	<section name="WorkbenchPreferenceDialog">
 		<item key="DIALOG_X_ORIGIN" value="462"/>
-		<item key="DIALOG_Y_ORIGIN" value="333"/>
+		<item key="DIALOG_Y_ORIGIN" value="217"/>
 		<item key="DIALOG_WIDTH" value="818"/>
 		<item key="DIALOG_HEIGHT" value="831"/>
 		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
@@ -25,6 +25,7 @@
 		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_SIZE" value="true"/>
 		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_LOCATION" value="false"/>
 		<list key="orderedElements">
+			<item value="org.eclipse.debug.ui.ExpressionView"/>
 			<item value="org.eclipse.ui.console.ConsoleView"/>
 			<item value="com.st.stm32cube.ide.mcu.debug.swv.core.itmtrace"/>
 			<item value="com.st.stm32cube.ide.mcu.debug.swv.core.SWVDatatraceTimeline"/>
@@ -33,13 +34,16 @@
 			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
 		</list>
 		<list key="textEntries">
+			<item value="1"/>
 			<item value="1"/>
 			<item value="1"/>
 			<item value="2"/>
 		</list>
 		<list key="textArray">
+			<item value="ex"/>
 			<item value="conso"/>
 			<item value="sw"/>
 			<item value="data"/>

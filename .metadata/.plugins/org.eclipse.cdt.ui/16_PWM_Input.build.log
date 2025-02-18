@@ -1,0 +1,59 @@
+20:43:41 **** Incremental Build of configuration Debug for project 16_PWM_Input ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:114:11: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+  114 |           sprintf(MSG, "DutyCycle: %f, Frequency: %d, CycleTime: %d\r\n", Duty, Frequency, CycleTime);
+      |           ^~~~~~~
+../Core/Src/main.c:21:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+   20 | #include "main.h"
+  +++ |+#include <stdio.h>
+   21 | 
+../Core/Src/main.c:114:11: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+  114 |           sprintf(MSG, "DutyCycle: %f, Frequency: %d, CycleTime: %d\r\n", Duty, Frequency, CycleTime);
+      |           ^~~~~~~
+../Core/Src/main.c:114:11: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:114:19: warning: passing argument 1 of 'sprintf' from incompatible pointer type [-Wincompatible-pointer-types]
+  114 |           sprintf(MSG, "DutyCycle: %f, Frequency: %d, CycleTime: %d\r\n", Duty, Frequency, CycleTime);
+      |                   ^~~
+      |                   |
+      |                   uint32_t * {aka long unsigned int *}
+../Core/Src/main.c:114:19: note: expected 'char *' but argument is of type 'uint32_t *' {aka 'long unsigned int *'}
+../Core/Src/main.c:114:52: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  114 |           sprintf(MSG, "DutyCycle: %f, Frequency: %d, CycleTime: %d\r\n", Duty, Frequency, CycleTime);
+      |                                                   ~^                            ~~~~~~~~~
+      |                                                    |                            |
+      |                                                    int                          uint32_t {aka long unsigned int}
+      |                                                   %ld
+../Core/Src/main.c:114:67: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  114 |           sprintf(MSG, "DutyCycle: %f, Frequency: %d, CycleTime: %d\r\n", Duty, Frequency, CycleTime);
+      |                                                                  ~^                        ~~~~~~~~~
+      |                                                                   |                        |
+      |                                                                   int                      uint32_t {aka long unsigned int}
+      |                                                                  %ld
+../Core/Src/main.c:115:38: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
+  115 |           HAL_UART_Transmit(&huart2, MSG, sizeof(MSG), 100);
+      |                                      ^~~
+      |                                      |
+      |                                      uint32_t * {aka long unsigned int *}
+In file included from ../Core/Inc/stm32f1xx_hal_conf.h:338,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:749:79: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'uint32_t *' {aka 'long unsigned int *'}
+  749 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~~~~~~~^~~~~
+arm-none-eabi-g++ -o "16_PWM_Input.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\16_PWM_Input\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="16_PWM_Input.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 16_PWM_Input.elf
+ 
+arm-none-eabi-size  16_PWM_Input.elf 
+arm-none-eabi-objdump -h -S 16_PWM_Input.elf  > "16_PWM_Input.list"
+   text	   data	    bss	    dec	    hex	filename
+  26616	    468	   2124	  29208	   7218	16_PWM_Input.elf
+Finished building: default.size.stdout
+ 
+Finished building: 16_PWM_Input.list
+ 
+
+20:43:42 Build Finished. 0 errors, 6 warnings. (took 1s.22ms)
+

@@ -1,0 +1,10 @@
+23:47:18 **** Incremental Build of configuration Debug for project 19_PWM_3Phase_Edge_Aligned ****
+make -j4 all 
+arm-none-eabi-size  19_PWM_3Phase_Edge_Aligned.elf 
+   text	   data	    bss	    dec	    hex	filename
+   9300	     12	   1716	  11028	   2b14	19_PWM_3Phase_Edge_Aligned.elf
+Finished building: default.size.stdout
+ 
+
+23:47:19 Build Finished. 0 errors, 0 warnings. (took 558ms)
+
