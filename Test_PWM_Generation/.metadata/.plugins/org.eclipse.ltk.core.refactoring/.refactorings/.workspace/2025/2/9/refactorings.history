@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <session version="1.0">
-<refactoring comment="Delete resource &apos;24_UART_Interrupt_DMA_Polling&apos;" deleteContents="false" description="Delete resource &apos;24_UART_Interrupt_DMA_Polling&apos;" element1="/24_UART_Interrupt_DMA_Polling" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1740336859897"/>
+<refactoring comment="Delete resource &apos;26_UART_HALF_DUPLEX_SingleWire&apos;" deleteContents="false" description="Delete resource &apos;26_UART_HALF_DUPLEX_SingleWire&apos;" element1="/26_UART_HALF_DUPLEX_SingleWire" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1740437664153"/>
 </session>

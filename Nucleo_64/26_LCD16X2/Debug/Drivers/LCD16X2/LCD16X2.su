@@ -1,0 +1,9 @@
+../Drivers/LCD16X2/LCD16X2.c:7:6:LCD16X2_DATA	16	static
+../Drivers/LCD16X2/LCD16X2.c:28:6:LCD16X2_CMD	40	static
+../Drivers/LCD16X2/LCD16X2.c:44:6:LCD16X2_Clear	32	static
+../Drivers/LCD16X2/LCD16X2.c:52:6:LCD16X2_Set_Cursor	24	static
+../Drivers/LCD16X2/LCD16X2.c:74:6:LCD16X2_Init	64	static
+../Drivers/LCD16X2/LCD16X2.c:103:6:LCD16X2_Write_Char	72	static
+../Drivers/LCD16X2/LCD16X2.c:129:6:LCD16X2_Write_String	24	static
+../Drivers/LCD16X2/LCD16X2.c:138:6:LCD16X2_SL	16	static
+../Drivers/LCD16X2/LCD16X2.c:145:6:LCD16X2_SR	16	static
