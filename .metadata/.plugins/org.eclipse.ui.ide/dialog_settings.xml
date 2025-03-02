@@ -26,4 +26,12 @@
 			<item value="C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\01_GPIO_Write"/>
 		</list>
 	</section>
+	<section name="ChooseWorkspaceDialogSettings">
+		<item key="DIALOG_X_ORIGIN" value="984"/>
+		<item key="DIALOG_Y_ORIGIN" value="508"/>
+	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+		</list>
+	</section>
 </section>
