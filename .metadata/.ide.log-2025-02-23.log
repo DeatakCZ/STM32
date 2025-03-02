@@ -1,0 +1,5 @@
+2025-02-23 16:50:13,809 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 16:50:13.793 ERROR Chromium process exit code: 1
+2025-02-23 16:50:13,836 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-02-23 16:50:13,840 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 16:50:13.838 ERROR Crash dump dir: C:\Users\PanTalir\AppData\Local\JxBrowser\7.39.2\CrashReports
+2025-02-23 16:50:13,842 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] 
+2025-02-23 16:50:13,845 [ERROR] WebApp:398 - JxBrowser engine crashed! Exit code: 1
