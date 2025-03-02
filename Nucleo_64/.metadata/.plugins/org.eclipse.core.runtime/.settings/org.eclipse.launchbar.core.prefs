@@ -1,0 +1,10 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
+configDescList=org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:30_ADC_ContinuousConversion,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:31_ADC_MultiChannel Debug,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:32_ADC_MultiChannel_Continuous Debug
+eclipse.preferences.version=1
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:30_ADC_ContinConv_Poll\ Debug/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:30_ADC_ContinConv_Poll\ Debug/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:30_ADC_ContinousConversion\ Debug/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:30_ADC_ContinuousConversion/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:31_ADC_MultiChannel\ Debug/activeLaunchMode=debug
