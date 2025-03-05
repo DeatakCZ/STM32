@@ -1,0 +1,10 @@
+18:00:50 **** Incremental Build of configuration Debug for project 34_ADC_Current_Sense_BluePill ****
+make -j4 all 
+arm-none-eabi-size  34_ADC_Current_Sense_BluePill.elf 
+   text	   data	    bss	    dec	    hex	filename
+  29664	    468	   2140	  32272	   7e10	34_ADC_Current_Sense_BluePill.elf
+Finished building: default.size.stdout
+ 
+
+18:00:50 Build Finished. 0 errors, 0 warnings. (took 376ms)
+

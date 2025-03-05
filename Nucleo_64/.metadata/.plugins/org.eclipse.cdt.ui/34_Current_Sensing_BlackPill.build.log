@@ -1,0 +1,10 @@
+16:44:25 **** Incremental Build of configuration Debug for project 34_Current_Sensing_BlackPill ****
+make -j4 all 
+arm-none-eabi-size  34_Current_Sensing_BlackPill.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31520	    468	   2164	  34152	   8568	34_Current_Sensing_BlackPill.elf
+Finished building: default.size.stdout
+ 
+
+16:44:26 Build Finished. 0 errors, 0 warnings. (took 358ms)
+

@@ -1,0 +1,17 @@
+14:40:11 **** Incremental Build of configuration Debug for project 34_ADC_Injected_channel ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "34_ADC_Injected_channel.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\Nucleo_64\34_ADC_Injected_channel\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="34_ADC_Injected_channel.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 34_ADC_Injected_channel.elf
+ 
+arm-none-eabi-size  34_ADC_Injected_channel.elf 
+arm-none-eabi-objdump -h -S 34_ADC_Injected_channel.elf  > "34_ADC_Injected_channel.list"
+   text	   data	    bss	    dec	    hex	filename
+  30048	    468	   2140	  32656	   7f90	34_ADC_Injected_channel.elf
+Finished building: default.size.stdout
+ 
+Finished building: 34_ADC_Injected_channel.list
+ 
+
+14:40:13 Build Finished. 0 errors, 0 warnings. (took 1s.502ms)
+
