@@ -38,6 +38,8 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+#define DEBUGGER
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -53,7 +55,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+char UART2_Debugger[60];
 char UART2_TxBuffer[30];
 volatile uint16_t InjADC_Reading = 0;
 uint16_t AD_RES = 0;
@@ -122,8 +124,14 @@ int main(void)
     AD_RES = HAL_ADC_GetValue(&hadc1);
     TIM2->CCR2 = AD_RES;
     I_dc = ((InjADC_Reading * 3.3)/ 4095);
-    sprintf(UART2_TxBuffer, "I_dc = %f mA\r\n", I_dc);
+    sprintf(UART2_TxBuffer, "\r\nI_dc = %f mA", I_dc);
     HAL_UART_Transmit(&huart2, (uint8_t*)UART2_TxBuffer, sizeof(UART2_TxBuffer), 10);
+
+#ifdef DEBUGGER
+    sprintf(UART2_Debugger, "\r\nDEBUG: InjADC_Reading = %d, AD_RES = %d, I_dc = %f", InjADC_Reading, AD_RES, I_dc);
+    HAL_UART_Transmit(&huart2, (uint8_t*)UART2_Debugger, sizeof(UART2_Debugger), 10);
+#endif
+
     HAL_Delay(1);
 
     /* USER CODE END WHILE */
