@@ -92,3 +92,9 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES ADDITIONAL_CLEAN_FILES ${
 if((CMAKE_C_STANDARD EQUAL 90) OR (CMAKE_C_STANDARD EQUAL 99))
     message(ERROR "Generated code requires C11 or higher")
 endif()
+
+
+target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+    --specs=nosys.specs  # Minimal I/O system
+    -u _printf_float     # Enable float support for printf
+)

@@ -29,3 +29,4 @@
 2246	2754	7631652273804536	cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c.obj	fe59ff76568f98d2
 11	45	0	CMakeFiles/clean.additional	ffc1679eadea21d6
 45	63	0	clean	e8882d2349536fa7
+5	821	7632187364656052	CurrentSense_2nd_try.elf	547fe5e82e3df43f
