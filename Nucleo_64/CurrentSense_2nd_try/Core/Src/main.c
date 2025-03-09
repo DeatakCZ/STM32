@@ -19,12 +19,19 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "stm32f1xx_hal.h"
+#include "stm32f1xx_hal_adc.h"
+#include "stm32f1xx_hal_adc_ex.h"
+#include "stm32f1xx_hal_gpio.h"
+#include "stm32f1xx_hal_tim.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -46,6 +53,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+char UART2_TxBuffer[30];
+volatile uint16_t InjADC_Reading = 0;
+uint16_t AD_RES = 0;
+float I_dc = 0.0;
 
 /* USER CODE END PV */
 
@@ -94,14 +106,29 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+  HAL_TIM_OC_Start(&htim2, TIM_CHANNEL_1);
+  TIM2->CCR1 = 1;
+  HAL_ADC_Start(&hadc1);
+  HAL_ADCEx_InjectedStart_IT(&hadc1);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
+    HAL_ADC_PollForConversion(&hadc1, 1);
+    AD_RES = HAL_ADC_GetValue(&hadc1);
+    TIM2->CCR2 = AD_RES;
+    I_dc = ((InjADC_Reading * 3.3)/ 4095);
+    sprintf(UART2_TxBuffer, "I_dc = %f mA\r\n", I_dc);
+    HAL_UART_Transmit(&huart2, (uint8_t*)UART2_TxBuffer, sizeof(UART2_TxBuffer), 10);
+    HAL_Delay(1);
 
+    /* USER CODE END WHILE */
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+    HAL_Delay(500);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -154,7 +181,12 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+  InjADC_Reading = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_1);
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+}
 /* USER CODE END 4 */
 
 /**
