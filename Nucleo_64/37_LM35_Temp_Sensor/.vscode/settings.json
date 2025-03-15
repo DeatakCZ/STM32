@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "lm35.h": "c"
+    },
+    "cortex-debug.variableUseNaturalFormat": true
+}

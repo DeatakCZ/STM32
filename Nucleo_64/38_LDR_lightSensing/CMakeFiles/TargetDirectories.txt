@@ -1,0 +1,6 @@
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/Nucleo_64/38_LDR_lightSensing/CMakeFiles/38_LDR_lightSensing.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/Nucleo_64/38_LDR_lightSensing/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/Nucleo_64/38_LDR_lightSensing/CMakeFiles/rebuild_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/Nucleo_64/38_LDR_lightSensing/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/Nucleo_64/38_LDR_lightSensing/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/Nucleo_64/38_LDR_lightSensing/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir
