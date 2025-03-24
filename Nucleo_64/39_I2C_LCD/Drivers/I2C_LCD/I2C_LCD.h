@@ -3,9 +3,9 @@
 
 #include "stdint.h"
 
-#define I2C_LCD_MAX     1   //Max number of modules used
+#define I2C_LCD_MAX     2   //Max number of modules used
 #define I2C_LCD_1       0   //Number of instance. add as needed
-
+#define I2C_LCD_2       1 
 
 /////////_PROTOTYPES FOR ALL USER EXTERNAL FUNCTIONS_//////////////////
 

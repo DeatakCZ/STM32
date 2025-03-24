@@ -1,0 +1,6 @@
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/StandAlone/G030K6/01_HelloWorld/build/Debug/CMakeFiles/01_HelloWorld.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/StandAlone/G030K6/01_HelloWorld/build/Debug/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/StandAlone/G030K6/01_HelloWorld/build/Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/StandAlone/G030K6/01_HelloWorld/build/Debug/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/StandAlone/G030K6/01_HelloWorld/build/Debug/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32Cube/StandAlone/G030K6/01_HelloWorld/build/Debug/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

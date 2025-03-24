@@ -46,6 +46,10 @@ set(STM32_Drivers_Src
     ${CMAKE_SOURCE_DIR}/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c
     ${CMAKE_SOURCE_DIR}/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c
     ${CMAKE_SOURCE_DIR}/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c
+    ${CMAKE_SOURCE_DIR}/Drivers/I2C_LCD/I2C_LCD.h
+    ${CMAKE_SOURCE_DIR}/Drivers/I2C_LCD/I2C_LCD.c
+    ${CMAKE_SOURCE_DIR}/Drivers/I2C_LCD/I2C_LCD_cfg.h
+    ${CMAKE_SOURCE_DIR}/Drivers/I2C_LCD/I2C_LCD_cfg.c
 )
 
 # Drivers Midllewares

@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "fir.h": "c",
+        "math.h": "c",
+        "lm35.h": "c",
+        "compare": "c"
+    }
+}

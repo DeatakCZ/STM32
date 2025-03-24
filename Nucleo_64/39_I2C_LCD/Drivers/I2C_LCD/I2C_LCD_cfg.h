@@ -8,7 +8,7 @@
 typedef struct
 {
     //I2C LCD Module Instance Index
-    uint8_t I2C_LCD_InstanceIndex;
+    uint8_t I2C_LCD_Instance;
 
     //I2C Hardware Peripheral handle
     I2C_HandleTypeDef* I2C_Handle;
@@ -23,6 +23,6 @@ typedef struct
     uint8_t I2C_LCD_nRow;
 }I2C_LCD_CfgType;
 
-extern const I2C_LCD_CfgType I2C_LCD_CfgType[I2C_LCD_MAX];
+extern const I2C_LCD_CfgType I2C_LCD_CfgParam[I2C_LCD_MAX];
 
 #endif

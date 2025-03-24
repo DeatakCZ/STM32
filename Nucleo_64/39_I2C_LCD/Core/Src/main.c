@@ -38,6 +38,9 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
+#define MyI2C_LCD I2C_LCD_1
+#define SPEED 400
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -48,6 +51,13 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+uint8_t HeartChar[] = {0x00, 0x0a, 0x15, 0x11, 0x11, 0x0a, 0x04, 0x00};
+uint8_t SmileChar[] = {0x00, 0x0a, 0x0a, 0x00, 0x1f, 0x11, 0x09, 0x06};
+uint8_t Flower1Char[] =     {0x13, 0x1e, 0x0e, 0x0f, 0x1b, 0x04, 0x15, 0x0e};
+uint8_t Flower1InvChar[] =  {0x0c, 0x01, 0x11, 0x10, 0x04, 0x1b, 0x0a, 0x11};
+uint8_t Flower2Char[] =     {0x19, 0x0f, 0x0e, 0x1e, 0x17, 0x04, 0x15, 0x0e};
+uint8_t Flower2InvChar[] =  {0x06, 0x10, 0x11, 0x01, 0x08, 0x1b, 0x0a, 0x11};
 
 /* USER CODE END PV */
 
@@ -60,6 +70,65 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+void Dance(uint8_t rounds, uint8_t mode)
+{
+
+  uint8_t i = 0, o = 0;
+
+  for( int c = 0 ; c < rounds ; c++)
+  {
+    if(mode)
+    {
+      I2C_LCD_ShiftLeft(MyI2C_LCD);
+      HAL_Delay(SPEED/2);
+      I2C_LCD_ShiftLeft(MyI2C_LCD);
+      HAL_Delay(SPEED);
+      I2C_LCD_ShiftRight(MyI2C_LCD);
+      HAL_Delay(SPEED/2);
+      I2C_LCD_ShiftRight(MyI2C_LCD);
+      HAL_Delay(SPEED);
+    }  
+
+
+    for (int p = 0; p < 4 ; p++)
+    {
+      I2C_LCD_SetCursor(MyI2C_LCD, 12, 1);
+      switch(i)
+      {
+        case 0:
+        if(!o)
+        {
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 2);
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 3);
+          o = 1;
+        }
+        else
+        {
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 4);
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 5);
+          i = 1;
+          o = 0;
+        }
+        break;
+      case 1:
+        if(!o)
+        {
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 3);
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 2);
+          o = 1;
+        }
+        else
+        {
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 5);
+          I2C_LCD_PrintCustomChar(MyI2C_LCD, 4);
+          i = 1;
+          o = 0;
+        }
+      } 
+      HAL_Delay(SPEED);
+    }
+  }
+}
 /* USER CODE END 0 */
 
 /**
@@ -95,12 +164,51 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  I2C_LCD_Init(MyI2C_LCD);
+
+  I2C_LCD_CreateCustomChar(MyI2C_LCD, 0, HeartChar);
+  I2C_LCD_CreateCustomChar(MyI2C_LCD, 1, SmileChar);
+  I2C_LCD_CreateCustomChar(MyI2C_LCD, 2, Flower1Char);
+  I2C_LCD_CreateCustomChar(MyI2C_LCD, 3, Flower2Char);
+  I2C_LCD_CreateCustomChar(MyI2C_LCD, 4, Flower1InvChar);
+  I2C_LCD_CreateCustomChar(MyI2C_LCD, 5, Flower2InvChar);
+
+  I2C_LCD_SetCursor(MyI2C_LCD, 0, 0);
+  I2C_LCD_WriteString(MyI2C_LCD, " !Hello World!");
+  I2C_LCD_SetCursor(MyI2C_LCD, 0, 1);
+  I2C_LCD_WriteString(MyI2C_LCD, " !I2C_LCD!");
+
+  HAL_Delay(SPEED*2);
+
+
+  I2C_LCD_PrintCustomChar(MyI2C_LCD, 0);
+  I2C_LCD_PrintCustomChar(MyI2C_LCD, 1);
+  I2C_LCD_PrintCustomChar(MyI2C_LCD, 2);
+  I2C_LCD_PrintCustomChar(MyI2C_LCD, 3);
+
+  HAL_Delay(SPEED*2);
+
+
+
+  I2C_LCD_NoBacklight(MyI2C_LCD);   HAL_Delay(SPEED*2);
+  I2C_LCD_Backlight(MyI2C_LCD);     HAL_Delay(SPEED*2);
+  Dance(1,1);
+  I2C_LCD_Cursor(MyI2C_LCD);        HAL_Delay(SPEED*2);
+  I2C_LCD_Blink(MyI2C_LCD);         HAL_Delay(SPEED*2);
+  I2C_LCD_NoBlink(MyI2C_LCD);       HAL_Delay(SPEED*2);
+  I2C_LCD_NoCursor(MyI2C_LCD);      HAL_Delay(SPEED*2);
+  I2C_LCD_NoDisplay(MyI2C_LCD);     HAL_Delay(SPEED*2);
+  I2C_LCD_Display(MyI2C_LCD);       HAL_Delay(SPEED*2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+    Dance(1, 0);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
