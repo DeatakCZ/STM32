@@ -1,9 +1,14 @@
-RTD: 	0C ... 1000R
-	  100C ... 1385R
-	  200C ... 1758R
-	  
+RTD: 	0C ... 1000R	V_adc = 1,667V 
+	  100C ... 1385R	V_adc = 1,326V
+	  200C ... 1758R	V_adc = 1,107V
+						V_dif = 560mV
 
 ADC: 12Bit -> 4095 Steps
-	 3,3V / 4095 = 0.8mV/Step
+	 Resolution = 3,3V / 4095 = 0.8mV/Step
 	 
-	 
+	StepsUsed = V-dif / Resolution 
+		0-200C = 700Steps
+		
+	TempResolution = maxTemp / StepsUsed = 200C / 700 = 0,29C/step
+	
+	
