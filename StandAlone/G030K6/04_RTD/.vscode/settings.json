@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "math.h": "c",
+        "bit": "c",
+        "cmath": "c",
+        "*.tcc": "c",
+        "main.h": "c",
+        "inttypes.h": "c",
+        "time.h": "c"
+    }
+}

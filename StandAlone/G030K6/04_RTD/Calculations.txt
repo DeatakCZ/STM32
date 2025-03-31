@@ -1,7 +1,10 @@
-RTD: 	0C ... 1000R	V_adc = 1,667V 
-	  100C ... 1385R	V_adc = 1,326V
-	  200C ... 1758R	V_adc = 1,107V
-						V_dif = 560mV
+RTD: Pt1000
++5V --| RTD |-- ADC_TEMP --| 500R |-- GND
+
+		0C ... 1000R	V_adc = 1,667V ... 2083,75 Steps
+	  100C ... 1385R	V_adc = 1,326V ... 1657,50 Steps
+	  200C ... 1758R	V_adc = 1,107V ... 1383,75 Steps
+						V_dif = 560mV  ...  700,00 Steps
 
 ADC: 12Bit -> 4095 Steps
 	 Resolution = 3,3V / 4095 = 0.8mV/Step
@@ -12,3 +15,97 @@ ADC: 12Bit -> 4095 Steps
 	TempResolution = maxTemp / StepsUsed = 200C / 700 = 0,29C/step
 	
 	
+	
+	
+	
+	
+	
+REFERENCE:
++5V --| 1kR |-- ADC_REF --| 1kR |-- GND
+When +5V changes, ADC will read the change and adjust the calculation of temperature
+
+ADC_REF:
+4,8V -> 2,40V ... 3000,0 Steps 
+4,9V -> 2,45V ... 3062,5 Steps
+5,0V -> 2,50V ... 3125,0 Steps
+5,1V -> 2,55V ... 3187,5 Steps
+5,2V -> 2,60V ... 3250,0 Steps
+
+V_supply = ADC_REF * Resolution * 2 = 3125 * 0,8 * 2 = 5000 mV
+---------------------------------------
+
+RTD_v2: Pt1000
++5V --| RTD |-- ADC_TEMP --| 1kR |-- GND
+
+@5V:
+  0C ... 1000R	V_adc = 2,500V ... 3125,00 Steps
+100C ... 1385R	V_adc = 2,096V ... 2620,00 Steps
+200C ... 1758R	V_adc = 1,813V ... 2266,25 Steps
+				V_dif = 687mV  ...  858,75 Steps
+
+ADC: 
+12Bit -> 4095 Steps
+
+Resolution = 3,3V / 4095 = 0.8mV/Step
+	 
+StepsUsed = V_dif / Resolution 
+   0-200C = 858,75 Steps
+   
+TempResolution = maxTemp / StepsUsed = 200C / 858,75 = 0,233C/step
+---------------------------------------
+
+Calculations:
+V_supply = ADC_REF * Resolution * 2 = 3125 * 0,8 * 2 = 5000 mV
+
+Temperature_0C = ADC_TEMP * Resolution = 2083,75 * 0,8 = 1667mV
+Temperature_0C_adjusted = Temperature_0C * 
+
+
+
+			V_supply * R2
+V_Temp = ----------------------
+			  (R1 + R2)
+			  
+
+			               ADC_REF * Resolution * R2 * 2 
+ADC_TEMP * Resolution = -------------------------------
+		                          (R1 + R2)
+				   
+				   
+				ADC_REF * /Resolution/ * R2 * 2 
+(R1 + R2)= -----------------------------------
+			   ADC_TEMP * /Resolution/ 
+
+
+		ADC_REF * R2 * 2 
+R1 = ---------------------------------- - R2
+				ADC_TEMP
+		
+		
+		3125 * 1000 * 2
+R1 = ---------------------- - 1000		
+		    2620
+			
+		6,250,000
+R1 = --------------- - 1000		
+		 2096
+		
+		
+R1 = 2385,5 - 1000 = 1385,5
+
+
+
+
+
+import math
+
+a=0.0039083
+b=-0.0000005775
+
+Rt=1758.56
+
+
+c=1 - (Rt/1000)
+
+print((-a + math.sqrt((a**2) - (4*b*c)))/(2*b)) //--> gives valid values => will be used
+print((-a - math.sqrt((a**2) - (4*b*c)))/(2*b))

@@ -1,0 +1,6 @@
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/StandAlone/G030K6/05_FIR_and_IO/CMakeFiles/05_FIR_and_IO.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/StandAlone/G030K6/05_FIR_and_IO/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/StandAlone/G030K6/05_FIR_and_IO/CMakeFiles/rebuild_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/StandAlone/G030K6/05_FIR_and_IO/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/StandAlone/G030K6/05_FIR_and_IO/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/StandAlone/G030K6/05_FIR_and_IO/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

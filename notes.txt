@@ -1,0 +1,33 @@
+///////////////////////////////////////////////////////////////
+    Link library files for compilation
+->/cmake/stm32cubemx/CMakeLists.txt
+
+	${CMAKE_SOURCE_DIR}/Drivers/_/.c
+    ${CMAKE_SOURCE_DIR}/Drivers/_/_cfg.c
+
+///////////////////////////////////////////////////////////////
+	SEGGER J-link config
+-> /.vscode/launch.json
+
+,
+        {
+            "name": "SEGGER J-link",
+            "cwd": "${workspaceFolder}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "jlink",
+            "serverpath": "D:/JLink_V818/JLinkGDBServerCL.exe",
+            "serverArgs": [],
+            "device": "STM32G030K6Tx",
+            "interface": "swd",
+            "serialNumber": "", //If you have more than one J-Link probe, add the serial number here.
+            "svdFile": "${config:STM32VSCodeExtension.cubeCLT.path}/STMicroelectronics_CMSIS_SVD/STM32G030.svd",
+            "armToolchainPath": "${config:STM32VSCodeExtension.cubeCLT.path}/GNU-tools-for-STM32/bin"
+        }
+///////////////////////////////////////////////////////////////
+	Printf with float
+->
+
+///////////////////////////////////////////////////////////////
