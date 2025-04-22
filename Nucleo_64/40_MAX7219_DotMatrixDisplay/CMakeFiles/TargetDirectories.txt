@@ -1,0 +1,6 @@
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/Nucleo_64/40_MAX7219_DotMatrixDisplay/CMakeFiles/40_MAX7219_DotMatrixDisplay.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/Nucleo_64/40_MAX7219_DotMatrixDisplay/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/Nucleo_64/40_MAX7219_DotMatrixDisplay/CMakeFiles/rebuild_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/Nucleo_64/40_MAX7219_DotMatrixDisplay/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/Nucleo_64/40_MAX7219_DotMatrixDisplay/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+C:/Users/PanTalir/Documents/GitHub/Programming/STM32/Nucleo_64/40_MAX7219_DotMatrixDisplay/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir
