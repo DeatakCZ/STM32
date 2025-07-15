@@ -1,0 +1,4 @@
+../Drivers/MATH/math.c:3:10:MAP	1
+../Drivers/MATH/math.c:8:10:Constrain	3
+../Drivers/MATH/math.c:24:15:MIN	3
+../Drivers/MATH/math.c:39:15:MAX	3

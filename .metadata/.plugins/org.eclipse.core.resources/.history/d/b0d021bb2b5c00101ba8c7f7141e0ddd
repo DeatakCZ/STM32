@@ -1,0 +1,527 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2025 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+#include "../../Drivers/MATH/math.h"
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+typedef union
+{
+  struct
+  {
+    uint8_t R;
+    uint8_t G;
+    uint8_t B;
+  } color;
+  uint32_t data;
+} PixelRGB_t;
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+#define NEOPIXEL_ZERO	26
+#define NEOPIXEL_ONE	43
+
+#define NEOPIXEL_NUMBER	8
+
+#define DMA_BUFF_SIZE	(NEOPIXEL_NUMBER * 24) + 1
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+TIM_HandleTypeDef htim2;
+DMA_HandleTypeDef hdma_tim2_ch1;
+
+/* USER CODE BEGIN PV */
+
+PixelRGB_t pixel[NEOPIXEL_NUMBER] = {'\0'};
+uint32_t dmaBuffer[DMA_BUFF_SIZE] = {'\0'};
+uint32_t *pBuff;
+
+uint8_t bufferCounter = 0;
+int i, j, k, l, n = 0;
+
+uint8_t stepSize = 3;
+uint8_t RedAdvance = 0;
+uint8_t GreenAdvance = 0;
+uint8_t BlueAdvance = 0;
+uint8_t LEDAdvance = 0;
+
+uint8_t enable = 0;
+									// T0 = 1,15us   T1 = 1,3us
+//uint32_t PWMPulseOn = 26;			// T1H = 0,7us  ; T1L = 0,6us
+//uint32_t PWMPulseOff = 43;		// T0H = 0,35us ; T0L = 0,8us
+
+
+									// 42 - On 650ns ; Off 600ns
+									// 43 - On 670ns ; Off 580ns	<==
+									// 44 - On 690ns ; Off 560ns
+
+									// 24 - On 370ns ; Off 880ns
+									// 25 - On 390ns ; Off 860ns
+									// 26 - On 400ns ; Off 850ns	<==
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
+static void MX_TIM2_Init(void);
+static void MX_NVIC_Init(void);
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+//*
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+{
+  HAL_TIM_PWM_Stop_DMA(&htim2, TIM_CHANNEL_1);
+  TIM2->CCR1 = 0;
+}
+//*/
+
+/*
+								// RES > 50us
+								// T0H - 0,4us, T0L - 0,85us
+								// T1H - 0,8us, T1L - 4,45us
+								// 64 MHz -> 1 clock = 15.625 ns
+void SendSignal(uint8_t State)	// 0 / 1
+{
+	if(State == 0)
+	{
+		GPIO_SET_PIN(LED_GPIO_Port, LED_Pin);
+		GPIO_CLEAR_PIN(LED_GPIO_Port, LED_Pin);
+	}
+	else if(State == 1)
+	{
+		GPIO_SET_PIN(LED_GPIO_Port, LED_Pin);
+		GPIO_CLEAR_PIN(LED_GPIO_Port, LED_Pin);
+	}
+	else
+	{
+		return 1;
+	}
+}
+
+void SendHigh()
+{
+	SendSignal(1);
+}
+
+void SendLow()
+{
+	SendSignal(0);
+}
+
+void SendLED(uint8_t LED[3])
+{
+
+	SendHigh();
+	SendLow();
+
+}
+//*/
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_TIM2_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
+  /* USER CODE BEGIN 2 */
+
+  //HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+
+//////////////////////////////////////////////////
+// Fill array with 0's
+  for(i = 0 ; i < NEOPIXEL_NUMBER ; i++)
+  {
+	  for(j = 0 ; j < 3 ; j++)
+	  {
+		  switch(j){
+		  case 0:	//Green
+			  pixel[i].color.G = 0;
+			  break;
+		  case 1:	//Red
+			  pixel[i].color.R = 0;
+			  break;
+		  case 2:	//Blue
+			  pixel[i].color.B = 0;
+			  break;
+		  }
+	  }
+  }
+
+//////////////////////////////////////////////////
+
+
+	while (1)
+	{
+
+
+//////////////////////////////////////////////////
+// Fill array with values
+		for(n = 0 ; n < 255 ; n++)							//Cycles
+		{
+			for(i = 0 ; i < NEOPIXEL_NUMBER ; i++)			// Separate LEDs
+			{
+				for(j = 0 ; j < 3 ; j++)					//Separate colours
+				{
+					switch(j)
+					{
+					case 0:	//Green
+						pixel[i].color.G = Constrain((n + GreenAdvance + (i * LEDAdvance)), 0, 255);
+						break;
+					case 1:	//Red
+						pixel[i].color.R = Constrain((n + RedAdvance + (i * LEDAdvance)), 0, 255);
+						break;
+					case 2:	//Blue
+						pixel[i].color.B = Constrain((n + BlueAdvance + (i * LEDAdvance)), 0, 255);
+						break;
+					}
+				}
+			}
+		}
+//////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////
+// Write values into DMA buffer
+//	G7-G0,R7-R0,B7-B0
+	for (i = 0; i < NEOPIXEL_NUMBER; i++)			//Separate LEDs
+	{
+		for(j = 0 ; j < 3 ; j++)					//Separate colours
+		{
+			for(k = 8 ; k > 0 ; k--)					//Separate bits in value
+			{
+				switch(j)
+				{
+				case 0:	//Green
+					if ((pixel[i].color.G >> (k - 1)) & 0x01)
+					{
+						dmaBuffer[(i*24) + (j*8) + (8-k)] = NEOPIXEL_ONE;		// 24 bits per LED ; 8 bits per colours ; Big Endian of colour
+					}
+					else
+					{
+						dmaBuffer[(i*24) + (j*8) + (8-k)] = NEOPIXEL_ZERO;
+					}
+					break;
+				case 1:	//Red
+					if ((pixel[i].color.R >> (k - 1)) & 0x01)
+					{
+						dmaBuffer[(i*24) + (j*8) + (8-k)] = NEOPIXEL_ONE;		// 24 bits per LED ; 8 bits per colours ; Big Endian of colour
+					}
+					else
+					{
+						dmaBuffer[(i*24) + (j*8) + (8-k)] = NEOPIXEL_ZERO;
+					}
+					break;
+				case 2:	//Blue
+					if ((pixel[i].color.B >> (k - 1)) & 0x01)
+					{
+						dmaBuffer[(i*24) + (j*8) + (8-k)] = NEOPIXEL_ONE;		// 24 bits per LED ; 8 bits per colours ; Big Endian of colour
+					}
+					else
+					{
+						dmaBuffer[(i*24) + (j*8) + (8-k)] = NEOPIXEL_ZERO;
+					}
+					break;
+				}
+			}
+		}
+	}
+//////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////
+// Write DMA Buffer into Timer to generate correct PWM
+	for(k = 0 ; k < 11 ; k++)
+	{
+		dmaBuffer[DMA_BUFF_SIZE - 1] = 0; // last element must be 0!
+	}
+		HAL_TIM_PWM_Start_DMA(&htim2, TIM_CHANNEL_1, dmaBuffer, DMA_BUFF_SIZE);
+
+		HAL_Delay(10);
+//////////////////////////////////////////////////
+
+
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+	}
+  /* USER CODE END 3 */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL8;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 1);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 79;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  __HAL_TIM_DISABLE_OCxPRELOAD(&htim2, TIM_CHANNEL_1);
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+
+  /* USER CODE END MX_GPIO_Init_1 */
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
+  GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LD2_Pin */
+  GPIO_InitStruct.Pin = LD2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 1);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+
+  /* USER CODE END MX_GPIO_Init_2 */
+}
+
+/* USER CODE BEGIN 4 */
+
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */

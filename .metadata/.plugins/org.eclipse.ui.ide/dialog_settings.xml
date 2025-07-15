@@ -14,6 +14,13 @@
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
 			<item value=""/>
 		</list>
+		<section name="ExternalProjectImportWizard.dialogBounds">
+			<item key="DIALOG_X_ORIGIN" value="1026"/>
+			<item key="DIALOG_Y_ORIGIN" value="371"/>
+			<item key="DIALOG_WIDTH" value="525"/>
+			<item key="DIALOG_HEIGHT" value="710"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+		</section>
 	</section>
 	<section name="BasicNewProjectResourceWizard">
 	</section>
@@ -23,8 +30,18 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\PanTalir\Documents\GitHub\Programming\STM32\StandAlone\G050K8\06_RelayBoard_Interrupts_V2"/>
+			<item value="C:\Users\PanTalir\Documents\GitHub\Programming\STM32\Nucleo_64\42_NeoPixel_FirstTest"/>
+			<item value="C:\Users\PanTalir\Documents\GitHub\Programming\STM32\StandAlone\G050K8\01_LED-MOSFET-Controller_HelloWorld"/>
 			<item value="C:\Users\PanTalir\Documents\GitHub\Programming\STM32Cube\01_GPIO_Write"/>
 		</list>
+		<section name="SW4STM32SmartImportWizard.dialogBounds">
+			<item key="DIALOG_X_ORIGIN" value="1026"/>
+			<item key="DIALOG_Y_ORIGIN" value="371"/>
+			<item key="DIALOG_WIDTH" value="1001"/>
+			<item key="DIALOG_HEIGHT" value="710"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+		</section>
 	</section>
 	<section name="ChooseWorkspaceDialogSettings">
 		<item key="DIALOG_X_ORIGIN" value="984"/>
@@ -33,5 +50,12 @@
 	<section name="WORKBENCH_SETTINGS">
 		<list key="ENABLED_TRANSFERS">
 		</list>
+	</section>
+	<section name="SaveAsDialogSettings">
+		<item key="DIALOG_X_ORIGIN" value="1026"/>
+		<item key="DIALOG_Y_ORIGIN" value="322"/>
+		<item key="DIALOG_WIDTH" value="525"/>
+		<item key="DIALOG_HEIGHT" value="580"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
 	</section>
 </section>

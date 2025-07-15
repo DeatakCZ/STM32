@@ -1,0 +1,2 @@
+../Drivers/LM35/LM35.c:10:6:LM35_Init	6
+../Drivers/LM35/LM35.c:49:7:LM35_Read	1

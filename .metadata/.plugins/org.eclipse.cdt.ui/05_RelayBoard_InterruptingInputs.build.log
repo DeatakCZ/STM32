@@ -1,0 +1,31 @@
+18:19:48 **** Incremental Build of configuration Debug for project 05_RelayBoard_InterruptingInputs ****
+make -j4 all 
+arm-none-eabi-gcc "../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.c" -mcpu=cortex-m0plus -std=gnu11 -g -DDEBUG -DSTM32 -DSTM32G050K8Tx -DSTM32G0 -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.d" -MT"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.o"
+arm-none-eabi-gcc "../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.c" -mcpu=cortex-m0plus -std=gnu11 -g -DDEBUG -DSTM32 -DSTM32G050K8Tx -DSTM32G0 -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.d" -MT"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.o"
+arm-none-eabi-gcc "../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc_ex.c" -mcpu=cortex-m0plus -std=gnu11 -g -DDEBUG -DSTM32 -DSTM32G050K8Tx -DSTM32G0 -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc_ex.d" -MT"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc_ex.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.c" -mcpu=cortex-m0plus -std=gnu11 -g -DDEBUG -DSTM32 -DSTM32G050K8Tx -DSTM32G0 -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.d" -MT"Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.o"
+../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.c:36:10: fatal error: stm32g0xx_hal.h: No such file or directory
+   36 | #include "stm32g0xx_hal.h"
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.c:284:10: fatal error: stm32g0xx_hal.h: No such file or directory
+  284 | #include "stm32g0xx_hal.h"
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.c:79:10: fatal error: stm32g0xx_hal.h: No such file or directory
+   79 | #include "stm32g0xx_hal.h"
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc_ex.c:33:10: fatal error: stm32g0xx_hal.h: No such file or directory
+   33 | #include "stm32g0xx_hal.h"
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [Drivers/STM32G0xx_HAL_Driver/Src/subdir.mk:76: Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Drivers/STM32G0xx_HAL_Driver/Src/subdir.mk:76: Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.o] Error 1
+make: *** [Drivers/STM32G0xx_HAL_Driver/Src/subdir.mk:76: Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.o] Error 1
+make: *** [Drivers/STM32G0xx_HAL_Driver/Src/subdir.mk:76: Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc_ex.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+
+18:19:48 Build Failed. 9 errors, 0 warnings. (took 538ms)
+

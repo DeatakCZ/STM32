@@ -1,0 +1,10 @@
+12:26:12 **** Incremental Build of configuration Debug for project 01_LED-MOSFET-Controller_HelloWorld ****
+make -j4 all 
+arm-none-eabi-size  01_LED-MOSFET-Controller_HelloWorld.elf 
+   text	   data	    bss	    dec	    hex	filename
+  20320	     12	   2036	  22368	   5760	01_LED-MOSFET-Controller_HelloWorld.elf
+Finished building: default.size.stdout
+ 
+
+12:26:13 Build Finished. 0 errors, 0 warnings. (took 477ms)
+
