@@ -16,10 +16,10 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
     __disable_irq();
 
 //If both button and switch are pressed, read DIP switches to refresh timer values
-    if(((GPIO_Pin == Inputs_CfgParam.BTN1_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.SW1_Port, Inputs_CfgParam.SW1_Pin) == GPIO_PIN_RESET)) || 
-       ((GPIO_Pin == Inputs_CfgParam.BTN2_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.SW2_Port, Inputs_CfgParam.SW2_Pin) == GPIO_PIN_RESET)) ||
-       ((GPIO_Pin == Inputs_CfgParam.SW1_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.BTN1_Port, Inputs_CfgParam.BTN1_Pin) == GPIO_PIN_RESET))|| 
-       ((GPIO_Pin == Inputs_CfgParam.SW2_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.BTN2_Port, Inputs_CfgParam.BTN2_Pin) == GPIO_PIN_RESET)))
+    if(((GPIO_Pin == Inputs_CfgParam.BTN1_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.BTN1_Port, Inputs_CfgParam.BTN1_Pin) == GPIO_PIN_RESET)) || 
+       ((GPIO_Pin == Inputs_CfgParam.BTN2_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.BTN1_Port, Inputs_CfgParam.BTN1_Pin) == GPIO_PIN_RESET)) ||
+       ((GPIO_Pin == Inputs_CfgParam.SW1_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.SW2_Port, Inputs_CfgParam.SW2_Pin) == GPIO_PIN_RESET))|| 
+       ((GPIO_Pin == Inputs_CfgParam.SW2_Pin) && (HAL_GPIO_ReadPin(Inputs_CfgParam.SW1_Port, Inputs_CfgParam.SW1_Pin) == GPIO_PIN_RESET)))
     {
         ReadDIPSwitch(&Timers_CfgParam.Relay1_Timer, &Timers_CfgParam.Relay2_Timer);
     }
