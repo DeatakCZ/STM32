@@ -1,0 +1,2272 @@
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"ws2812b.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "Core/Src/ws2812b.c"
+  18              		.section	.text.delay_cycles,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	delay_cycles:
+  25              	.LVL0:
+  26              	.LFB66:
+   1:Core/Src/ws2812b.c **** #include "ws2812b.h"
+   2:Core/Src/ws2812b.c **** #include "gpio.h"
+   3:Core/Src/ws2812b.c **** 
+   4:Core/Src/ws2812b.c **** // ============================================================================
+   5:Core/Src/ws2812b.c **** // PRIVATE FUNCTION DECLARATIONS
+   6:Core/Src/ws2812b.c **** // ============================================================================
+   7:Core/Src/ws2812b.c **** 
+   8:Core/Src/ws2812b.c **** static void delay_cycles(uint32_t cycles);
+   9:Core/Src/ws2812b.c **** static void send_byte(WS2812B_Handle_t* handle, uint8_t byte);
+  10:Core/Src/ws2812b.c **** static void send_reset(WS2812B_Handle_t* handle);
+  11:Core/Src/ws2812b.c **** 
+  12:Core/Src/ws2812b.c **** // ============================================================================
+  13:Core/Src/ws2812b.c **** // INITIALIZATION
+  14:Core/Src/ws2812b.c **** // ============================================================================
+  15:Core/Src/ws2812b.c **** 
+  16:Core/Src/ws2812b.c **** void WS2812B_Init(WS2812B_Handle_t* handle, GPIO_TypeDef* port, uint16_t pin, uint16_t num_leds) {
+  17:Core/Src/ws2812b.c ****     // Initialize handle
+  18:Core/Src/ws2812b.c ****     handle->gpio_port = port;
+  19:Core/Src/ws2812b.c ****     handle->gpio_pin = pin;
+  20:Core/Src/ws2812b.c ****     
+  21:Core/Src/ws2812b.c ****     // Validate LED count
+  22:Core/Src/ws2812b.c ****     if (num_leds > WS2812B_MAX_LEDS) {
+  23:Core/Src/ws2812b.c ****         handle->led_count = WS2812B_MAX_LEDS;
+  24:Core/Src/ws2812b.c ****     } else {
+  25:Core/Src/ws2812b.c ****         handle->led_count = num_leds;
+  26:Core/Src/ws2812b.c ****     }
+  27:Core/Src/ws2812b.c ****     
+  28:Core/Src/ws2812b.c ****     // Initialize all LEDs to off
+  29:Core/Src/ws2812b.c ****     WS2812B_ClearAll(handle);
+  30:Core/Src/ws2812b.c **** }
+  31:Core/Src/ws2812b.c **** 
+  32:Core/Src/ws2812b.c **** // ============================================================================
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 2
+
+
+  33:Core/Src/ws2812b.c **** // PRIVATE TIMING FUNCTIONS
+  34:Core/Src/ws2812b.c **** // ============================================================================
+  35:Core/Src/ws2812b.c **** 
+  36:Core/Src/ws2812b.c **** static void delay_cycles(uint32_t cycles) {
+  27              		.loc 1 36 43 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              		.loc 1 36 43 is_stmt 0 view .LVU1
+  33 0000 82B0     		sub	sp, sp, #8
+  34              		.cfi_def_cfa_offset 8
+  37:Core/Src/ws2812b.c ****     // Simple cycle-accurate delay using loop
+  38:Core/Src/ws2812b.c ****     for (volatile uint32_t i = 0; i < cycles; i++) {
+  35              		.loc 1 38 5 is_stmt 1 view .LVU2
+  36              	.LBB2:
+  37              		.loc 1 38 10 view .LVU3
+  38              		.loc 1 38 28 is_stmt 0 view .LVU4
+  39 0002 0023     		movs	r3, #0
+  40 0004 0193     		str	r3, [sp, #4]
+  41              		.loc 1 38 5 view .LVU5
+  42 0006 03E0     		b	.L2
+  43              	.L3:
+  39:Core/Src/ws2812b.c ****         __NOP(); // No operation instruction
+  44              		.loc 1 39 9 is_stmt 1 view .LVU6
+  45              		.syntax unified
+  46              	@ 39 "Core/Src/ws2812b.c" 1
+  47 0008 00BF     		nop
+  48              	@ 0 "" 2
+  38:Core/Src/ws2812b.c ****         __NOP(); // No operation instruction
+  49              		.loc 1 38 48 discriminator 3 view .LVU7
+  50              		.thumb
+  51              		.syntax unified
+  52 000a 019B     		ldr	r3, [sp, #4]
+  53 000c 0133     		adds	r3, r3, #1
+  54 000e 0193     		str	r3, [sp, #4]
+  55              	.L2:
+  38:Core/Src/ws2812b.c ****         __NOP(); // No operation instruction
+  56              		.loc 1 38 37 discriminator 1 view .LVU8
+  57 0010 019B     		ldr	r3, [sp, #4]
+  58 0012 8342     		cmp	r3, r0
+  59 0014 F8D3     		bcc	.L3
+  60              	.LBE2:
+  40:Core/Src/ws2812b.c ****     }
+  41:Core/Src/ws2812b.c **** }
+  61              		.loc 1 41 1 is_stmt 0 view .LVU9
+  62 0016 02B0     		add	sp, sp, #8
+  63              		.cfi_def_cfa_offset 0
+  64              		@ sp needed
+  65 0018 7047     		bx	lr
+  66              		.cfi_endproc
+  67              	.LFE66:
+  69              		.section	.text.send_byte,"ax",%progbits
+  70              		.align	1
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 3
+
+
+  75              	send_byte:
+  76              	.LVL1:
+  77              	.LFB67:
+  42:Core/Src/ws2812b.c **** 
+  43:Core/Src/ws2812b.c **** static void send_byte(WS2812B_Handle_t* handle, uint8_t byte) {
+  78              		.loc 1 43 63 is_stmt 1 view -0
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 0, uses_anonymous_args = 0
+  82              		.loc 1 43 63 is_stmt 0 view .LVU11
+  83 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  84              		.cfi_def_cfa_offset 24
+  85              		.cfi_offset 3, -24
+  86              		.cfi_offset 4, -20
+  87              		.cfi_offset 5, -16
+  88              		.cfi_offset 6, -12
+  89              		.cfi_offset 7, -8
+  90              		.cfi_offset 14, -4
+  91 0002 0546     		mov	r5, r0
+  92 0004 0F46     		mov	r7, r1
+  44:Core/Src/ws2812b.c ****     // Send 8 bits with precise timing
+  45:Core/Src/ws2812b.c ****     for (int8_t i = 7; i >= 0; i--) {
+  93              		.loc 1 45 5 is_stmt 1 view .LVU12
+  94              	.LBB3:
+  95              		.loc 1 45 10 view .LVU13
+  96              	.LVL2:
+  97              		.loc 1 45 17 is_stmt 0 view .LVU14
+  98 0006 0724     		movs	r4, #7
+  99              		.loc 1 45 5 view .LVU15
+ 100 0008 0CE0     		b	.L6
+ 101              	.LVL3:
+ 102              	.L7:
+ 103              	.LBB4:
+  46:Core/Src/ws2812b.c ****         // Get current bit (MSB first)
+  47:Core/Src/ws2812b.c ****         uint8_t bit = (byte >> i) & 0x01;
+  48:Core/Src/ws2812b.c ****         
+  49:Core/Src/ws2812b.c ****         // Set pin high
+  50:Core/Src/ws2812b.c ****         HAL_GPIO_WritePin(handle->gpio_port, handle->gpio_pin, GPIO_PIN_SET);
+  51:Core/Src/ws2812b.c ****         
+  52:Core/Src/ws2812b.c ****         if (bit) {
+  53:Core/Src/ws2812b.c ****             // Send 1-bit: longer high time
+  54:Core/Src/ws2812b.c ****             delay_cycles(WS2812B_T1H_CYCLES);
+  55:Core/Src/ws2812b.c ****             HAL_GPIO_WritePin(handle->gpio_port, handle->gpio_pin, GPIO_PIN_RESET);
+  56:Core/Src/ws2812b.c ****             delay_cycles(WS2812B_T1L_CYCLES);
+  57:Core/Src/ws2812b.c ****         } else {
+  58:Core/Src/ws2812b.c ****             // Send 0-bit: shorter high time
+  59:Core/Src/ws2812b.c ****             delay_cycles(WS2812B_T0H_CYCLES);
+ 104              		.loc 1 59 13 is_stmt 1 view .LVU16
+ 105 000a 1E20     		movs	r0, #30
+ 106 000c FFF7FEFF 		bl	delay_cycles
+ 107              	.LVL4:
+  60:Core/Src/ws2812b.c ****             HAL_GPIO_WritePin(handle->gpio_port, handle->gpio_pin, GPIO_PIN_RESET);
+ 108              		.loc 1 60 13 view .LVU17
+ 109 0010 0022     		movs	r2, #0
+ 110 0012 A988     		ldrh	r1, [r5, #4]
+ 111 0014 2868     		ldr	r0, [r5]
+ 112 0016 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 4
+
+
+ 113              	.LVL5:
+  61:Core/Src/ws2812b.c ****             delay_cycles(WS2812B_T0L_CYCLES);
+ 114              		.loc 1 61 13 view .LVU18
+ 115 001a 4620     		movs	r0, #70
+ 116 001c FFF7FEFF 		bl	delay_cycles
+ 117              	.LVL6:
+ 118              	.L8:
+ 119              		.loc 1 61 13 is_stmt 0 view .LVU19
+ 120              	.LBE4:
+  45:Core/Src/ws2812b.c ****         // Get current bit (MSB first)
+ 121              		.loc 1 45 33 is_stmt 1 discriminator 2 view .LVU20
+ 122 0020 013C     		subs	r4, r4, #1
+ 123              	.LVL7:
+  45:Core/Src/ws2812b.c ****         // Get current bit (MSB first)
+ 124              		.loc 1 45 33 is_stmt 0 discriminator 2 view .LVU21
+ 125 0022 64B2     		sxtb	r4, r4
+ 126              	.LVL8:
+ 127              	.L6:
+  45:Core/Src/ws2812b.c ****         // Get current bit (MSB first)
+ 128              		.loc 1 45 26 is_stmt 1 discriminator 1 view .LVU22
+ 129 0024 002C     		cmp	r4, #0
+ 130 0026 16DB     		blt	.L11
+ 131              	.LBB5:
+  47:Core/Src/ws2812b.c ****         
+ 132              		.loc 1 47 9 view .LVU23
+  47:Core/Src/ws2812b.c ****         
+ 133              		.loc 1 47 29 is_stmt 0 view .LVU24
+ 134 0028 47FA04F6 		asr	r6, r7, r4
+  47:Core/Src/ws2812b.c ****         
+ 135              		.loc 1 47 17 view .LVU25
+ 136 002c 06F00106 		and	r6, r6, #1
+ 137              	.LVL9:
+  50:Core/Src/ws2812b.c ****         
+ 138              		.loc 1 50 9 is_stmt 1 view .LVU26
+ 139 0030 0122     		movs	r2, #1
+ 140 0032 A988     		ldrh	r1, [r5, #4]
+ 141 0034 2868     		ldr	r0, [r5]
+ 142 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 143              	.LVL10:
+  52:Core/Src/ws2812b.c ****             // Send 1-bit: longer high time
+ 144              		.loc 1 52 9 view .LVU27
+  52:Core/Src/ws2812b.c ****             // Send 1-bit: longer high time
+ 145              		.loc 1 52 12 is_stmt 0 view .LVU28
+ 146 003a 002E     		cmp	r6, #0
+ 147 003c E5D0     		beq	.L7
+  54:Core/Src/ws2812b.c ****             HAL_GPIO_WritePin(handle->gpio_port, handle->gpio_pin, GPIO_PIN_RESET);
+ 148              		.loc 1 54 13 is_stmt 1 view .LVU29
+ 149 003e 4620     		movs	r0, #70
+ 150 0040 FFF7FEFF 		bl	delay_cycles
+ 151              	.LVL11:
+  55:Core/Src/ws2812b.c ****             delay_cycles(WS2812B_T1L_CYCLES);
+ 152              		.loc 1 55 13 view .LVU30
+ 153 0044 0022     		movs	r2, #0
+ 154 0046 A988     		ldrh	r1, [r5, #4]
+ 155 0048 2868     		ldr	r0, [r5]
+ 156 004a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 157              	.LVL12:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 5
+
+
+  56:Core/Src/ws2812b.c ****         } else {
+ 158              		.loc 1 56 13 view .LVU31
+ 159 004e 1E20     		movs	r0, #30
+ 160 0050 FFF7FEFF 		bl	delay_cycles
+ 161              	.LVL13:
+ 162 0054 E4E7     		b	.L8
+ 163              	.LVL14:
+ 164              	.L11:
+  56:Core/Src/ws2812b.c ****         } else {
+ 165              		.loc 1 56 13 is_stmt 0 view .LVU32
+ 166              	.LBE5:
+ 167              	.LBE3:
+  62:Core/Src/ws2812b.c ****         }
+  63:Core/Src/ws2812b.c ****     }
+  64:Core/Src/ws2812b.c **** }
+ 168              		.loc 1 64 1 view .LVU33
+ 169 0056 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 170              		.loc 1 64 1 view .LVU34
+ 171              		.cfi_endproc
+ 172              	.LFE67:
+ 174              		.section	.text.send_reset,"ax",%progbits
+ 175              		.align	1
+ 176              		.syntax unified
+ 177              		.thumb
+ 178              		.thumb_func
+ 180              	send_reset:
+ 181              	.LVL15:
+ 182              	.LFB68:
+  65:Core/Src/ws2812b.c **** 
+  66:Core/Src/ws2812b.c **** static void send_reset(WS2812B_Handle_t* handle) {
+ 183              		.loc 1 66 50 is_stmt 1 view -0
+ 184              		.cfi_startproc
+ 185              		@ args = 0, pretend = 0, frame = 0
+ 186              		@ frame_needed = 0, uses_anonymous_args = 0
+ 187              		.loc 1 66 50 is_stmt 0 view .LVU36
+ 188 0000 08B5     		push	{r3, lr}
+ 189              		.cfi_def_cfa_offset 8
+ 190              		.cfi_offset 3, -8
+ 191              		.cfi_offset 14, -4
+  67:Core/Src/ws2812b.c ****     // Send reset signal (low for at least 50us)
+  68:Core/Src/ws2812b.c ****     HAL_GPIO_WritePin(handle->gpio_port, handle->gpio_pin, GPIO_PIN_RESET);
+ 192              		.loc 1 68 5 is_stmt 1 view .LVU37
+ 193 0002 0022     		movs	r2, #0
+ 194 0004 8188     		ldrh	r1, [r0, #4]
+ 195 0006 0068     		ldr	r0, [r0]
+ 196              	.LVL16:
+ 197              		.loc 1 68 5 is_stmt 0 view .LVU38
+ 198 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 199              	.LVL17:
+  69:Core/Src/ws2812b.c ****     delay_cycles(WS2812B_RESET_CYCLES);
+ 200              		.loc 1 69 5 is_stmt 1 view .LVU39
+ 201 000c 4FF47A60 		mov	r0, #4000
+ 202 0010 FFF7FEFF 		bl	delay_cycles
+ 203              	.LVL18:
+  70:Core/Src/ws2812b.c **** }
+ 204              		.loc 1 70 1 is_stmt 0 view .LVU40
+ 205 0014 08BD     		pop	{r3, pc}
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 6
+
+
+ 206              		.cfi_endproc
+ 207              	.LFE68:
+ 209              		.section	.text.WS2812B_SetLED,"ax",%progbits
+ 210              		.align	1
+ 211              		.global	WS2812B_SetLED
+ 212              		.syntax unified
+ 213              		.thumb
+ 214              		.thumb_func
+ 216              	WS2812B_SetLED:
+ 217              	.LVL19:
+ 218              	.LFB69:
+  71:Core/Src/ws2812b.c **** 
+  72:Core/Src/ws2812b.c **** // ============================================================================
+  73:Core/Src/ws2812b.c **** // CORE LED CONTROL FUNCTIONS
+  74:Core/Src/ws2812b.c **** // ============================================================================
+  75:Core/Src/ws2812b.c **** 
+  76:Core/Src/ws2812b.c **** void WS2812B_SetLED(WS2812B_Handle_t* handle, uint16_t index, RGBColor_t color) {
+ 219              		.loc 1 76 81 is_stmt 1 view -0
+ 220              		.cfi_startproc
+ 221              		@ args = 0, pretend = 0, frame = 8
+ 222              		@ frame_needed = 0, uses_anonymous_args = 0
+ 223              		@ link register save eliminated.
+ 224              		.loc 1 76 81 is_stmt 0 view .LVU42
+ 225 0000 82B0     		sub	sp, sp, #8
+ 226              		.cfi_def_cfa_offset 8
+ 227 0002 0192     		str	r2, [sp, #4]
+  77:Core/Src/ws2812b.c ****     // Validate index
+  78:Core/Src/ws2812b.c ****     if (index >= handle->led_count) return;
+ 228              		.loc 1 78 5 is_stmt 1 view .LVU43
+ 229              		.loc 1 78 24 is_stmt 0 view .LVU44
+ 230 0004 C388     		ldrh	r3, [r0, #6]
+ 231              		.loc 1 78 8 view .LVU45
+ 232 0006 8B42     		cmp	r3, r1
+ 233 0008 08D9     		bls	.L14
+  79:Core/Src/ws2812b.c ****     
+  80:Core/Src/ws2812b.c ****     // Store color in buffer (WS2812B expects GRB order)
+  81:Core/Src/ws2812b.c ****     handle->led_buffer[index] = color;
+ 234              		.loc 1 81 5 is_stmt 1 view .LVU46
+ 235              		.loc 1 81 31 is_stmt 0 view .LVU47
+ 236 000a 01EB4101 		add	r1, r1, r1, lsl #1
+ 237              	.LVL20:
+ 238              		.loc 1 81 31 view .LVU48
+ 239 000e 0844     		add	r0, r0, r1
+ 240              	.LVL21:
+ 241              		.loc 1 81 31 view .LVU49
+ 242 0010 BDF80420 		ldrh	r2, [sp, #4]	@ unaligned
+ 243 0014 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 244 0018 0281     		strh	r2, [r0, #8]	@ unaligned
+ 245 001a 8372     		strb	r3, [r0, #10]
+ 246              	.L14:
+  82:Core/Src/ws2812b.c **** }
+ 247              		.loc 1 82 1 view .LVU50
+ 248 001c 02B0     		add	sp, sp, #8
+ 249              		.cfi_def_cfa_offset 0
+ 250              		@ sp needed
+ 251 001e 7047     		bx	lr
+ 252              		.cfi_endproc
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 7
+
+
+ 253              	.LFE69:
+ 255              		.section	.text.WS2812B_SetLED_RGB,"ax",%progbits
+ 256              		.align	1
+ 257              		.global	WS2812B_SetLED_RGB
+ 258              		.syntax unified
+ 259              		.thumb
+ 260              		.thumb_func
+ 262              	WS2812B_SetLED_RGB:
+ 263              	.LVL22:
+ 264              	.LFB70:
+  83:Core/Src/ws2812b.c **** 
+  84:Core/Src/ws2812b.c **** void WS2812B_SetLED_RGB(WS2812B_Handle_t* handle, uint16_t index, uint8_t red, uint8_t green, uint8
+ 265              		.loc 1 84 109 is_stmt 1 view -0
+ 266              		.cfi_startproc
+ 267              		@ args = 4, pretend = 0, frame = 8
+ 268              		@ frame_needed = 0, uses_anonymous_args = 0
+ 269              		.loc 1 84 109 is_stmt 0 view .LVU52
+ 270 0000 00B5     		push	{lr}
+ 271              		.cfi_def_cfa_offset 4
+ 272              		.cfi_offset 14, -4
+ 273 0002 83B0     		sub	sp, sp, #12
+ 274              		.cfi_def_cfa_offset 16
+  85:Core/Src/ws2812b.c ****     RGBColor_t color = {red, green, blue};
+ 275              		.loc 1 85 5 is_stmt 1 view .LVU53
+ 276              		.loc 1 85 16 is_stmt 0 view .LVU54
+ 277 0004 8DF80420 		strb	r2, [sp, #4]
+ 278 0008 8DF80530 		strb	r3, [sp, #5]
+ 279 000c 9DF81030 		ldrb	r3, [sp, #16]	@ zero_extendqisi2
+ 280              	.LVL23:
+ 281              		.loc 1 85 16 view .LVU55
+ 282 0010 8DF80630 		strb	r3, [sp, #6]
+  86:Core/Src/ws2812b.c ****     WS2812B_SetLED(handle, index, color);
+ 283              		.loc 1 86 5 is_stmt 1 view .LVU56
+ 284 0014 019A     		ldr	r2, [sp, #4]
+ 285              	.LVL24:
+ 286              		.loc 1 86 5 is_stmt 0 view .LVU57
+ 287 0016 FFF7FEFF 		bl	WS2812B_SetLED
+ 288              	.LVL25:
+  87:Core/Src/ws2812b.c **** }
+ 289              		.loc 1 87 1 view .LVU58
+ 290 001a 03B0     		add	sp, sp, #12
+ 291              		.cfi_def_cfa_offset 4
+ 292              		@ sp needed
+ 293 001c 5DF804FB 		ldr	pc, [sp], #4
+ 294              		.loc 1 87 1 view .LVU59
+ 295              		.cfi_endproc
+ 296              	.LFE70:
+ 298              		.section	.text.WS2812B_SetAllLEDs,"ax",%progbits
+ 299              		.align	1
+ 300              		.global	WS2812B_SetAllLEDs
+ 301              		.syntax unified
+ 302              		.thumb
+ 303              		.thumb_func
+ 305              	WS2812B_SetAllLEDs:
+ 306              	.LVL26:
+ 307              	.LFB71:
+  88:Core/Src/ws2812b.c **** 
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 8
+
+
+  89:Core/Src/ws2812b.c **** void WS2812B_SetAllLEDs(WS2812B_Handle_t* handle, RGBColor_t color) {
+ 308              		.loc 1 89 69 is_stmt 1 view -0
+ 309              		.cfi_startproc
+ 310              		@ args = 0, pretend = 0, frame = 8
+ 311              		@ frame_needed = 0, uses_anonymous_args = 0
+ 312              		@ link register save eliminated.
+ 313              		.loc 1 89 69 is_stmt 0 view .LVU61
+ 314 0000 82B0     		sub	sp, sp, #8
+ 315              		.cfi_def_cfa_offset 8
+ 316 0002 0191     		str	r1, [sp, #4]
+  90:Core/Src/ws2812b.c ****     // Set all LEDs to the same color
+  91:Core/Src/ws2812b.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 317              		.loc 1 91 5 is_stmt 1 view .LVU62
+ 318              	.LBB6:
+ 319              		.loc 1 91 10 view .LVU63
+ 320              	.LVL27:
+ 321              		.loc 1 91 19 is_stmt 0 view .LVU64
+ 322 0004 0023     		movs	r3, #0
+ 323              		.loc 1 91 5 view .LVU65
+ 324 0006 0BE0     		b	.L20
+ 325              	.LVL28:
+ 326              	.L21:
+  92:Core/Src/ws2812b.c ****         handle->led_buffer[i] = color;
+ 327              		.loc 1 92 9 is_stmt 1 view .LVU66
+ 328              		.loc 1 92 31 is_stmt 0 view .LVU67
+ 329 0008 03EB4302 		add	r2, r3, r3, lsl #1
+ 330 000c 0244     		add	r2, r2, r0
+ 331 000e BDF804C0 		ldrh	ip, [sp, #4]	@ unaligned
+ 332 0012 9DF80610 		ldrb	r1, [sp, #6]	@ zero_extendqisi2
+ 333 0016 A2F808C0 		strh	ip, [r2, #8]	@ unaligned
+ 334 001a 9172     		strb	r1, [r2, #10]
+  91:Core/Src/ws2812b.c ****         handle->led_buffer[i] = color;
+ 335              		.loc 1 91 50 is_stmt 1 discriminator 3 view .LVU68
+ 336 001c 0133     		adds	r3, r3, #1
+ 337              	.LVL29:
+  91:Core/Src/ws2812b.c ****         handle->led_buffer[i] = color;
+ 338              		.loc 1 91 50 is_stmt 0 discriminator 3 view .LVU69
+ 339 001e 9BB2     		uxth	r3, r3
+ 340              	.LVL30:
+ 341              	.L20:
+  91:Core/Src/ws2812b.c ****         handle->led_buffer[i] = color;
+ 342              		.loc 1 91 28 is_stmt 1 discriminator 1 view .LVU70
+  91:Core/Src/ws2812b.c ****         handle->led_buffer[i] = color;
+ 343              		.loc 1 91 36 is_stmt 0 discriminator 1 view .LVU71
+ 344 0020 C288     		ldrh	r2, [r0, #6]
+  91:Core/Src/ws2812b.c ****         handle->led_buffer[i] = color;
+ 345              		.loc 1 91 28 discriminator 1 view .LVU72
+ 346 0022 9A42     		cmp	r2, r3
+ 347 0024 F0D8     		bhi	.L21
+ 348              	.LBE6:
+  93:Core/Src/ws2812b.c ****     }
+  94:Core/Src/ws2812b.c **** }
+ 349              		.loc 1 94 1 view .LVU73
+ 350 0026 02B0     		add	sp, sp, #8
+ 351              		.cfi_def_cfa_offset 0
+ 352              		@ sp needed
+ 353 0028 7047     		bx	lr
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 9
+
+
+ 354              		.cfi_endproc
+ 355              	.LFE71:
+ 357              		.section	.text.WS2812B_ClearAll,"ax",%progbits
+ 358              		.align	1
+ 359              		.global	WS2812B_ClearAll
+ 360              		.syntax unified
+ 361              		.thumb
+ 362              		.thumb_func
+ 364              	WS2812B_ClearAll:
+ 365              	.LVL31:
+ 366              	.LFB72:
+  95:Core/Src/ws2812b.c **** 
+  96:Core/Src/ws2812b.c **** void WS2812B_ClearAll(WS2812B_Handle_t* handle) {
+ 367              		.loc 1 96 49 is_stmt 1 view -0
+ 368              		.cfi_startproc
+ 369              		@ args = 0, pretend = 0, frame = 8
+ 370              		@ frame_needed = 0, uses_anonymous_args = 0
+ 371              		.loc 1 96 49 is_stmt 0 view .LVU75
+ 372 0000 00B5     		push	{lr}
+ 373              		.cfi_def_cfa_offset 4
+ 374              		.cfi_offset 14, -4
+ 375 0002 83B0     		sub	sp, sp, #12
+ 376              		.cfi_def_cfa_offset 16
+  97:Core/Src/ws2812b.c ****     // Turn off all LEDs
+  98:Core/Src/ws2812b.c ****     RGBColor_t black = {0, 0, 0};
+ 377              		.loc 1 98 5 is_stmt 1 view .LVU76
+ 378              		.loc 1 98 16 is_stmt 0 view .LVU77
+ 379 0004 0023     		movs	r3, #0
+ 380 0006 8DF80430 		strb	r3, [sp, #4]
+ 381 000a 8DF80530 		strb	r3, [sp, #5]
+ 382 000e 8DF80630 		strb	r3, [sp, #6]
+  99:Core/Src/ws2812b.c ****     WS2812B_SetAllLEDs(handle, black);
+ 383              		.loc 1 99 5 is_stmt 1 view .LVU78
+ 384 0012 0199     		ldr	r1, [sp, #4]
+ 385 0014 FFF7FEFF 		bl	WS2812B_SetAllLEDs
+ 386              	.LVL32:
+ 100:Core/Src/ws2812b.c **** }
+ 387              		.loc 1 100 1 is_stmt 0 view .LVU79
+ 388 0018 03B0     		add	sp, sp, #12
+ 389              		.cfi_def_cfa_offset 4
+ 390              		@ sp needed
+ 391 001a 5DF804FB 		ldr	pc, [sp], #4
+ 392              		.cfi_endproc
+ 393              	.LFE72:
+ 395              		.section	.text.WS2812B_Init,"ax",%progbits
+ 396              		.align	1
+ 397              		.global	WS2812B_Init
+ 398              		.syntax unified
+ 399              		.thumb
+ 400              		.thumb_func
+ 402              	WS2812B_Init:
+ 403              	.LVL33:
+ 404              	.LFB65:
+  16:Core/Src/ws2812b.c ****     // Initialize handle
+ 405              		.loc 1 16 98 is_stmt 1 view -0
+ 406              		.cfi_startproc
+ 407              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 10
+
+
+ 408              		@ frame_needed = 0, uses_anonymous_args = 0
+  16:Core/Src/ws2812b.c ****     // Initialize handle
+ 409              		.loc 1 16 98 is_stmt 0 view .LVU81
+ 410 0000 08B5     		push	{r3, lr}
+ 411              		.cfi_def_cfa_offset 8
+ 412              		.cfi_offset 3, -8
+ 413              		.cfi_offset 14, -4
+  18:Core/Src/ws2812b.c ****     handle->gpio_pin = pin;
+ 414              		.loc 1 18 5 is_stmt 1 view .LVU82
+  18:Core/Src/ws2812b.c ****     handle->gpio_pin = pin;
+ 415              		.loc 1 18 23 is_stmt 0 view .LVU83
+ 416 0002 0160     		str	r1, [r0]
+  19:Core/Src/ws2812b.c ****     
+ 417              		.loc 1 19 5 is_stmt 1 view .LVU84
+  19:Core/Src/ws2812b.c ****     
+ 418              		.loc 1 19 22 is_stmt 0 view .LVU85
+ 419 0004 8280     		strh	r2, [r0, #4]	@ movhi
+  22:Core/Src/ws2812b.c ****         handle->led_count = WS2812B_MAX_LEDS;
+ 420              		.loc 1 22 5 is_stmt 1 view .LVU86
+  22:Core/Src/ws2812b.c ****         handle->led_count = WS2812B_MAX_LEDS;
+ 421              		.loc 1 22 8 is_stmt 0 view .LVU87
+ 422 0006 202B     		cmp	r3, #32
+ 423 0008 04D9     		bls	.L26
+  23:Core/Src/ws2812b.c ****     } else {
+ 424              		.loc 1 23 9 is_stmt 1 view .LVU88
+  23:Core/Src/ws2812b.c ****     } else {
+ 425              		.loc 1 23 27 is_stmt 0 view .LVU89
+ 426 000a 2023     		movs	r3, #32
+ 427              	.LVL34:
+  23:Core/Src/ws2812b.c ****     } else {
+ 428              		.loc 1 23 27 view .LVU90
+ 429 000c C380     		strh	r3, [r0, #6]	@ movhi
+ 430              	.L27:
+  29:Core/Src/ws2812b.c **** }
+ 431              		.loc 1 29 5 is_stmt 1 view .LVU91
+ 432 000e FFF7FEFF 		bl	WS2812B_ClearAll
+ 433              	.LVL35:
+  30:Core/Src/ws2812b.c **** 
+ 434              		.loc 1 30 1 is_stmt 0 view .LVU92
+ 435 0012 08BD     		pop	{r3, pc}
+ 436              	.LVL36:
+ 437              	.L26:
+  25:Core/Src/ws2812b.c ****     }
+ 438              		.loc 1 25 9 is_stmt 1 view .LVU93
+  25:Core/Src/ws2812b.c ****     }
+ 439              		.loc 1 25 27 is_stmt 0 view .LVU94
+ 440 0014 C380     		strh	r3, [r0, #6]	@ movhi
+ 441 0016 FAE7     		b	.L27
+ 442              		.cfi_endproc
+ 443              	.LFE65:
+ 445              		.section	.text.WS2812B_Update,"ax",%progbits
+ 446              		.align	1
+ 447              		.global	WS2812B_Update
+ 448              		.syntax unified
+ 449              		.thumb
+ 450              		.thumb_func
+ 452              	WS2812B_Update:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 11
+
+
+ 453              	.LVL37:
+ 454              	.LFB73:
+ 101:Core/Src/ws2812b.c **** 
+ 102:Core/Src/ws2812b.c **** void WS2812B_Update(WS2812B_Handle_t* handle) {
+ 455              		.loc 1 102 47 is_stmt 1 view -0
+ 456              		.cfi_startproc
+ 457              		@ args = 0, pretend = 0, frame = 0
+ 458              		@ frame_needed = 0, uses_anonymous_args = 0
+ 459              		.loc 1 102 47 is_stmt 0 view .LVU96
+ 460 0000 70B5     		push	{r4, r5, r6, lr}
+ 461              		.cfi_def_cfa_offset 16
+ 462              		.cfi_offset 4, -16
+ 463              		.cfi_offset 5, -12
+ 464              		.cfi_offset 6, -8
+ 465              		.cfi_offset 14, -4
+ 466 0002 0646     		mov	r6, r0
+ 103:Core/Src/ws2812b.c ****     // Send all LED data to the strip
+ 104:Core/Src/ws2812b.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 467              		.loc 1 104 5 is_stmt 1 view .LVU97
+ 468              	.LBB7:
+ 469              		.loc 1 104 10 view .LVU98
+ 470              	.LVL38:
+ 471              		.loc 1 104 19 is_stmt 0 view .LVU99
+ 472 0004 0024     		movs	r4, #0
+ 473              		.loc 1 104 5 view .LVU100
+ 474 0006 10E0     		b	.L30
+ 475              	.LVL39:
+ 476              	.L31:
+ 105:Core/Src/ws2812b.c ****         // WS2812B expects GRB order, not RGB
+ 106:Core/Src/ws2812b.c ****         send_byte(handle, handle->led_buffer[i].green);
+ 477              		.loc 1 106 9 is_stmt 1 view .LVU101
+ 478 0008 04EB4405 		add	r5, r4, r4, lsl #1
+ 479 000c 3544     		add	r5, r5, r6
+ 480 000e 697A     		ldrb	r1, [r5, #9]	@ zero_extendqisi2
+ 481 0010 3046     		mov	r0, r6
+ 482 0012 FFF7FEFF 		bl	send_byte
+ 483              	.LVL40:
+ 107:Core/Src/ws2812b.c ****         send_byte(handle, handle->led_buffer[i].red);
+ 484              		.loc 1 107 9 view .LVU102
+ 485 0016 297A     		ldrb	r1, [r5, #8]	@ zero_extendqisi2
+ 486 0018 3046     		mov	r0, r6
+ 487 001a FFF7FEFF 		bl	send_byte
+ 488              	.LVL41:
+ 108:Core/Src/ws2812b.c ****         send_byte(handle, handle->led_buffer[i].blue);
+ 489              		.loc 1 108 9 view .LVU103
+ 490 001e A97A     		ldrb	r1, [r5, #10]	@ zero_extendqisi2
+ 491 0020 3046     		mov	r0, r6
+ 492 0022 FFF7FEFF 		bl	send_byte
+ 493              	.LVL42:
+ 104:Core/Src/ws2812b.c ****         // WS2812B expects GRB order, not RGB
+ 494              		.loc 1 104 50 discriminator 3 view .LVU104
+ 495 0026 0134     		adds	r4, r4, #1
+ 496              	.LVL43:
+ 104:Core/Src/ws2812b.c ****         // WS2812B expects GRB order, not RGB
+ 497              		.loc 1 104 50 is_stmt 0 discriminator 3 view .LVU105
+ 498 0028 A4B2     		uxth	r4, r4
+ 499              	.LVL44:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 12
+
+
+ 500              	.L30:
+ 104:Core/Src/ws2812b.c ****         // WS2812B expects GRB order, not RGB
+ 501              		.loc 1 104 28 is_stmt 1 discriminator 1 view .LVU106
+ 104:Core/Src/ws2812b.c ****         // WS2812B expects GRB order, not RGB
+ 502              		.loc 1 104 36 is_stmt 0 discriminator 1 view .LVU107
+ 503 002a F388     		ldrh	r3, [r6, #6]
+ 104:Core/Src/ws2812b.c ****         // WS2812B expects GRB order, not RGB
+ 504              		.loc 1 104 28 discriminator 1 view .LVU108
+ 505 002c A342     		cmp	r3, r4
+ 506 002e EBD8     		bhi	.L31
+ 507              	.LBE7:
+ 109:Core/Src/ws2812b.c ****     }
+ 110:Core/Src/ws2812b.c ****     
+ 111:Core/Src/ws2812b.c ****     // Send reset signal
+ 112:Core/Src/ws2812b.c ****     send_reset(handle);
+ 508              		.loc 1 112 5 is_stmt 1 view .LVU109
+ 509 0030 3046     		mov	r0, r6
+ 510 0032 FFF7FEFF 		bl	send_reset
+ 511              	.LVL45:
+ 113:Core/Src/ws2812b.c **** }
+ 512              		.loc 1 113 1 is_stmt 0 view .LVU110
+ 513 0036 70BD     		pop	{r4, r5, r6, pc}
+ 514              		.loc 1 113 1 view .LVU111
+ 515              		.cfi_endproc
+ 516              	.LFE73:
+ 518              		.section	.text.WS2812B_GetLEDCount,"ax",%progbits
+ 519              		.align	1
+ 520              		.global	WS2812B_GetLEDCount
+ 521              		.syntax unified
+ 522              		.thumb
+ 523              		.thumb_func
+ 525              	WS2812B_GetLEDCount:
+ 526              	.LVL46:
+ 527              	.LFB74:
+ 114:Core/Src/ws2812b.c **** 
+ 115:Core/Src/ws2812b.c **** // ============================================================================
+ 116:Core/Src/ws2812b.c **** // UTILITY FUNCTIONS
+ 117:Core/Src/ws2812b.c **** // ============================================================================
+ 118:Core/Src/ws2812b.c **** 
+ 119:Core/Src/ws2812b.c **** uint16_t WS2812B_GetLEDCount(WS2812B_Handle_t* handle) {
+ 528              		.loc 1 119 56 is_stmt 1 view -0
+ 529              		.cfi_startproc
+ 530              		@ args = 0, pretend = 0, frame = 0
+ 531              		@ frame_needed = 0, uses_anonymous_args = 0
+ 532              		@ link register save eliminated.
+ 120:Core/Src/ws2812b.c ****     return handle->led_count;
+ 533              		.loc 1 120 5 view .LVU113
+ 121:Core/Src/ws2812b.c **** }
+ 534              		.loc 1 121 1 is_stmt 0 view .LVU114
+ 535 0000 C088     		ldrh	r0, [r0, #6]
+ 536              	.LVL47:
+ 537              		.loc 1 121 1 view .LVU115
+ 538 0002 7047     		bx	lr
+ 539              		.cfi_endproc
+ 540              	.LFE74:
+ 542              		.section	.text.WS2812B_GetMaxLEDs,"ax",%progbits
+ 543              		.align	1
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 13
+
+
+ 544              		.global	WS2812B_GetMaxLEDs
+ 545              		.syntax unified
+ 546              		.thumb
+ 547              		.thumb_func
+ 549              	WS2812B_GetMaxLEDs:
+ 550              	.LFB75:
+ 122:Core/Src/ws2812b.c **** 
+ 123:Core/Src/ws2812b.c **** uint16_t WS2812B_GetMaxLEDs(void) {
+ 551              		.loc 1 123 35 is_stmt 1 view -0
+ 552              		.cfi_startproc
+ 553              		@ args = 0, pretend = 0, frame = 0
+ 554              		@ frame_needed = 0, uses_anonymous_args = 0
+ 555              		@ link register save eliminated.
+ 124:Core/Src/ws2812b.c ****     return WS2812B_MAX_LEDS;
+ 556              		.loc 1 124 5 view .LVU117
+ 125:Core/Src/ws2812b.c **** }
+ 557              		.loc 1 125 1 is_stmt 0 view .LVU118
+ 558 0000 2020     		movs	r0, #32
+ 559 0002 7047     		bx	lr
+ 560              		.cfi_endproc
+ 561              	.LFE75:
+ 563              		.section	.text.WS2812B_SetBrightness,"ax",%progbits
+ 564              		.align	1
+ 565              		.global	WS2812B_SetBrightness
+ 566              		.syntax unified
+ 567              		.thumb
+ 568              		.thumb_func
+ 570              	WS2812B_SetBrightness:
+ 571              	.LVL48:
+ 572              	.LFB76:
+ 126:Core/Src/ws2812b.c **** 
+ 127:Core/Src/ws2812b.c **** void WS2812B_SetBrightness(WS2812B_Handle_t* handle, uint16_t index, uint8_t brightness) {
+ 573              		.loc 1 127 90 is_stmt 1 view -0
+ 574              		.cfi_startproc
+ 575              		@ args = 0, pretend = 0, frame = 0
+ 576              		@ frame_needed = 0, uses_anonymous_args = 0
+ 128:Core/Src/ws2812b.c ****     // Validate index
+ 129:Core/Src/ws2812b.c ****     if (index >= handle->led_count) return;
+ 577              		.loc 1 129 5 view .LVU120
+ 578              		.loc 1 129 24 is_stmt 0 view .LVU121
+ 579 0000 C388     		ldrh	r3, [r0, #6]
+ 580              		.loc 1 129 8 view .LVU122
+ 581 0002 8B42     		cmp	r3, r1
+ 582 0004 20D9     		bls	.L38
+ 127:Core/Src/ws2812b.c ****     // Validate index
+ 583              		.loc 1 127 90 view .LVU123
+ 584 0006 00B5     		push	{lr}
+ 585              		.cfi_def_cfa_offset 4
+ 586              		.cfi_offset 14, -4
+ 130:Core/Src/ws2812b.c ****     
+ 131:Core/Src/ws2812b.c ****     // Scale RGB values by brightness (0-255)
+ 132:Core/Src/ws2812b.c ****     uint8_t scale = brightness;
+ 587              		.loc 1 132 5 is_stmt 1 view .LVU124
+ 588              	.LVL49:
+ 133:Core/Src/ws2812b.c ****     handle->led_buffer[index].red = (handle->led_buffer[index].red * scale) / 255;
+ 589              		.loc 1 133 5 view .LVU125
+ 590              		.loc 1 133 63 is_stmt 0 view .LVU126
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 14
+
+
+ 591 0008 01EB4101 		add	r1, r1, r1, lsl #1
+ 592              	.LVL50:
+ 593              		.loc 1 133 63 view .LVU127
+ 594 000c 0844     		add	r0, r0, r1
+ 595              	.LVL51:
+ 596              		.loc 1 133 63 view .LVU128
+ 597 000e 90F808C0 		ldrb	ip, [r0, #8]	@ zero_extendqisi2
+ 598              		.loc 1 133 68 view .LVU129
+ 599 0012 02FB0CFC 		mul	ip, r2, ip
+ 600              		.loc 1 133 77 view .LVU130
+ 601 0016 0D4B     		ldr	r3, .L41
+ 602 0018 83FB0CE1 		smull	lr, r1, r3, ip
+ 603 001c 6144     		add	r1, r1, ip
+ 604 001e C911     		asrs	r1, r1, #7
+ 605              		.loc 1 133 35 view .LVU131
+ 606 0020 0172     		strb	r1, [r0, #8]
+ 134:Core/Src/ws2812b.c ****     handle->led_buffer[index].green = (handle->led_buffer[index].green * scale) / 255;
+ 607              		.loc 1 134 5 is_stmt 1 view .LVU132
+ 608              		.loc 1 134 65 is_stmt 0 view .LVU133
+ 609 0022 90F809C0 		ldrb	ip, [r0, #9]	@ zero_extendqisi2
+ 610              		.loc 1 134 72 view .LVU134
+ 611 0026 0CFB02FC 		mul	ip, ip, r2
+ 612              		.loc 1 134 81 view .LVU135
+ 613 002a 83FB0CE1 		smull	lr, r1, r3, ip
+ 614 002e 6144     		add	r1, r1, ip
+ 615 0030 C911     		asrs	r1, r1, #7
+ 616              		.loc 1 134 37 view .LVU136
+ 617 0032 4172     		strb	r1, [r0, #9]
+ 135:Core/Src/ws2812b.c ****     handle->led_buffer[index].blue = (handle->led_buffer[index].blue * scale) / 255;
+ 618              		.loc 1 135 5 is_stmt 1 view .LVU137
+ 619              		.loc 1 135 64 is_stmt 0 view .LVU138
+ 620 0034 817A     		ldrb	r1, [r0, #10]	@ zero_extendqisi2
+ 621              		.loc 1 135 70 view .LVU139
+ 622 0036 01FB02F2 		mul	r2, r1, r2
+ 623              	.LVL52:
+ 624              		.loc 1 135 79 view .LVU140
+ 625 003a 83FB0213 		smull	r1, r3, r3, r2
+ 626 003e 1344     		add	r3, r3, r2
+ 627 0040 DB11     		asrs	r3, r3, #7
+ 628              		.loc 1 135 36 view .LVU141
+ 629 0042 8372     		strb	r3, [r0, #10]
+ 136:Core/Src/ws2812b.c **** }
+ 630              		.loc 1 136 1 view .LVU142
+ 631 0044 5DF804FB 		ldr	pc, [sp], #4
+ 632              	.LVL53:
+ 633              	.L38:
+ 634              		.cfi_def_cfa_offset 0
+ 635              		.cfi_restore 14
+ 636              		.loc 1 136 1 view .LVU143
+ 637 0048 7047     		bx	lr
+ 638              	.L42:
+ 639 004a 00BF     		.align	2
+ 640              	.L41:
+ 641 004c 81808080 		.word	-2139062143
+ 642              		.cfi_endproc
+ 643              	.LFE76:
+ 645              		.section	.text.WS2812B_SetAllBrightness,"ax",%progbits
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 15
+
+
+ 646              		.align	1
+ 647              		.global	WS2812B_SetAllBrightness
+ 648              		.syntax unified
+ 649              		.thumb
+ 650              		.thumb_func
+ 652              	WS2812B_SetAllBrightness:
+ 653              	.LVL54:
+ 654              	.LFB77:
+ 137:Core/Src/ws2812b.c **** 
+ 138:Core/Src/ws2812b.c **** void WS2812B_SetAllBrightness(WS2812B_Handle_t* handle, uint8_t brightness) {
+ 655              		.loc 1 138 77 is_stmt 1 view -0
+ 656              		.cfi_startproc
+ 657              		@ args = 0, pretend = 0, frame = 0
+ 658              		@ frame_needed = 0, uses_anonymous_args = 0
+ 659              		.loc 1 138 77 is_stmt 0 view .LVU145
+ 660 0000 70B5     		push	{r4, r5, r6, lr}
+ 661              		.cfi_def_cfa_offset 16
+ 662              		.cfi_offset 4, -16
+ 663              		.cfi_offset 5, -12
+ 664              		.cfi_offset 6, -8
+ 665              		.cfi_offset 14, -4
+ 666 0002 0546     		mov	r5, r0
+ 667 0004 0E46     		mov	r6, r1
+ 139:Core/Src/ws2812b.c ****     // Apply brightness to all LEDs
+ 140:Core/Src/ws2812b.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 668              		.loc 1 140 5 is_stmt 1 view .LVU146
+ 669              	.LBB8:
+ 670              		.loc 1 140 10 view .LVU147
+ 671              	.LVL55:
+ 672              		.loc 1 140 19 is_stmt 0 view .LVU148
+ 673 0006 0024     		movs	r4, #0
+ 674              		.loc 1 140 5 view .LVU149
+ 675 0008 06E0     		b	.L44
+ 676              	.LVL56:
+ 677              	.L45:
+ 141:Core/Src/ws2812b.c ****         WS2812B_SetBrightness(handle, i, brightness);
+ 678              		.loc 1 141 9 is_stmt 1 view .LVU150
+ 679 000a 3246     		mov	r2, r6
+ 680 000c 2146     		mov	r1, r4
+ 681 000e 2846     		mov	r0, r5
+ 682 0010 FFF7FEFF 		bl	WS2812B_SetBrightness
+ 683              	.LVL57:
+ 140:Core/Src/ws2812b.c ****         WS2812B_SetBrightness(handle, i, brightness);
+ 684              		.loc 1 140 50 discriminator 3 view .LVU151
+ 685 0014 0134     		adds	r4, r4, #1
+ 686              	.LVL58:
+ 140:Core/Src/ws2812b.c ****         WS2812B_SetBrightness(handle, i, brightness);
+ 687              		.loc 1 140 50 is_stmt 0 discriminator 3 view .LVU152
+ 688 0016 A4B2     		uxth	r4, r4
+ 689              	.LVL59:
+ 690              	.L44:
+ 140:Core/Src/ws2812b.c ****         WS2812B_SetBrightness(handle, i, brightness);
+ 691              		.loc 1 140 28 is_stmt 1 discriminator 1 view .LVU153
+ 140:Core/Src/ws2812b.c ****         WS2812B_SetBrightness(handle, i, brightness);
+ 692              		.loc 1 140 36 is_stmt 0 discriminator 1 view .LVU154
+ 693 0018 EB88     		ldrh	r3, [r5, #6]
+ 140:Core/Src/ws2812b.c ****         WS2812B_SetBrightness(handle, i, brightness);
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 16
+
+
+ 694              		.loc 1 140 28 discriminator 1 view .LVU155
+ 695 001a A342     		cmp	r3, r4
+ 696 001c F5D8     		bhi	.L45
+ 697              	.LBE8:
+ 142:Core/Src/ws2812b.c ****     }
+ 143:Core/Src/ws2812b.c **** }
+ 698              		.loc 1 143 1 view .LVU156
+ 699 001e 70BD     		pop	{r4, r5, r6, pc}
+ 700              		.loc 1 143 1 view .LVU157
+ 701              		.cfi_endproc
+ 702              	.LFE77:
+ 704              		.section	.text.WS2812B_Color_Red,"ax",%progbits
+ 705              		.align	1
+ 706              		.global	WS2812B_Color_Red
+ 707              		.syntax unified
+ 708              		.thumb
+ 709              		.thumb_func
+ 711              	WS2812B_Color_Red:
+ 712              	.LFB78:
+ 144:Core/Src/ws2812b.c **** 
+ 145:Core/Src/ws2812b.c **** // ============================================================================
+ 146:Core/Src/ws2812b.c **** // PREDEFINED COLORS
+ 147:Core/Src/ws2812b.c **** // ============================================================================
+ 148:Core/Src/ws2812b.c **** 
+ 149:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_Red(void) {
+ 713              		.loc 1 149 36 is_stmt 1 view -0
+ 714              		.cfi_startproc
+ 715              		@ args = 0, pretend = 0, frame = 8
+ 716              		@ frame_needed = 0, uses_anonymous_args = 0
+ 717              		@ link register save eliminated.
+ 718 0000 82B0     		sub	sp, sp, #8
+ 719              		.cfi_def_cfa_offset 8
+ 150:Core/Src/ws2812b.c ****     RGBColor_t color = {255, 0, 0};
+ 720              		.loc 1 150 5 view .LVU159
+ 721              		.loc 1 150 16 is_stmt 0 view .LVU160
+ 722 0002 FF23     		movs	r3, #255
+ 723 0004 8DF80030 		strb	r3, [sp]
+ 724 0008 0020     		movs	r0, #0
+ 725 000a 8DF80100 		strb	r0, [sp, #1]
+ 726 000e 8DF80200 		strb	r0, [sp, #2]
+ 151:Core/Src/ws2812b.c ****     return color;
+ 727              		.loc 1 151 5 is_stmt 1 view .LVU161
+ 728              		.loc 1 151 12 is_stmt 0 view .LVU162
+ 729 0012 009B     		ldr	r3, [sp]
+ 730 0014 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 731 0018 1B0C     		lsrs	r3, r3, #16
+ 732 001a 8DF80630 		strb	r3, [sp, #6]
+ 733 001e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 734 0022 63F30700 		bfi	r0, r3, #0, #8
+ 735 0026 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 736 002a 63F30F20 		bfi	r0, r3, #8, #8
+ 737 002e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 738 0032 63F31740 		bfi	r0, r3, #16, #8
+ 152:Core/Src/ws2812b.c **** }
+ 739              		.loc 1 152 1 view .LVU163
+ 740 0036 02B0     		add	sp, sp, #8
+ 741              		.cfi_def_cfa_offset 0
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 17
+
+
+ 742              		@ sp needed
+ 743 0038 7047     		bx	lr
+ 744              		.cfi_endproc
+ 745              	.LFE78:
+ 747              		.section	.text.WS2812B_Color_Green,"ax",%progbits
+ 748              		.align	1
+ 749              		.global	WS2812B_Color_Green
+ 750              		.syntax unified
+ 751              		.thumb
+ 752              		.thumb_func
+ 754              	WS2812B_Color_Green:
+ 755              	.LFB79:
+ 153:Core/Src/ws2812b.c **** 
+ 154:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_Green(void) {
+ 756              		.loc 1 154 38 is_stmt 1 view -0
+ 757              		.cfi_startproc
+ 758              		@ args = 0, pretend = 0, frame = 8
+ 759              		@ frame_needed = 0, uses_anonymous_args = 0
+ 760              		@ link register save eliminated.
+ 761 0000 82B0     		sub	sp, sp, #8
+ 762              		.cfi_def_cfa_offset 8
+ 155:Core/Src/ws2812b.c ****     RGBColor_t color = {0, 255, 0};
+ 763              		.loc 1 155 5 view .LVU165
+ 764              		.loc 1 155 16 is_stmt 0 view .LVU166
+ 765 0002 0020     		movs	r0, #0
+ 766 0004 8DF80000 		strb	r0, [sp]
+ 767 0008 FF23     		movs	r3, #255
+ 768 000a 8DF80130 		strb	r3, [sp, #1]
+ 769 000e 8DF80200 		strb	r0, [sp, #2]
+ 156:Core/Src/ws2812b.c ****     return color;
+ 770              		.loc 1 156 5 is_stmt 1 view .LVU167
+ 771              		.loc 1 156 12 is_stmt 0 view .LVU168
+ 772 0012 009B     		ldr	r3, [sp]
+ 773 0014 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 774 0018 1B0C     		lsrs	r3, r3, #16
+ 775 001a 8DF80630 		strb	r3, [sp, #6]
+ 776 001e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 777 0022 63F30700 		bfi	r0, r3, #0, #8
+ 778 0026 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 779 002a 63F30F20 		bfi	r0, r3, #8, #8
+ 780 002e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 781 0032 63F31740 		bfi	r0, r3, #16, #8
+ 157:Core/Src/ws2812b.c **** }
+ 782              		.loc 1 157 1 view .LVU169
+ 783 0036 02B0     		add	sp, sp, #8
+ 784              		.cfi_def_cfa_offset 0
+ 785              		@ sp needed
+ 786 0038 7047     		bx	lr
+ 787              		.cfi_endproc
+ 788              	.LFE79:
+ 790              		.section	.text.WS2812B_Color_Blue,"ax",%progbits
+ 791              		.align	1
+ 792              		.global	WS2812B_Color_Blue
+ 793              		.syntax unified
+ 794              		.thumb
+ 795              		.thumb_func
+ 797              	WS2812B_Color_Blue:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 18
+
+
+ 798              	.LFB80:
+ 158:Core/Src/ws2812b.c **** 
+ 159:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_Blue(void) {
+ 799              		.loc 1 159 37 is_stmt 1 view -0
+ 800              		.cfi_startproc
+ 801              		@ args = 0, pretend = 0, frame = 8
+ 802              		@ frame_needed = 0, uses_anonymous_args = 0
+ 803              		@ link register save eliminated.
+ 804 0000 82B0     		sub	sp, sp, #8
+ 805              		.cfi_def_cfa_offset 8
+ 160:Core/Src/ws2812b.c ****     RGBColor_t color = {0, 0, 255};
+ 806              		.loc 1 160 5 view .LVU171
+ 807              		.loc 1 160 16 is_stmt 0 view .LVU172
+ 808 0002 0020     		movs	r0, #0
+ 809 0004 8DF80000 		strb	r0, [sp]
+ 810 0008 8DF80100 		strb	r0, [sp, #1]
+ 811 000c FF23     		movs	r3, #255
+ 812 000e 8DF80230 		strb	r3, [sp, #2]
+ 161:Core/Src/ws2812b.c ****     return color;
+ 813              		.loc 1 161 5 is_stmt 1 view .LVU173
+ 814              		.loc 1 161 12 is_stmt 0 view .LVU174
+ 815 0012 009B     		ldr	r3, [sp]
+ 816 0014 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 817 0018 1B0C     		lsrs	r3, r3, #16
+ 818 001a 8DF80630 		strb	r3, [sp, #6]
+ 819 001e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 820 0022 63F30700 		bfi	r0, r3, #0, #8
+ 821 0026 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 822 002a 63F30F20 		bfi	r0, r3, #8, #8
+ 823 002e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 824 0032 63F31740 		bfi	r0, r3, #16, #8
+ 162:Core/Src/ws2812b.c **** }
+ 825              		.loc 1 162 1 view .LVU175
+ 826 0036 02B0     		add	sp, sp, #8
+ 827              		.cfi_def_cfa_offset 0
+ 828              		@ sp needed
+ 829 0038 7047     		bx	lr
+ 830              		.cfi_endproc
+ 831              	.LFE80:
+ 833              		.section	.text.WS2812B_Color_White,"ax",%progbits
+ 834              		.align	1
+ 835              		.global	WS2812B_Color_White
+ 836              		.syntax unified
+ 837              		.thumb
+ 838              		.thumb_func
+ 840              	WS2812B_Color_White:
+ 841              	.LFB81:
+ 163:Core/Src/ws2812b.c **** 
+ 164:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_White(void) {
+ 842              		.loc 1 164 38 is_stmt 1 view -0
+ 843              		.cfi_startproc
+ 844              		@ args = 0, pretend = 0, frame = 8
+ 845              		@ frame_needed = 0, uses_anonymous_args = 0
+ 846              		@ link register save eliminated.
+ 847 0000 82B0     		sub	sp, sp, #8
+ 848              		.cfi_def_cfa_offset 8
+ 165:Core/Src/ws2812b.c ****     RGBColor_t color = {255, 255, 255};
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 19
+
+
+ 849              		.loc 1 165 5 view .LVU177
+ 850              		.loc 1 165 16 is_stmt 0 view .LVU178
+ 851 0002 0E4B     		ldr	r3, .L55
+ 852 0004 1B68     		ldr	r3, [r3]
+ 853 0006 ADF80030 		strh	r3, [sp]	@ movhi
+ 854 000a 1B0C     		lsrs	r3, r3, #16
+ 855 000c 8DF80230 		strb	r3, [sp, #2]
+ 166:Core/Src/ws2812b.c ****     return color;
+ 856              		.loc 1 166 5 is_stmt 1 view .LVU179
+ 857              		.loc 1 166 12 is_stmt 0 view .LVU180
+ 858 0010 009B     		ldr	r3, [sp]
+ 859 0012 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 860 0016 1B0C     		lsrs	r3, r3, #16
+ 861 0018 8DF80630 		strb	r3, [sp, #6]
+ 862 001c 0020     		movs	r0, #0
+ 863 001e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 864 0022 63F30700 		bfi	r0, r3, #0, #8
+ 865 0026 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 866 002a 63F30F20 		bfi	r0, r3, #8, #8
+ 867 002e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 868 0032 63F31740 		bfi	r0, r3, #16, #8
+ 167:Core/Src/ws2812b.c **** }
+ 869              		.loc 1 167 1 view .LVU181
+ 870 0036 02B0     		add	sp, sp, #8
+ 871              		.cfi_def_cfa_offset 0
+ 872              		@ sp needed
+ 873 0038 7047     		bx	lr
+ 874              	.L56:
+ 875 003a 00BF     		.align	2
+ 876              	.L55:
+ 877 003c 00000000 		.word	.LANCHOR0
+ 878              		.cfi_endproc
+ 879              	.LFE81:
+ 881              		.section	.text.WS2812B_Color_Black,"ax",%progbits
+ 882              		.align	1
+ 883              		.global	WS2812B_Color_Black
+ 884              		.syntax unified
+ 885              		.thumb
+ 886              		.thumb_func
+ 888              	WS2812B_Color_Black:
+ 889              	.LFB82:
+ 168:Core/Src/ws2812b.c **** 
+ 169:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_Black(void) {
+ 890              		.loc 1 169 38 is_stmt 1 view -0
+ 891              		.cfi_startproc
+ 892              		@ args = 0, pretend = 0, frame = 8
+ 893              		@ frame_needed = 0, uses_anonymous_args = 0
+ 894              		@ link register save eliminated.
+ 895 0000 82B0     		sub	sp, sp, #8
+ 896              		.cfi_def_cfa_offset 8
+ 170:Core/Src/ws2812b.c ****     RGBColor_t color = {0, 0, 0};
+ 897              		.loc 1 170 5 view .LVU183
+ 898              		.loc 1 170 16 is_stmt 0 view .LVU184
+ 899 0002 0020     		movs	r0, #0
+ 900 0004 8DF80000 		strb	r0, [sp]
+ 901 0008 8DF80100 		strb	r0, [sp, #1]
+ 902 000c 8DF80200 		strb	r0, [sp, #2]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 20
+
+
+ 171:Core/Src/ws2812b.c ****     return color;
+ 903              		.loc 1 171 5 is_stmt 1 view .LVU185
+ 904              		.loc 1 171 12 is_stmt 0 view .LVU186
+ 905 0010 009B     		ldr	r3, [sp]
+ 906 0012 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 907 0016 1B0C     		lsrs	r3, r3, #16
+ 908 0018 8DF80630 		strb	r3, [sp, #6]
+ 909 001c 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 910 0020 63F30700 		bfi	r0, r3, #0, #8
+ 911 0024 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 912 0028 63F30F20 		bfi	r0, r3, #8, #8
+ 913 002c 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 914 0030 63F31740 		bfi	r0, r3, #16, #8
+ 172:Core/Src/ws2812b.c **** }
+ 915              		.loc 1 172 1 view .LVU187
+ 916 0034 02B0     		add	sp, sp, #8
+ 917              		.cfi_def_cfa_offset 0
+ 918              		@ sp needed
+ 919 0036 7047     		bx	lr
+ 920              		.cfi_endproc
+ 921              	.LFE82:
+ 923              		.section	.text.WS2812B_Color_Yellow,"ax",%progbits
+ 924              		.align	1
+ 925              		.global	WS2812B_Color_Yellow
+ 926              		.syntax unified
+ 927              		.thumb
+ 928              		.thumb_func
+ 930              	WS2812B_Color_Yellow:
+ 931              	.LFB83:
+ 173:Core/Src/ws2812b.c **** 
+ 174:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_Yellow(void) {
+ 932              		.loc 1 174 39 is_stmt 1 view -0
+ 933              		.cfi_startproc
+ 934              		@ args = 0, pretend = 0, frame = 8
+ 935              		@ frame_needed = 0, uses_anonymous_args = 0
+ 936              		@ link register save eliminated.
+ 937 0000 82B0     		sub	sp, sp, #8
+ 938              		.cfi_def_cfa_offset 8
+ 175:Core/Src/ws2812b.c ****     RGBColor_t color = {255, 255, 0};
+ 939              		.loc 1 175 5 view .LVU189
+ 940              		.loc 1 175 16 is_stmt 0 view .LVU190
+ 941 0002 0E4B     		ldr	r3, .L61
+ 942 0004 5B68     		ldr	r3, [r3, #4]
+ 943 0006 ADF80030 		strh	r3, [sp]	@ movhi
+ 944 000a 1B0C     		lsrs	r3, r3, #16
+ 945 000c 8DF80230 		strb	r3, [sp, #2]
+ 176:Core/Src/ws2812b.c ****     return color;
+ 946              		.loc 1 176 5 is_stmt 1 view .LVU191
+ 947              		.loc 1 176 12 is_stmt 0 view .LVU192
+ 948 0010 009B     		ldr	r3, [sp]
+ 949 0012 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 950 0016 1B0C     		lsrs	r3, r3, #16
+ 951 0018 8DF80630 		strb	r3, [sp, #6]
+ 952 001c 0020     		movs	r0, #0
+ 953 001e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 954 0022 63F30700 		bfi	r0, r3, #0, #8
+ 955 0026 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 21
+
+
+ 956 002a 63F30F20 		bfi	r0, r3, #8, #8
+ 957 002e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 958 0032 63F31740 		bfi	r0, r3, #16, #8
+ 177:Core/Src/ws2812b.c **** }
+ 959              		.loc 1 177 1 view .LVU193
+ 960 0036 02B0     		add	sp, sp, #8
+ 961              		.cfi_def_cfa_offset 0
+ 962              		@ sp needed
+ 963 0038 7047     		bx	lr
+ 964              	.L62:
+ 965 003a 00BF     		.align	2
+ 966              	.L61:
+ 967 003c 00000000 		.word	.LANCHOR0
+ 968              		.cfi_endproc
+ 969              	.LFE83:
+ 971              		.section	.text.WS2812B_Color_Purple,"ax",%progbits
+ 972              		.align	1
+ 973              		.global	WS2812B_Color_Purple
+ 974              		.syntax unified
+ 975              		.thumb
+ 976              		.thumb_func
+ 978              	WS2812B_Color_Purple:
+ 979              	.LFB84:
+ 178:Core/Src/ws2812b.c **** 
+ 179:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_Purple(void) {
+ 980              		.loc 1 179 39 is_stmt 1 view -0
+ 981              		.cfi_startproc
+ 982              		@ args = 0, pretend = 0, frame = 8
+ 983              		@ frame_needed = 0, uses_anonymous_args = 0
+ 984              		@ link register save eliminated.
+ 985 0000 82B0     		sub	sp, sp, #8
+ 986              		.cfi_def_cfa_offset 8
+ 180:Core/Src/ws2812b.c ****     RGBColor_t color = {255, 0, 255};
+ 987              		.loc 1 180 5 view .LVU195
+ 988              		.loc 1 180 16 is_stmt 0 view .LVU196
+ 989 0002 0E4B     		ldr	r3, .L65
+ 990 0004 9B68     		ldr	r3, [r3, #8]
+ 991 0006 ADF80030 		strh	r3, [sp]	@ movhi
+ 992 000a 1B0C     		lsrs	r3, r3, #16
+ 993 000c 8DF80230 		strb	r3, [sp, #2]
+ 181:Core/Src/ws2812b.c ****     return color;
+ 994              		.loc 1 181 5 is_stmt 1 view .LVU197
+ 995              		.loc 1 181 12 is_stmt 0 view .LVU198
+ 996 0010 009B     		ldr	r3, [sp]
+ 997 0012 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 998 0016 1B0C     		lsrs	r3, r3, #16
+ 999 0018 8DF80630 		strb	r3, [sp, #6]
+ 1000 001c 0020     		movs	r0, #0
+ 1001 001e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 1002 0022 63F30700 		bfi	r0, r3, #0, #8
+ 1003 0026 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 1004 002a 63F30F20 		bfi	r0, r3, #8, #8
+ 1005 002e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1006 0032 63F31740 		bfi	r0, r3, #16, #8
+ 182:Core/Src/ws2812b.c **** }
+ 1007              		.loc 1 182 1 view .LVU199
+ 1008 0036 02B0     		add	sp, sp, #8
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 22
+
+
+ 1009              		.cfi_def_cfa_offset 0
+ 1010              		@ sp needed
+ 1011 0038 7047     		bx	lr
+ 1012              	.L66:
+ 1013 003a 00BF     		.align	2
+ 1014              	.L65:
+ 1015 003c 00000000 		.word	.LANCHOR0
+ 1016              		.cfi_endproc
+ 1017              	.LFE84:
+ 1019              		.section	.text.WS2812B_Color_Cyan,"ax",%progbits
+ 1020              		.align	1
+ 1021              		.global	WS2812B_Color_Cyan
+ 1022              		.syntax unified
+ 1023              		.thumb
+ 1024              		.thumb_func
+ 1026              	WS2812B_Color_Cyan:
+ 1027              	.LFB85:
+ 183:Core/Src/ws2812b.c **** 
+ 184:Core/Src/ws2812b.c **** RGBColor_t WS2812B_Color_Cyan(void) {
+ 1028              		.loc 1 184 37 is_stmt 1 view -0
+ 1029              		.cfi_startproc
+ 1030              		@ args = 0, pretend = 0, frame = 8
+ 1031              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1032              		@ link register save eliminated.
+ 1033 0000 82B0     		sub	sp, sp, #8
+ 1034              		.cfi_def_cfa_offset 8
+ 185:Core/Src/ws2812b.c ****     RGBColor_t color = {0, 255, 255};
+ 1035              		.loc 1 185 5 view .LVU201
+ 1036              		.loc 1 185 16 is_stmt 0 view .LVU202
+ 1037 0002 0E4B     		ldr	r3, .L69
+ 1038 0004 DB68     		ldr	r3, [r3, #12]
+ 1039 0006 ADF80030 		strh	r3, [sp]	@ movhi
+ 1040 000a 1B0C     		lsrs	r3, r3, #16
+ 1041 000c 8DF80230 		strb	r3, [sp, #2]
+ 186:Core/Src/ws2812b.c ****     return color;
+ 1042              		.loc 1 186 5 is_stmt 1 view .LVU203
+ 1043              		.loc 1 186 12 is_stmt 0 view .LVU204
+ 1044 0010 009B     		ldr	r3, [sp]
+ 1045 0012 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 1046 0016 1B0C     		lsrs	r3, r3, #16
+ 1047 0018 8DF80630 		strb	r3, [sp, #6]
+ 1048 001c 0020     		movs	r0, #0
+ 1049 001e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 1050 0022 63F30700 		bfi	r0, r3, #0, #8
+ 1051 0026 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 1052 002a 63F30F20 		bfi	r0, r3, #8, #8
+ 1053 002e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1054 0032 63F31740 		bfi	r0, r3, #16, #8
+ 187:Core/Src/ws2812b.c **** }
+ 1055              		.loc 1 187 1 view .LVU205
+ 1056 0036 02B0     		add	sp, sp, #8
+ 1057              		.cfi_def_cfa_offset 0
+ 1058              		@ sp needed
+ 1059 0038 7047     		bx	lr
+ 1060              	.L70:
+ 1061 003a 00BF     		.align	2
+ 1062              	.L69:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 23
+
+
+ 1063 003c 00000000 		.word	.LANCHOR0
+ 1064              		.cfi_endproc
+ 1065              	.LFE85:
+ 1067              		.section	.text.WS2812B_FadeIn,"ax",%progbits
+ 1068              		.align	1
+ 1069              		.global	WS2812B_FadeIn
+ 1070              		.syntax unified
+ 1071              		.thumb
+ 1072              		.thumb_func
+ 1074              	WS2812B_FadeIn:
+ 1075              	.LVL60:
+ 1076              	.LFB86:
+ 188:Core/Src/ws2812b.c **** 
+ 189:Core/Src/ws2812b.c **** // ============================================================================
+ 190:Core/Src/ws2812b.c **** // ANIMATION HELPER FUNCTIONS
+ 191:Core/Src/ws2812b.c **** // ============================================================================
+ 192:Core/Src/ws2812b.c **** 
+ 193:Core/Src/ws2812b.c **** void WS2812B_FadeIn(WS2812B_Handle_t* handle, RGBColor_t color, uint16_t duration_ms) {
+ 1077              		.loc 1 193 87 is_stmt 1 view -0
+ 1078              		.cfi_startproc
+ 1079              		@ args = 0, pretend = 0, frame = 16
+ 1080              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1081              		.loc 1 193 87 is_stmt 0 view .LVU207
+ 1082 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1083              		.cfi_def_cfa_offset 24
+ 1084              		.cfi_offset 4, -24
+ 1085              		.cfi_offset 5, -20
+ 1086              		.cfi_offset 6, -16
+ 1087              		.cfi_offset 7, -12
+ 1088              		.cfi_offset 8, -8
+ 1089              		.cfi_offset 14, -4
+ 1090 0004 84B0     		sub	sp, sp, #16
+ 1091              		.cfi_def_cfa_offset 40
+ 1092 0006 0546     		mov	r5, r0
+ 1093 0008 0191     		str	r1, [sp, #4]
+ 194:Core/Src/ws2812b.c ****     // Fade in from black to specified color
+ 195:Core/Src/ws2812b.c ****     uint16_t steps = duration_ms / 10; // 10ms per step
+ 1094              		.loc 1 195 5 is_stmt 1 view .LVU208
+ 1095              		.loc 1 195 14 is_stmt 0 view .LVU209
+ 1096 000a 234B     		ldr	r3, .L78
+ 1097 000c A3FB0238 		umull	r3, r8, r3, r2
+ 1098 0010 4FEAD808 		lsr	r8, r8, #3
+ 1099              	.LVL61:
+ 196:Core/Src/ws2812b.c ****     
+ 197:Core/Src/ws2812b.c ****     for (uint16_t step = 0; step <= steps; step++) {
+ 1100              		.loc 1 197 5 is_stmt 1 view .LVU210
+ 1101              	.LBB9:
+ 1102              		.loc 1 197 10 view .LVU211
+ 1103              		.loc 1 197 19 is_stmt 0 view .LVU212
+ 1104 0014 0027     		movs	r7, #0
+ 1105              		.loc 1 197 5 view .LVU213
+ 1106 0016 34E0     		b	.L72
+ 1107              	.LVL62:
+ 1108              	.L74:
+ 1109              	.LBB10:
+ 1110              	.LBB11:
+ 1111              	.LBB12:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 24
+
+
+ 198:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 199:Core/Src/ws2812b.c ****         
+ 200:Core/Src/ws2812b.c ****         for (uint16_t i = 0; i < handle->led_count; i++) {
+ 201:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1112              		.loc 1 201 13 is_stmt 1 view .LVU214
+ 202:Core/Src/ws2812b.c ****                 (uint8_t)((color.red * brightness) / 255),
+ 1113              		.loc 1 202 33 is_stmt 0 view .LVU215
+ 1114 0018 9DF80400 		ldrb	r0, [sp, #4]	@ zero_extendqisi2
+ 1115 001c F1B2     		uxtb	r1, r6
+ 1116              		.loc 1 202 38 view .LVU216
+ 1117 001e 01FB00F0 		mul	r0, r1, r0
+ 1118              		.loc 1 202 52 view .LVU217
+ 1119 0022 1E4B     		ldr	r3, .L78+4
+ 1120 0024 83FB00C2 		smull	ip, r2, r3, r0
+ 1121 0028 0244     		add	r2, r2, r0
+ 1122              		.loc 1 202 17 view .LVU218
+ 1123 002a C2F3C712 		ubfx	r2, r2, #7, #8
+ 201:Core/Src/ws2812b.c ****                 (uint8_t)((color.red * brightness) / 255),
+ 1124              		.loc 1 201 24 view .LVU219
+ 1125 002e 8DF80C20 		strb	r2, [sp, #12]
+ 203:Core/Src/ws2812b.c ****                 (uint8_t)((color.green * brightness) / 255),
+ 1126              		.loc 1 203 33 view .LVU220
+ 1127 0032 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 1128              		.loc 1 203 40 view .LVU221
+ 1129 0036 01FB00F0 		mul	r0, r1, r0
+ 1130              		.loc 1 203 54 view .LVU222
+ 1131 003a 83FB00C2 		smull	ip, r2, r3, r0
+ 1132 003e 0244     		add	r2, r2, r0
+ 1133              		.loc 1 203 17 view .LVU223
+ 1134 0040 C2F3C712 		ubfx	r2, r2, #7, #8
+ 201:Core/Src/ws2812b.c ****                 (uint8_t)((color.red * brightness) / 255),
+ 1135              		.loc 1 201 24 view .LVU224
+ 1136 0044 8DF80D20 		strb	r2, [sp, #13]
+ 204:Core/Src/ws2812b.c ****                 (uint8_t)((color.blue * brightness) / 255)
+ 1137              		.loc 1 204 33 view .LVU225
+ 1138 0048 9DF80620 		ldrb	r2, [sp, #6]	@ zero_extendqisi2
+ 1139              		.loc 1 204 39 view .LVU226
+ 1140 004c 01FB02F2 		mul	r2, r1, r2
+ 1141              		.loc 1 204 53 view .LVU227
+ 1142 0050 83FB0213 		smull	r1, r3, r3, r2
+ 1143 0054 1344     		add	r3, r3, r2
+ 1144              		.loc 1 204 17 view .LVU228
+ 1145 0056 C3F3C713 		ubfx	r3, r3, #7, #8
+ 201:Core/Src/ws2812b.c ****                 (uint8_t)((color.red * brightness) / 255),
+ 1146              		.loc 1 201 24 view .LVU229
+ 1147 005a 8DF80E30 		strb	r3, [sp, #14]
+ 205:Core/Src/ws2812b.c ****             };
+ 206:Core/Src/ws2812b.c ****             WS2812B_SetLED(handle, i, fade_color);
+ 1148              		.loc 1 206 13 is_stmt 1 view .LVU230
+ 1149 005e 039A     		ldr	r2, [sp, #12]
+ 1150 0060 2146     		mov	r1, r4
+ 1151 0062 2846     		mov	r0, r5
+ 1152 0064 FFF7FEFF 		bl	WS2812B_SetLED
+ 1153              	.LVL63:
+ 1154              	.LBE12:
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1155              		.loc 1 200 54 discriminator 3 view .LVU231
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 25
+
+
+ 1156 0068 0134     		adds	r4, r4, #1
+ 1157              	.LVL64:
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1158              		.loc 1 200 54 is_stmt 0 discriminator 3 view .LVU232
+ 1159 006a A4B2     		uxth	r4, r4
+ 1160              	.LVL65:
+ 1161              	.L73:
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1162              		.loc 1 200 32 is_stmt 1 discriminator 1 view .LVU233
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1163              		.loc 1 200 40 is_stmt 0 discriminator 1 view .LVU234
+ 1164 006c EB88     		ldrh	r3, [r5, #6]
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1165              		.loc 1 200 32 discriminator 1 view .LVU235
+ 1166 006e A342     		cmp	r3, r4
+ 1167 0070 D2D8     		bhi	.L74
+ 1168              	.LBE11:
+ 207:Core/Src/ws2812b.c ****         }
+ 208:Core/Src/ws2812b.c ****         
+ 209:Core/Src/ws2812b.c ****         WS2812B_Update(handle);
+ 1169              		.loc 1 209 9 is_stmt 1 view .LVU236
+ 1170 0072 2846     		mov	r0, r5
+ 1171 0074 FFF7FEFF 		bl	WS2812B_Update
+ 1172              	.LVL66:
+ 210:Core/Src/ws2812b.c ****         HAL_Delay(10);
+ 1173              		.loc 1 210 9 view .LVU237
+ 1174 0078 0A20     		movs	r0, #10
+ 1175 007a FFF7FEFF 		bl	HAL_Delay
+ 1176              	.LVL67:
+ 1177              	.LBE10:
+ 197:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 1178              		.loc 1 197 48 discriminator 2 view .LVU238
+ 1179 007e 0137     		adds	r7, r7, #1
+ 1180              	.LVL68:
+ 197:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 1181              		.loc 1 197 48 is_stmt 0 discriminator 2 view .LVU239
+ 1182 0080 BFB2     		uxth	r7, r7
+ 1183              	.LVL69:
+ 1184              	.L72:
+ 197:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 1185              		.loc 1 197 34 is_stmt 1 discriminator 1 view .LVU240
+ 1186 0082 4745     		cmp	r7, r8
+ 1187 0084 05D8     		bhi	.L77
+ 1188              	.LBB14:
+ 198:Core/Src/ws2812b.c ****         
+ 1189              		.loc 1 198 9 view .LVU241
+ 198:Core/Src/ws2812b.c ****         
+ 1190              		.loc 1 198 36 is_stmt 0 view .LVU242
+ 1191 0086 C7EB0726 		rsb	r6, r7, r7, lsl #8
+ 198:Core/Src/ws2812b.c ****         
+ 1192              		.loc 1 198 43 view .LVU243
+ 1193 008a 96FBF8F6 		sdiv	r6, r6, r8
+ 1194              	.LVL70:
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1195              		.loc 1 200 9 is_stmt 1 view .LVU244
+ 1196              	.LBB13:
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 26
+
+
+ 1197              		.loc 1 200 14 view .LVU245
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1198              		.loc 1 200 23 is_stmt 0 view .LVU246
+ 1199 008e 0024     		movs	r4, #0
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1200              		.loc 1 200 9 view .LVU247
+ 1201 0090 ECE7     		b	.L73
+ 1202              	.LVL71:
+ 1203              	.L77:
+ 200:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1204              		.loc 1 200 9 view .LVU248
+ 1205              	.LBE13:
+ 1206              	.LBE14:
+ 1207              	.LBE9:
+ 211:Core/Src/ws2812b.c ****     }
+ 212:Core/Src/ws2812b.c **** }
+ 1208              		.loc 1 212 1 view .LVU249
+ 1209 0092 04B0     		add	sp, sp, #16
+ 1210              		.cfi_def_cfa_offset 24
+ 1211              		@ sp needed
+ 1212 0094 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1213              	.LVL72:
+ 1214              	.L79:
+ 1215              		.loc 1 212 1 view .LVU250
+ 1216              		.align	2
+ 1217              	.L78:
+ 1218 0098 CDCCCCCC 		.word	-858993459
+ 1219 009c 81808080 		.word	-2139062143
+ 1220              		.cfi_endproc
+ 1221              	.LFE86:
+ 1223              		.section	.text.WS2812B_FadeOut,"ax",%progbits
+ 1224              		.align	1
+ 1225              		.global	WS2812B_FadeOut
+ 1226              		.syntax unified
+ 1227              		.thumb
+ 1228              		.thumb_func
+ 1230              	WS2812B_FadeOut:
+ 1231              	.LVL73:
+ 1232              	.LFB87:
+ 213:Core/Src/ws2812b.c **** 
+ 214:Core/Src/ws2812b.c **** void WS2812B_FadeOut(WS2812B_Handle_t* handle, uint16_t duration_ms) {
+ 1233              		.loc 1 214 70 is_stmt 1 view -0
+ 1234              		.cfi_startproc
+ 1235              		@ args = 0, pretend = 0, frame = 8
+ 1236              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1237              		.loc 1 214 70 is_stmt 0 view .LVU252
+ 1238 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1239              		.cfi_def_cfa_offset 24
+ 1240              		.cfi_offset 4, -24
+ 1241              		.cfi_offset 5, -20
+ 1242              		.cfi_offset 6, -16
+ 1243              		.cfi_offset 7, -12
+ 1244              		.cfi_offset 8, -8
+ 1245              		.cfi_offset 14, -4
+ 1246 0004 82B0     		sub	sp, sp, #8
+ 1247              		.cfi_def_cfa_offset 32
+ 1248 0006 0546     		mov	r5, r0
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 27
+
+
+ 215:Core/Src/ws2812b.c ****     // Fade out to black
+ 216:Core/Src/ws2812b.c ****     uint16_t steps = duration_ms / 10; // 10ms per step
+ 1249              		.loc 1 216 5 is_stmt 1 view .LVU253
+ 1250              		.loc 1 216 14 is_stmt 0 view .LVU254
+ 1251 0008 264B     		ldr	r3, .L87
+ 1252 000a A3FB0138 		umull	r3, r8, r3, r1
+ 1253 000e 4FEAD808 		lsr	r8, r8, #3
+ 1254              	.LVL74:
+ 217:Core/Src/ws2812b.c ****     
+ 218:Core/Src/ws2812b.c ****     for (uint16_t step = steps; step > 0; step--) {
+ 1255              		.loc 1 218 5 is_stmt 1 view .LVU255
+ 1256              	.LBB15:
+ 1257              		.loc 1 218 10 view .LVU256
+ 1258              		.loc 1 218 19 is_stmt 0 view .LVU257
+ 1259 0012 4746     		mov	r7, r8
+ 1260              		.loc 1 218 5 view .LVU258
+ 1261 0014 36E0     		b	.L81
+ 1262              	.LVL75:
+ 1263              	.L83:
+ 1264              	.LBB16:
+ 1265              	.LBB17:
+ 1266              	.LBB18:
+ 219:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 220:Core/Src/ws2812b.c ****         
+ 221:Core/Src/ws2812b.c ****         for (uint16_t i = 0; i < handle->led_count; i++) {
+ 222:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1267              		.loc 1 222 13 is_stmt 1 view .LVU259
+ 223:Core/Src/ws2812b.c ****                 (uint8_t)((handle->led_buffer[i].red * brightness) / 255),
+ 1268              		.loc 1 223 49 is_stmt 0 view .LVU260
+ 1269 0016 04EB4402 		add	r2, r4, r4, lsl #1
+ 1270 001a 2A44     		add	r2, r2, r5
+ 1271 001c 92F808C0 		ldrb	ip, [r2, #8]	@ zero_extendqisi2
+ 1272 0020 F0B2     		uxtb	r0, r6
+ 1273              		.loc 1 223 54 view .LVU261
+ 1274 0022 00FB0CFC 		mul	ip, r0, ip
+ 1275              		.loc 1 223 68 view .LVU262
+ 1276 0026 204B     		ldr	r3, .L87+4
+ 1277 0028 83FB0CE1 		smull	lr, r1, r3, ip
+ 1278 002c 6144     		add	r1, r1, ip
+ 1279              		.loc 1 223 17 view .LVU263
+ 1280 002e C1F3C711 		ubfx	r1, r1, #7, #8
+ 222:Core/Src/ws2812b.c ****                 (uint8_t)((handle->led_buffer[i].red * brightness) / 255),
+ 1281              		.loc 1 222 24 view .LVU264
+ 1282 0032 8DF80410 		strb	r1, [sp, #4]
+ 224:Core/Src/ws2812b.c ****                 (uint8_t)((handle->led_buffer[i].green * brightness) / 255),
+ 1283              		.loc 1 224 49 view .LVU265
+ 1284 0036 92F809C0 		ldrb	ip, [r2, #9]	@ zero_extendqisi2
+ 1285              		.loc 1 224 56 view .LVU266
+ 1286 003a 00FB0CFC 		mul	ip, r0, ip
+ 1287              		.loc 1 224 70 view .LVU267
+ 1288 003e 83FB0CE1 		smull	lr, r1, r3, ip
+ 1289 0042 6144     		add	r1, r1, ip
+ 1290              		.loc 1 224 17 view .LVU268
+ 1291 0044 C1F3C711 		ubfx	r1, r1, #7, #8
+ 222:Core/Src/ws2812b.c ****                 (uint8_t)((handle->led_buffer[i].red * brightness) / 255),
+ 1292              		.loc 1 222 24 view .LVU269
+ 1293 0048 8DF80510 		strb	r1, [sp, #5]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 28
+
+
+ 225:Core/Src/ws2812b.c ****                 (uint8_t)((handle->led_buffer[i].blue * brightness) / 255)
+ 1294              		.loc 1 225 49 view .LVU270
+ 1295 004c 927A     		ldrb	r2, [r2, #10]	@ zero_extendqisi2
+ 1296              		.loc 1 225 55 view .LVU271
+ 1297 004e 00FB02F2 		mul	r2, r0, r2
+ 1298              		.loc 1 225 69 view .LVU272
+ 1299 0052 83FB0213 		smull	r1, r3, r3, r2
+ 1300 0056 1344     		add	r3, r3, r2
+ 1301              		.loc 1 225 17 view .LVU273
+ 1302 0058 C3F3C713 		ubfx	r3, r3, #7, #8
+ 222:Core/Src/ws2812b.c ****                 (uint8_t)((handle->led_buffer[i].red * brightness) / 255),
+ 1303              		.loc 1 222 24 view .LVU274
+ 1304 005c 8DF80630 		strb	r3, [sp, #6]
+ 226:Core/Src/ws2812b.c ****             };
+ 227:Core/Src/ws2812b.c ****             WS2812B_SetLED(handle, i, fade_color);
+ 1305              		.loc 1 227 13 is_stmt 1 view .LVU275
+ 1306 0060 019A     		ldr	r2, [sp, #4]
+ 1307 0062 2146     		mov	r1, r4
+ 1308 0064 2846     		mov	r0, r5
+ 1309 0066 FFF7FEFF 		bl	WS2812B_SetLED
+ 1310              	.LVL76:
+ 1311              	.LBE18:
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1312              		.loc 1 221 54 discriminator 3 view .LVU276
+ 1313 006a 0134     		adds	r4, r4, #1
+ 1314              	.LVL77:
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1315              		.loc 1 221 54 is_stmt 0 discriminator 3 view .LVU277
+ 1316 006c A4B2     		uxth	r4, r4
+ 1317              	.LVL78:
+ 1318              	.L82:
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1319              		.loc 1 221 32 is_stmt 1 discriminator 1 view .LVU278
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1320              		.loc 1 221 40 is_stmt 0 discriminator 1 view .LVU279
+ 1321 006e EB88     		ldrh	r3, [r5, #6]
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1322              		.loc 1 221 32 discriminator 1 view .LVU280
+ 1323 0070 A342     		cmp	r3, r4
+ 1324 0072 D0D8     		bhi	.L83
+ 1325              	.LBE17:
+ 228:Core/Src/ws2812b.c ****         }
+ 229:Core/Src/ws2812b.c ****         
+ 230:Core/Src/ws2812b.c ****         WS2812B_Update(handle);
+ 1326              		.loc 1 230 9 is_stmt 1 view .LVU281
+ 1327 0074 2846     		mov	r0, r5
+ 1328 0076 FFF7FEFF 		bl	WS2812B_Update
+ 1329              	.LVL79:
+ 231:Core/Src/ws2812b.c ****         HAL_Delay(10);
+ 1330              		.loc 1 231 9 view .LVU282
+ 1331 007a 0A20     		movs	r0, #10
+ 1332 007c FFF7FEFF 		bl	HAL_Delay
+ 1333              	.LVL80:
+ 1334              	.LBE16:
+ 218:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 1335              		.loc 1 218 47 discriminator 2 view .LVU283
+ 1336 0080 013F     		subs	r7, r7, #1
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 29
+
+
+ 1337              	.LVL81:
+ 218:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 1338              		.loc 1 218 47 is_stmt 0 discriminator 2 view .LVU284
+ 1339 0082 BFB2     		uxth	r7, r7
+ 1340              	.LVL82:
+ 1341              	.L81:
+ 218:Core/Src/ws2812b.c ****         uint8_t brightness = (step * 255) / steps;
+ 1342              		.loc 1 218 38 is_stmt 1 discriminator 1 view .LVU285
+ 1343 0084 2FB1     		cbz	r7, .L86
+ 1344              	.LBB20:
+ 219:Core/Src/ws2812b.c ****         
+ 1345              		.loc 1 219 9 view .LVU286
+ 219:Core/Src/ws2812b.c ****         
+ 1346              		.loc 1 219 36 is_stmt 0 view .LVU287
+ 1347 0086 C7EB0726 		rsb	r6, r7, r7, lsl #8
+ 219:Core/Src/ws2812b.c ****         
+ 1348              		.loc 1 219 43 view .LVU288
+ 1349 008a 96FBF8F6 		sdiv	r6, r6, r8
+ 1350              	.LVL83:
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1351              		.loc 1 221 9 is_stmt 1 view .LVU289
+ 1352              	.LBB19:
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1353              		.loc 1 221 14 view .LVU290
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1354              		.loc 1 221 23 is_stmt 0 view .LVU291
+ 1355 008e 0024     		movs	r4, #0
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1356              		.loc 1 221 9 view .LVU292
+ 1357 0090 EDE7     		b	.L82
+ 1358              	.LVL84:
+ 1359              	.L86:
+ 221:Core/Src/ws2812b.c ****             RGBColor_t fade_color = {
+ 1360              		.loc 1 221 9 view .LVU293
+ 1361              	.LBE19:
+ 1362              	.LBE20:
+ 1363              	.LBE15:
+ 232:Core/Src/ws2812b.c ****     }
+ 233:Core/Src/ws2812b.c ****     
+ 234:Core/Src/ws2812b.c ****     WS2812B_ClearAll(handle);
+ 1364              		.loc 1 234 5 is_stmt 1 view .LVU294
+ 1365 0092 2846     		mov	r0, r5
+ 1366 0094 FFF7FEFF 		bl	WS2812B_ClearAll
+ 1367              	.LVL85:
+ 235:Core/Src/ws2812b.c ****     WS2812B_Update(handle);
+ 1368              		.loc 1 235 5 view .LVU295
+ 1369 0098 2846     		mov	r0, r5
+ 1370 009a FFF7FEFF 		bl	WS2812B_Update
+ 1371              	.LVL86:
+ 236:Core/Src/ws2812b.c **** }
+ 1372              		.loc 1 236 1 is_stmt 0 view .LVU296
+ 1373 009e 02B0     		add	sp, sp, #8
+ 1374              		.cfi_def_cfa_offset 24
+ 1375              		@ sp needed
+ 1376 00a0 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1377              	.LVL87:
+ 1378              	.L88:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 30
+
+
+ 1379              		.loc 1 236 1 view .LVU297
+ 1380              		.align	2
+ 1381              	.L87:
+ 1382 00a4 CDCCCCCC 		.word	-858993459
+ 1383 00a8 81808080 		.word	-2139062143
+ 1384              		.cfi_endproc
+ 1385              	.LFE87:
+ 1387              		.section	.text.WS2812B_Rainbow,"ax",%progbits
+ 1388              		.align	1
+ 1389              		.global	WS2812B_Rainbow
+ 1390              		.syntax unified
+ 1391              		.thumb
+ 1392              		.thumb_func
+ 1394              	WS2812B_Rainbow:
+ 1395              	.LVL88:
+ 1396              	.LFB88:
+ 237:Core/Src/ws2812b.c **** 
+ 238:Core/Src/ws2812b.c **** void WS2812B_Rainbow(WS2812B_Handle_t* handle, uint16_t start_index, uint16_t length) {
+ 1397              		.loc 1 238 87 is_stmt 1 view -0
+ 1398              		.cfi_startproc
+ 1399              		@ args = 0, pretend = 0, frame = 8
+ 1400              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1401              		.loc 1 238 87 is_stmt 0 view .LVU299
+ 1402 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1403              		.cfi_def_cfa_offset 20
+ 1404              		.cfi_offset 4, -20
+ 1405              		.cfi_offset 5, -16
+ 1406              		.cfi_offset 6, -12
+ 1407              		.cfi_offset 7, -8
+ 1408              		.cfi_offset 14, -4
+ 1409 0002 83B0     		sub	sp, sp, #12
+ 1410              		.cfi_def_cfa_offset 32
+ 1411 0004 0746     		mov	r7, r0
+ 1412 0006 0E46     		mov	r6, r1
+ 1413 0008 1546     		mov	r5, r2
+ 239:Core/Src/ws2812b.c ****     // Create rainbow effect across specified LEDs
+ 240:Core/Src/ws2812b.c ****     for (uint16_t i = 0; i < length && (start_index + i) < handle->led_count; i++) {
+ 1414              		.loc 1 240 5 is_stmt 1 view .LVU300
+ 1415              	.LBB21:
+ 1416              		.loc 1 240 10 view .LVU301
+ 1417              	.LVL89:
+ 1418              		.loc 1 240 19 is_stmt 0 view .LVU302
+ 1419 000a 0024     		movs	r4, #0
+ 1420              		.loc 1 240 5 view .LVU303
+ 1421 000c 0FE0     		b	.L90
+ 1422              	.LVL90:
+ 1423              	.L98:
+ 1424              	.LBB22:
+ 1425              	.LBB23:
+ 241:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 242:Core/Src/ws2812b.c ****         
+ 243:Core/Src/ws2812b.c ****         // Simple HSV to RGB conversion
+ 244:Core/Src/ws2812b.c ****         uint8_t sector = hue / 43;
+ 245:Core/Src/ws2812b.c ****         uint8_t offset = hue % 43;
+ 246:Core/Src/ws2812b.c ****         uint8_t p = 0;
+ 247:Core/Src/ws2812b.c ****         uint8_t q = (255 * (43 - offset)) / 43;
+ 248:Core/Src/ws2812b.c ****         uint8_t t = (255 * offset) / 43;
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 31
+
+
+ 249:Core/Src/ws2812b.c ****         
+ 250:Core/Src/ws2812b.c ****         RGBColor_t color;
+ 251:Core/Src/ws2812b.c ****         switch (sector) {
+ 252:Core/Src/ws2812b.c ****             case 0: color = (RGBColor_t){255, t, p}; break;      // Red to Yellow
+ 1426              		.loc 1 252 21 is_stmt 1 view .LVU304
+ 1427              		.loc 1 252 27 is_stmt 0 view .LVU305
+ 1428 000e FF22     		movs	r2, #255
+ 1429              	.LVL91:
+ 1430              		.loc 1 252 27 view .LVU306
+ 1431 0010 8DF80420 		strb	r2, [sp, #4]
+ 1432 0014 8DF80530 		strb	r3, [sp, #5]
+ 1433 0018 0023     		movs	r3, #0
+ 1434              	.LVL92:
+ 1435              		.loc 1 252 27 view .LVU307
+ 1436 001a 8DF80630 		strb	r3, [sp, #6]
+ 1437              		.loc 1 252 54 is_stmt 1 view .LVU308
+ 1438              	.LVL93:
+ 1439              	.L91:
+ 1440              		.loc 1 252 54 is_stmt 0 view .LVU309
+ 1441              	.LBE23:
+ 253:Core/Src/ws2812b.c ****             case 1: color = (RGBColor_t){q, 255, p}; break;      // Yellow to Green
+ 254:Core/Src/ws2812b.c ****             case 2: color = (RGBColor_t){p, 255, t}; break;      // Green to Cyan
+ 255:Core/Src/ws2812b.c ****             case 3: color = (RGBColor_t){p, q, 255}; break;      // Cyan to Blue
+ 256:Core/Src/ws2812b.c ****             case 4: color = (RGBColor_t){t, p, 255}; break;      // Blue to Magenta
+ 257:Core/Src/ws2812b.c ****             case 5: color = (RGBColor_t){255, p, q}; break;      // Magenta to Red
+ 258:Core/Src/ws2812b.c ****         }
+ 259:Core/Src/ws2812b.c ****         
+ 260:Core/Src/ws2812b.c ****         WS2812B_SetLED(handle, start_index + i, color);
+ 1442              		.loc 1 260 9 is_stmt 1 view .LVU310
+ 1443 001e A119     		adds	r1, r4, r6
+ 1444              	.LVL94:
+ 1445              		.loc 1 260 9 is_stmt 0 view .LVU311
+ 1446 0020 019A     		ldr	r2, [sp, #4]
+ 1447 0022 89B2     		uxth	r1, r1
+ 1448 0024 3846     		mov	r0, r7
+ 1449 0026 FFF7FEFF 		bl	WS2812B_SetLED
+ 1450              	.LVL95:
+ 1451              	.LBE22:
+ 240:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1452              		.loc 1 240 80 is_stmt 1 discriminator 2 view .LVU312
+ 1453 002a 0134     		adds	r4, r4, #1
+ 1454              	.LVL96:
+ 240:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1455              		.loc 1 240 80 is_stmt 0 discriminator 2 view .LVU313
+ 1456 002c A4B2     		uxth	r4, r4
+ 1457              	.LVL97:
+ 1458              	.L90:
+ 240:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1459              		.loc 1 240 37 is_stmt 1 discriminator 1 view .LVU314
+ 1460 002e AC42     		cmp	r4, r5
+ 1461 0030 63D2     		bcs	.L89
+ 240:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1462              		.loc 1 240 53 is_stmt 0 discriminator 3 view .LVU315
+ 1463 0032 3319     		adds	r3, r6, r4
+ 240:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1464              		.loc 1 240 66 discriminator 3 view .LVU316
+ 1465 0034 FA88     		ldrh	r2, [r7, #6]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 32
+
+
+ 240:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1466              		.loc 1 240 37 discriminator 3 view .LVU317
+ 1467 0036 9342     		cmp	r3, r2
+ 1468 0038 5FDA     		bge	.L89
+ 1469              	.LBB25:
+ 241:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1470              		.loc 1 241 9 is_stmt 1 view .LVU318
+ 241:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1471              		.loc 1 241 26 is_stmt 0 view .LVU319
+ 1472 003a C4EB0423 		rsb	r3, r4, r4, lsl #8
+ 241:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1473              		.loc 1 241 33 view .LVU320
+ 1474 003e 93FBF5F3 		sdiv	r3, r3, r5
+ 241:Core/Src/ws2812b.c ****         uint8_t hue = (i * 255) / length;
+ 1475              		.loc 1 241 17 view .LVU321
+ 1476 0042 DBB2     		uxtb	r3, r3
+ 1477              	.LVL98:
+ 244:Core/Src/ws2812b.c ****         uint8_t offset = hue % 43;
+ 1478              		.loc 1 244 9 is_stmt 1 view .LVU322
+ 244:Core/Src/ws2812b.c ****         uint8_t offset = hue % 43;
+ 1479              		.loc 1 244 17 is_stmt 0 view .LVU323
+ 1480 0044 2E48     		ldr	r0, .L103
+ 1481 0046 A0FB0321 		umull	r2, r1, r0, r3
+ 1482 004a CA08     		lsrs	r2, r1, #3
+ 1483 004c 1146     		mov	r1, r2
+ 1484              	.LVL99:
+ 245:Core/Src/ws2812b.c ****         uint8_t p = 0;
+ 1485              		.loc 1 245 9 is_stmt 1 view .LVU324
+ 245:Core/Src/ws2812b.c ****         uint8_t p = 0;
+ 1486              		.loc 1 245 17 is_stmt 0 view .LVU325
+ 1487 004e 4FF02B0C 		mov	ip, #43
+ 1488 0052 0CFB1233 		mls	r3, ip, r2, r3
+ 1489              	.LVL100:
+ 245:Core/Src/ws2812b.c ****         uint8_t p = 0;
+ 1490              		.loc 1 245 17 view .LVU326
+ 1491 0056 DBB2     		uxtb	r3, r3
+ 1492              	.LVL101:
+ 246:Core/Src/ws2812b.c ****         uint8_t q = (255 * (43 - offset)) / 43;
+ 1493              		.loc 1 246 9 is_stmt 1 view .LVU327
+ 247:Core/Src/ws2812b.c ****         uint8_t t = (255 * offset) / 43;
+ 1494              		.loc 1 247 9 view .LVU328
+ 247:Core/Src/ws2812b.c ****         uint8_t t = (255 * offset) / 43;
+ 1495              		.loc 1 247 32 is_stmt 0 view .LVU329
+ 1496 0058 ACEB0302 		sub	r2, ip, r3
+ 1497              	.LVL102:
+ 247:Core/Src/ws2812b.c ****         uint8_t t = (255 * offset) / 43;
+ 1498              		.loc 1 247 26 view .LVU330
+ 1499 005c C2EB0222 		rsb	r2, r2, r2, lsl #8
+ 247:Core/Src/ws2812b.c ****         uint8_t t = (255 * offset) / 43;
+ 1500              		.loc 1 247 43 view .LVU331
+ 1501 0060 80FB02EC 		smull	lr, ip, r0, r2
+ 1502 0064 D217     		asrs	r2, r2, #31
+ 1503 0066 C2EBEC02 		rsb	r2, r2, ip, asr #3
+ 247:Core/Src/ws2812b.c ****         uint8_t t = (255 * offset) / 43;
+ 1504              		.loc 1 247 17 view .LVU332
+ 1505 006a D2B2     		uxtb	r2, r2
+ 1506              	.LVL103:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 33
+
+
+ 248:Core/Src/ws2812b.c ****         
+ 1507              		.loc 1 248 9 is_stmt 1 view .LVU333
+ 248:Core/Src/ws2812b.c ****         
+ 1508              		.loc 1 248 26 is_stmt 0 view .LVU334
+ 1509 006c C3EB0323 		rsb	r3, r3, r3, lsl #8
+ 1510              	.LVL104:
+ 248:Core/Src/ws2812b.c ****         
+ 1511              		.loc 1 248 36 view .LVU335
+ 1512 0070 80FB03C0 		smull	ip, r0, r0, r3
+ 1513 0074 DB17     		asrs	r3, r3, #31
+ 1514 0076 C3EBE003 		rsb	r3, r3, r0, asr #3
+ 248:Core/Src/ws2812b.c ****         
+ 1515              		.loc 1 248 17 view .LVU336
+ 1516 007a DBB2     		uxtb	r3, r3
+ 1517              	.LVL105:
+ 250:Core/Src/ws2812b.c ****         switch (sector) {
+ 1518              		.loc 1 250 9 is_stmt 1 view .LVU337
+ 251:Core/Src/ws2812b.c ****             case 0: color = (RGBColor_t){255, t, p}; break;      // Red to Yellow
+ 1519              		.loc 1 251 9 view .LVU338
+ 1520 007c 0529     		cmp	r1, #5
+ 1521 007e CED8     		bhi	.L91
+ 1522 0080 01A0     		adr	r0, .L93
+ 1523 0082 50F821F0 		ldr	pc, [r0, r1, lsl #2]
+ 1524 0086 00BF     		.p2align 2
+ 1525              	.L93:
+ 1526 0088 0F000000 		.word	.L98+1
+ 1527 008c A1000000 		.word	.L97+1
+ 1528 0090 B3000000 		.word	.L96+1
+ 1529 0094 C5000000 		.word	.L95+1
+ 1530 0098 D7000000 		.word	.L94+1
+ 1531 009c E9000000 		.word	.L92+1
+ 1532              		.p2align 1
+ 1533              	.L97:
+ 1534              	.LBB24:
+ 253:Core/Src/ws2812b.c ****             case 2: color = (RGBColor_t){p, 255, t}; break;      // Green to Cyan
+ 1535              		.loc 1 253 21 view .LVU339
+ 253:Core/Src/ws2812b.c ****             case 2: color = (RGBColor_t){p, 255, t}; break;      // Green to Cyan
+ 1536              		.loc 1 253 27 is_stmt 0 view .LVU340
+ 1537 00a0 8DF80420 		strb	r2, [sp, #4]
+ 1538 00a4 FF23     		movs	r3, #255
+ 1539              	.LVL106:
+ 253:Core/Src/ws2812b.c ****             case 2: color = (RGBColor_t){p, 255, t}; break;      // Green to Cyan
+ 1540              		.loc 1 253 27 view .LVU341
+ 1541 00a6 8DF80530 		strb	r3, [sp, #5]
+ 1542 00aa 0023     		movs	r3, #0
+ 1543 00ac 8DF80630 		strb	r3, [sp, #6]
+ 253:Core/Src/ws2812b.c ****             case 2: color = (RGBColor_t){p, 255, t}; break;      // Green to Cyan
+ 1544              		.loc 1 253 54 is_stmt 1 view .LVU342
+ 1545 00b0 B5E7     		b	.L91
+ 1546              	.LVL107:
+ 1547              	.L96:
+ 254:Core/Src/ws2812b.c ****             case 3: color = (RGBColor_t){p, q, 255}; break;      // Cyan to Blue
+ 1548              		.loc 1 254 21 view .LVU343
+ 254:Core/Src/ws2812b.c ****             case 3: color = (RGBColor_t){p, q, 255}; break;      // Cyan to Blue
+ 1549              		.loc 1 254 27 is_stmt 0 view .LVU344
+ 1550 00b2 0022     		movs	r2, #0
+ 1551              	.LVL108:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 34
+
+
+ 254:Core/Src/ws2812b.c ****             case 3: color = (RGBColor_t){p, q, 255}; break;      // Cyan to Blue
+ 1552              		.loc 1 254 27 view .LVU345
+ 1553 00b4 8DF80420 		strb	r2, [sp, #4]
+ 1554 00b8 FF22     		movs	r2, #255
+ 1555 00ba 8DF80520 		strb	r2, [sp, #5]
+ 1556 00be 8DF80630 		strb	r3, [sp, #6]
+ 254:Core/Src/ws2812b.c ****             case 3: color = (RGBColor_t){p, q, 255}; break;      // Cyan to Blue
+ 1557              		.loc 1 254 54 is_stmt 1 view .LVU346
+ 1558 00c2 ACE7     		b	.L91
+ 1559              	.LVL109:
+ 1560              	.L95:
+ 255:Core/Src/ws2812b.c ****             case 4: color = (RGBColor_t){t, p, 255}; break;      // Blue to Magenta
+ 1561              		.loc 1 255 21 view .LVU347
+ 255:Core/Src/ws2812b.c ****             case 4: color = (RGBColor_t){t, p, 255}; break;      // Blue to Magenta
+ 1562              		.loc 1 255 27 is_stmt 0 view .LVU348
+ 1563 00c4 0023     		movs	r3, #0
+ 1564              	.LVL110:
+ 255:Core/Src/ws2812b.c ****             case 4: color = (RGBColor_t){t, p, 255}; break;      // Blue to Magenta
+ 1565              		.loc 1 255 27 view .LVU349
+ 1566 00c6 8DF80430 		strb	r3, [sp, #4]
+ 1567 00ca 8DF80520 		strb	r2, [sp, #5]
+ 1568 00ce FF23     		movs	r3, #255
+ 1569 00d0 8DF80630 		strb	r3, [sp, #6]
+ 255:Core/Src/ws2812b.c ****             case 4: color = (RGBColor_t){t, p, 255}; break;      // Blue to Magenta
+ 1570              		.loc 1 255 54 is_stmt 1 view .LVU350
+ 1571 00d4 A3E7     		b	.L91
+ 1572              	.LVL111:
+ 1573              	.L94:
+ 256:Core/Src/ws2812b.c ****             case 5: color = (RGBColor_t){255, p, q}; break;      // Magenta to Red
+ 1574              		.loc 1 256 21 view .LVU351
+ 256:Core/Src/ws2812b.c ****             case 5: color = (RGBColor_t){255, p, q}; break;      // Magenta to Red
+ 1575              		.loc 1 256 27 is_stmt 0 view .LVU352
+ 1576 00d6 8DF80430 		strb	r3, [sp, #4]
+ 1577 00da 0023     		movs	r3, #0
+ 1578              	.LVL112:
+ 256:Core/Src/ws2812b.c ****             case 5: color = (RGBColor_t){255, p, q}; break;      // Magenta to Red
+ 1579              		.loc 1 256 27 view .LVU353
+ 1580 00dc 8DF80530 		strb	r3, [sp, #5]
+ 1581 00e0 FF23     		movs	r3, #255
+ 1582 00e2 8DF80630 		strb	r3, [sp, #6]
+ 256:Core/Src/ws2812b.c ****             case 5: color = (RGBColor_t){255, p, q}; break;      // Magenta to Red
+ 1583              		.loc 1 256 54 is_stmt 1 view .LVU354
+ 1584 00e6 9AE7     		b	.L91
+ 1585              	.LVL113:
+ 1586              	.L92:
+ 257:Core/Src/ws2812b.c ****         }
+ 1587              		.loc 1 257 21 view .LVU355
+ 257:Core/Src/ws2812b.c ****         }
+ 1588              		.loc 1 257 27 is_stmt 0 view .LVU356
+ 1589 00e8 FF23     		movs	r3, #255
+ 1590              	.LVL114:
+ 257:Core/Src/ws2812b.c ****         }
+ 1591              		.loc 1 257 27 view .LVU357
+ 1592 00ea 8DF80430 		strb	r3, [sp, #4]
+ 1593 00ee 0023     		movs	r3, #0
+ 1594 00f0 8DF80530 		strb	r3, [sp, #5]
+ 1595 00f4 8DF80620 		strb	r2, [sp, #6]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 35
+
+
+ 257:Core/Src/ws2812b.c ****         }
+ 1596              		.loc 1 257 54 is_stmt 1 view .LVU358
+ 1597 00f8 91E7     		b	.L91
+ 1598              	.LVL115:
+ 1599              	.L89:
+ 257:Core/Src/ws2812b.c ****         }
+ 1600              		.loc 1 257 54 is_stmt 0 view .LVU359
+ 1601              	.LBE24:
+ 1602              	.LBE25:
+ 1603              	.LBE21:
+ 261:Core/Src/ws2812b.c ****     }
+ 262:Core/Src/ws2812b.c **** }
+ 1604              		.loc 1 262 1 view .LVU360
+ 1605 00fa 03B0     		add	sp, sp, #12
+ 1606              		.cfi_def_cfa_offset 20
+ 1607              		@ sp needed
+ 1608 00fc F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1609              	.LVL116:
+ 1610              	.L104:
+ 1611              		.loc 1 262 1 view .LVU361
+ 1612 00fe 00BF     		.align	2
+ 1613              	.L103:
+ 1614 0100 83BEA02F 		.word	799063683
+ 1615              		.cfi_endproc
+ 1616              	.LFE88:
+ 1618              		.section	.text.WS2812B_Chase,"ax",%progbits
+ 1619              		.align	1
+ 1620              		.global	WS2812B_Chase
+ 1621              		.syntax unified
+ 1622              		.thumb
+ 1623              		.thumb_func
+ 1625              	WS2812B_Chase:
+ 1626              	.LVL117:
+ 1627              	.LFB89:
+ 263:Core/Src/ws2812b.c **** 
+ 264:Core/Src/ws2812b.c **** void WS2812B_Chase(WS2812B_Handle_t* handle, RGBColor_t color, uint16_t delay_ms) {
+ 1628              		.loc 1 264 83 is_stmt 1 view -0
+ 1629              		.cfi_startproc
+ 1630              		@ args = 0, pretend = 0, frame = 8
+ 1631              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1632              		.loc 1 264 83 is_stmt 0 view .LVU363
+ 1633 0000 70B5     		push	{r4, r5, r6, lr}
+ 1634              		.cfi_def_cfa_offset 16
+ 1635              		.cfi_offset 4, -16
+ 1636              		.cfi_offset 5, -12
+ 1637              		.cfi_offset 6, -8
+ 1638              		.cfi_offset 14, -4
+ 1639 0002 82B0     		sub	sp, sp, #8
+ 1640              		.cfi_def_cfa_offset 24
+ 1641 0004 0546     		mov	r5, r0
+ 1642 0006 0191     		str	r1, [sp, #4]
+ 1643 0008 1646     		mov	r6, r2
+ 265:Core/Src/ws2812b.c ****     // Chase animation - moving light across the strip
+ 266:Core/Src/ws2812b.c ****     for (uint16_t pos = 0; pos < handle->led_count; pos++) {
+ 1644              		.loc 1 266 5 is_stmt 1 view .LVU364
+ 1645              	.LBB26:
+ 1646              		.loc 1 266 10 view .LVU365
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 36
+
+
+ 1647              	.LVL118:
+ 1648              		.loc 1 266 19 is_stmt 0 view .LVU366
+ 1649 000a 0024     		movs	r4, #0
+ 1650              		.loc 1 266 5 view .LVU367
+ 1651 000c 0FE0     		b	.L106
+ 1652              	.LVL119:
+ 1653              	.L107:
+ 267:Core/Src/ws2812b.c ****         // Clear all LEDs
+ 268:Core/Src/ws2812b.c ****         WS2812B_ClearAll(handle);
+ 1654              		.loc 1 268 9 is_stmt 1 view .LVU368
+ 1655 000e 2846     		mov	r0, r5
+ 1656 0010 FFF7FEFF 		bl	WS2812B_ClearAll
+ 1657              	.LVL120:
+ 269:Core/Src/ws2812b.c ****         
+ 270:Core/Src/ws2812b.c ****         // Set current position
+ 271:Core/Src/ws2812b.c ****         WS2812B_SetLED(handle, pos, color);
+ 1658              		.loc 1 271 9 view .LVU369
+ 1659 0014 019A     		ldr	r2, [sp, #4]
+ 1660 0016 2146     		mov	r1, r4
+ 1661 0018 2846     		mov	r0, r5
+ 1662 001a FFF7FEFF 		bl	WS2812B_SetLED
+ 1663              	.LVL121:
+ 272:Core/Src/ws2812b.c ****         
+ 273:Core/Src/ws2812b.c ****         // Update and wait
+ 274:Core/Src/ws2812b.c ****         WS2812B_Update(handle);
+ 1664              		.loc 1 274 9 view .LVU370
+ 1665 001e 2846     		mov	r0, r5
+ 1666 0020 FFF7FEFF 		bl	WS2812B_Update
+ 1667              	.LVL122:
+ 275:Core/Src/ws2812b.c ****         HAL_Delay(delay_ms);
+ 1668              		.loc 1 275 9 view .LVU371
+ 1669 0024 3046     		mov	r0, r6
+ 1670 0026 FFF7FEFF 		bl	HAL_Delay
+ 1671              	.LVL123:
+ 266:Core/Src/ws2812b.c ****         // Clear all LEDs
+ 1672              		.loc 1 266 56 discriminator 3 view .LVU372
+ 1673 002a 0134     		adds	r4, r4, #1
+ 1674              	.LVL124:
+ 266:Core/Src/ws2812b.c ****         // Clear all LEDs
+ 1675              		.loc 1 266 56 is_stmt 0 discriminator 3 view .LVU373
+ 1676 002c A4B2     		uxth	r4, r4
+ 1677              	.LVL125:
+ 1678              	.L106:
+ 266:Core/Src/ws2812b.c ****         // Clear all LEDs
+ 1679              		.loc 1 266 32 is_stmt 1 discriminator 1 view .LVU374
+ 266:Core/Src/ws2812b.c ****         // Clear all LEDs
+ 1680              		.loc 1 266 40 is_stmt 0 discriminator 1 view .LVU375
+ 1681 002e EB88     		ldrh	r3, [r5, #6]
+ 266:Core/Src/ws2812b.c ****         // Clear all LEDs
+ 1682              		.loc 1 266 32 discriminator 1 view .LVU376
+ 1683 0030 A342     		cmp	r3, r4
+ 1684 0032 ECD8     		bhi	.L107
+ 1685              	.LBE26:
+ 276:Core/Src/ws2812b.c ****     }
+ 277:Core/Src/ws2812b.c **** } ...
+ 1686              		.loc 1 277 1 view .LVU377
+ 1687 0034 02B0     		add	sp, sp, #8
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 37
+
+
+ 1688              		.cfi_def_cfa_offset 16
+ 1689              		@ sp needed
+ 1690 0036 70BD     		pop	{r4, r5, r6, pc}
+ 1691              		.loc 1 277 1 view .LVU378
+ 1692              		.cfi_endproc
+ 1693              	.LFE89:
+ 1695              		.section	.rodata
+ 1696              		.align	2
+ 1697              		.set	.LANCHOR0,. + 0
+ 1698              	.LC0:
+ 1699 0000 FF       		.byte	-1
+ 1700 0001 FF       		.byte	-1
+ 1701 0002 FF       		.byte	-1
+ 1702 0003 00       		.space	1
+ 1703              	.LC1:
+ 1704 0004 FF       		.byte	-1
+ 1705 0005 FF       		.byte	-1
+ 1706 0006 00       		.byte	0
+ 1707 0007 00       		.space	1
+ 1708              	.LC2:
+ 1709 0008 FF       		.byte	-1
+ 1710 0009 00       		.byte	0
+ 1711 000a FF       		.byte	-1
+ 1712 000b 00       		.space	1
+ 1713              	.LC3:
+ 1714 000c 00       		.byte	0
+ 1715 000d FF       		.byte	-1
+ 1716 000e FF       		.byte	-1
+ 1717              		.text
+ 1718              	.Letext0:
+ 1719              		.file 2 "C:/Users/PanTalir/AppData/Roaming/Cursor/User/globalStorage/bmd.stm32-for-vscode/@xpack-d
+ 1720              		.file 3 "C:/Users/PanTalir/AppData/Roaming/Cursor/User/globalStorage/bmd.stm32-for-vscode/@xpack-d
+ 1721              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 1722              		.file 5 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 1723              		.file 6 "Core/Inc/ws2812b.h"
+ 1724              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 38
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 ws2812b.c
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:19     .text.delay_cycles:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:24     .text.delay_cycles:00000000 delay_cycles
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:70     .text.send_byte:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:75     .text.send_byte:00000000 send_byte
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:175    .text.send_reset:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:180    .text.send_reset:00000000 send_reset
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:210    .text.WS2812B_SetLED:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:216    .text.WS2812B_SetLED:00000000 WS2812B_SetLED
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:256    .text.WS2812B_SetLED_RGB:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:262    .text.WS2812B_SetLED_RGB:00000000 WS2812B_SetLED_RGB
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:299    .text.WS2812B_SetAllLEDs:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:305    .text.WS2812B_SetAllLEDs:00000000 WS2812B_SetAllLEDs
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:358    .text.WS2812B_ClearAll:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:364    .text.WS2812B_ClearAll:00000000 WS2812B_ClearAll
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:396    .text.WS2812B_Init:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:402    .text.WS2812B_Init:00000000 WS2812B_Init
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:446    .text.WS2812B_Update:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:452    .text.WS2812B_Update:00000000 WS2812B_Update
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:519    .text.WS2812B_GetLEDCount:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:525    .text.WS2812B_GetLEDCount:00000000 WS2812B_GetLEDCount
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:543    .text.WS2812B_GetMaxLEDs:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:549    .text.WS2812B_GetMaxLEDs:00000000 WS2812B_GetMaxLEDs
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:564    .text.WS2812B_SetBrightness:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:570    .text.WS2812B_SetBrightness:00000000 WS2812B_SetBrightness
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:641    .text.WS2812B_SetBrightness:0000004c $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:646    .text.WS2812B_SetAllBrightness:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:652    .text.WS2812B_SetAllBrightness:00000000 WS2812B_SetAllBrightness
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:705    .text.WS2812B_Color_Red:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:711    .text.WS2812B_Color_Red:00000000 WS2812B_Color_Red
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:748    .text.WS2812B_Color_Green:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:754    .text.WS2812B_Color_Green:00000000 WS2812B_Color_Green
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:791    .text.WS2812B_Color_Blue:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:797    .text.WS2812B_Color_Blue:00000000 WS2812B_Color_Blue
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:834    .text.WS2812B_Color_White:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:840    .text.WS2812B_Color_White:00000000 WS2812B_Color_White
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:877    .text.WS2812B_Color_White:0000003c $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:882    .text.WS2812B_Color_Black:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:888    .text.WS2812B_Color_Black:00000000 WS2812B_Color_Black
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:924    .text.WS2812B_Color_Yellow:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:930    .text.WS2812B_Color_Yellow:00000000 WS2812B_Color_Yellow
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:967    .text.WS2812B_Color_Yellow:0000003c $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:972    .text.WS2812B_Color_Purple:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:978    .text.WS2812B_Color_Purple:00000000 WS2812B_Color_Purple
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1015   .text.WS2812B_Color_Purple:0000003c $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1020   .text.WS2812B_Color_Cyan:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1026   .text.WS2812B_Color_Cyan:00000000 WS2812B_Color_Cyan
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1063   .text.WS2812B_Color_Cyan:0000003c $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1068   .text.WS2812B_FadeIn:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1074   .text.WS2812B_FadeIn:00000000 WS2812B_FadeIn
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1218   .text.WS2812B_FadeIn:00000098 $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1224   .text.WS2812B_FadeOut:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1230   .text.WS2812B_FadeOut:00000000 WS2812B_FadeOut
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1382   .text.WS2812B_FadeOut:000000a4 $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1388   .text.WS2812B_Rainbow:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1394   .text.WS2812B_Rainbow:00000000 WS2812B_Rainbow
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s 			page 39
+
+
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1526   .text.WS2812B_Rainbow:00000088 $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1532   .text.WS2812B_Rainbow:000000a0 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1614   .text.WS2812B_Rainbow:00000100 $d
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1619   .text.WS2812B_Chase:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1625   .text.WS2812B_Chase:00000000 WS2812B_Chase
+C:\Users\PanTalir\AppData\Local\Temp\cc0SKHsd.s:1696   .rodata:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_Delay

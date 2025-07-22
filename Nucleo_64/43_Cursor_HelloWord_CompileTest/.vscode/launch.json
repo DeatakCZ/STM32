@@ -1,0 +1,80 @@
+{
+    "configurations": [
+        {
+            "showDevDebugOutput": "parsed",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/debug/43_Cursor_HelloWord_CompileTest.elf",
+            "name": "Debug STM32",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "preLaunchTask": "Build STM",
+            "device": "stm32f103xb.s",
+            "configFiles": [
+                "openocd.cfg"
+            ],
+            "runToEntryPoint": "main",
+            "liveWatch": {
+                "enabled": true,
+                "refreshRate": 1000,
+                "variables": [
+                    "debug_tick_count",
+                    "uwTick",
+                    "LD2_GPIO_Port->ODR",
+                    "HAL_GetTick()"
+                ]
+            }
+        },
+        {
+            "showDevDebugOutput": "parsed",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/debug/43_Cursor_HelloWord_CompileTest.elf",
+            "name": "Attach STM32",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "preLaunchTask": "Build STM",
+            "device": "stm32f103xb.s",
+            "configFiles": [
+                "openocd.cfg"
+            ],
+            "liveWatch": {
+                "enabled": true,
+                "refreshRate": 1000,
+                "variables": [
+                    "debug_tick_count",
+                    "uwTick",
+                    "LD2_GPIO_Port->ODR",
+                    "HAL_GetTick()"
+                ]
+            }
+        },
+        {
+            "showDevDebugOutput": "parsed",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/debug/43_Cursor_HelloWord_CompileTest.elf",
+            "name": "Debug STM32 (Live Watch)",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "preLaunchTask": "Build STM",
+            "device": "stm32f103xb.s",
+            "configFiles": [
+                "openocd.cfg"
+            ],
+            "runToEntryPoint": "main",
+            "liveWatch": {
+                "enabled": true,
+                "refreshRate": 500,
+                "variables": [
+                    "debug_tick_count",
+                    "uwTick",
+                    "LD2_GPIO_Port->ODR",
+                    "HAL_GetTick()",
+                    "GPIOA->ODR",
+                    "RCC->APB2ENR"
+                ]
+            }
+        }
+    ]
+}

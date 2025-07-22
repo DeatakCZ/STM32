@@ -1,0 +1,2273 @@
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"ws2812b_timer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "Core/Src/ws2812b_timer.c"
+  18              		.section	.text.set_pwm_duty,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	set_pwm_duty:
+  25              	.LVL0:
+  26              	.LFB66:
+   1:Core/Src/ws2812b_timer.c **** #include "ws2812b_timer.h"
+   2:Core/Src/ws2812b_timer.c **** #include "tim.h"
+   3:Core/Src/ws2812b_timer.c **** 
+   4:Core/Src/ws2812b_timer.c **** // ============================================================================
+   5:Core/Src/ws2812b_timer.c **** // PRIVATE FUNCTION DECLARATIONS
+   6:Core/Src/ws2812b_timer.c **** // ============================================================================
+   7:Core/Src/ws2812b_timer.c **** 
+   8:Core/Src/ws2812b_timer.c **** static void send_byte_pwm(WS2812B_Timer_Handle_t* handle, uint8_t byte);
+   9:Core/Src/ws2812b_timer.c **** static void send_reset_pwm(WS2812B_Timer_Handle_t* handle);
+  10:Core/Src/ws2812b_timer.c **** static void set_pwm_duty(WS2812B_Timer_Handle_t* handle, uint8_t duty_percent);
+  11:Core/Src/ws2812b_timer.c **** 
+  12:Core/Src/ws2812b_timer.c **** // ============================================================================
+  13:Core/Src/ws2812b_timer.c **** // INITIALIZATION
+  14:Core/Src/ws2812b_timer.c **** // ============================================================================
+  15:Core/Src/ws2812b_timer.c **** 
+  16:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_Init(WS2812B_Timer_Handle_t* handle, TIM_HandleTypeDef* htim, uint32_t channel, 
+  17:Core/Src/ws2812b_timer.c ****     // Initialize handle
+  18:Core/Src/ws2812b_timer.c ****     handle->htim = htim;
+  19:Core/Src/ws2812b_timer.c ****     handle->channel = channel;
+  20:Core/Src/ws2812b_timer.c ****     
+  21:Core/Src/ws2812b_timer.c ****     // Validate LED count
+  22:Core/Src/ws2812b_timer.c ****     if (num_leds > WS2812B_MAX_LEDS) {
+  23:Core/Src/ws2812b_timer.c ****         handle->led_count = WS2812B_MAX_LEDS;
+  24:Core/Src/ws2812b_timer.c ****     } else {
+  25:Core/Src/ws2812b_timer.c ****         handle->led_count = num_leds;
+  26:Core/Src/ws2812b_timer.c ****     }
+  27:Core/Src/ws2812b_timer.c ****     
+  28:Core/Src/ws2812b_timer.c ****     // Initialize all LEDs to off
+  29:Core/Src/ws2812b_timer.c ****     WS2812B_Timer_ClearAll(handle);
+  30:Core/Src/ws2812b_timer.c ****     
+  31:Core/Src/ws2812b_timer.c ****     // Start timer PWM
+  32:Core/Src/ws2812b_timer.c ****     HAL_TIM_PWM_Start(handle->htim, handle->channel);
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 2
+
+
+  33:Core/Src/ws2812b_timer.c **** }
+  34:Core/Src/ws2812b_timer.c **** 
+  35:Core/Src/ws2812b_timer.c **** // ============================================================================
+  36:Core/Src/ws2812b_timer.c **** // PRIVATE PWM FUNCTIONS
+  37:Core/Src/ws2812b_timer.c **** // ============================================================================
+  38:Core/Src/ws2812b_timer.c **** 
+  39:Core/Src/ws2812b_timer.c **** static void set_pwm_duty(WS2812B_Timer_Handle_t* handle, uint8_t duty_percent) {
+  27              		.loc 1 39 80 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  40:Core/Src/ws2812b_timer.c ****     // Calculate compare value for given duty cycle
+  41:Core/Src/ws2812b_timer.c ****     uint32_t compare_value = (WS2812B_TIMER_PERIOD * duty_percent) / 100;
+  32              		.loc 1 41 5 view .LVU1
+  33              		.loc 1 41 52 is_stmt 0 view .LVU2
+  34 0000 01EBC101 		add	r1, r1, r1, lsl #3
+  35              	.LVL1:
+  36              		.loc 1 41 52 view .LVU3
+  37 0004 C900     		lsls	r1, r1, #3
+  38              		.loc 1 41 68 view .LVU4
+  39 0006 0D4B     		ldr	r3, .L8
+  40 0008 83FB0131 		smull	r3, r1, r3, r1
+  41 000c 4911     		asrs	r1, r1, #5
+  42              	.LVL2:
+  42:Core/Src/ws2812b_timer.c ****     
+  43:Core/Src/ws2812b_timer.c ****     // Set PWM compare value
+  44:Core/Src/ws2812b_timer.c ****     __HAL_TIM_SET_COMPARE(handle->htim, handle->channel, compare_value);
+  43              		.loc 1 44 5 is_stmt 1 view .LVU5
+  44 000e 4368     		ldr	r3, [r0, #4]
+  45 0010 1BB9     		cbnz	r3, .L2
+  46              		.loc 1 44 5 is_stmt 0 discriminator 1 view .LVU6
+  47 0012 0368     		ldr	r3, [r0]
+  48 0014 1B68     		ldr	r3, [r3]
+  49 0016 5963     		str	r1, [r3, #52]
+  50 0018 7047     		bx	lr
+  51              	.L2:
+  52              		.loc 1 44 5 discriminator 2 view .LVU7
+  53 001a 042B     		cmp	r3, #4
+  54 001c 05D0     		beq	.L6
+  55              		.loc 1 44 5 discriminator 4 view .LVU8
+  56 001e 082B     		cmp	r3, #8
+  57 0020 07D0     		beq	.L7
+  58              		.loc 1 44 5 discriminator 7 view .LVU9
+  59 0022 0368     		ldr	r3, [r0]
+  60 0024 1B68     		ldr	r3, [r3]
+  61 0026 1964     		str	r1, [r3, #64]
+  45:Core/Src/ws2812b_timer.c **** }
+  62              		.loc 1 45 1 view .LVU10
+  63 0028 7047     		bx	lr
+  64              	.L6:
+  44:Core/Src/ws2812b_timer.c **** }
+  65              		.loc 1 44 5 discriminator 3 view .LVU11
+  66 002a 0368     		ldr	r3, [r0]
+  67 002c 1B68     		ldr	r3, [r3]
+  68 002e 9963     		str	r1, [r3, #56]
+  69 0030 7047     		bx	lr
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 3
+
+
+  70              	.L7:
+  44:Core/Src/ws2812b_timer.c **** }
+  71              		.loc 1 44 5 discriminator 6 view .LVU12
+  72 0032 0368     		ldr	r3, [r0]
+  73 0034 1B68     		ldr	r3, [r3]
+  74 0036 D963     		str	r1, [r3, #60]
+  75 0038 7047     		bx	lr
+  76              	.L9:
+  77 003a 00BF     		.align	2
+  78              	.L8:
+  79 003c 1F85EB51 		.word	1374389535
+  80              		.cfi_endproc
+  81              	.LFE66:
+  83              		.section	.text.send_byte_pwm,"ax",%progbits
+  84              		.align	1
+  85              		.syntax unified
+  86              		.thumb
+  87              		.thumb_func
+  89              	send_byte_pwm:
+  90              	.LVL3:
+  91              	.LFB67:
+  46:Core/Src/ws2812b_timer.c **** 
+  47:Core/Src/ws2812b_timer.c **** static void send_byte_pwm(WS2812B_Timer_Handle_t* handle, uint8_t byte) {
+  92              		.loc 1 47 73 is_stmt 1 view -0
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 0
+  95              		@ frame_needed = 0, uses_anonymous_args = 0
+  96              		.loc 1 47 73 is_stmt 0 view .LVU14
+  97 0000 70B5     		push	{r4, r5, r6, lr}
+  98              		.cfi_def_cfa_offset 16
+  99              		.cfi_offset 4, -16
+ 100              		.cfi_offset 5, -12
+ 101              		.cfi_offset 6, -8
+ 102              		.cfi_offset 14, -4
+ 103 0002 0446     		mov	r4, r0
+ 104 0004 0E46     		mov	r6, r1
+  48:Core/Src/ws2812b_timer.c ****     // Send 8 bits using PWM timing for 72MHz clock
+  49:Core/Src/ws2812b_timer.c ****     for (int8_t i = 7; i >= 0; i--) {
+ 105              		.loc 1 49 5 is_stmt 1 view .LVU15
+ 106              	.LBB2:
+ 107              		.loc 1 49 10 view .LVU16
+ 108              	.LVL4:
+ 109              		.loc 1 49 17 is_stmt 0 view .LVU17
+ 110 0006 0725     		movs	r5, #7
+ 111              		.loc 1 49 5 view .LVU18
+ 112 0008 0EE0     		b	.L11
+ 113              	.LVL5:
+ 114              	.L12:
+ 115              	.LBB3:
+  50:Core/Src/ws2812b_timer.c ****         // Get current bit (MSB first)
+  51:Core/Src/ws2812b_timer.c ****         uint8_t bit = (byte >> i) & 0x01;
+  52:Core/Src/ws2812b_timer.c ****         
+  53:Core/Src/ws2812b_timer.c ****         if (bit) {
+  54:Core/Src/ws2812b_timer.c ****             // Send 1-bit: High for 700ns, Low for 600ns
+  55:Core/Src/ws2812b_timer.c ****             set_pwm_duty(handle, WS2812B_PWM_T1H_DUTY);
+  56:Core/Src/ws2812b_timer.c ****         } else {
+  57:Core/Src/ws2812b_timer.c ****             // Send 0-bit: High for 350ns, Low for 800ns
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 4
+
+
+  58:Core/Src/ws2812b_timer.c ****             set_pwm_duty(handle, WS2812B_PWM_T0H_DUTY);
+ 116              		.loc 1 58 13 is_stmt 1 view .LVU19
+ 117 000a 1C21     		movs	r1, #28
+ 118 000c 2046     		mov	r0, r4
+ 119 000e FFF7FEFF 		bl	set_pwm_duty
+ 120              	.LVL6:
+ 121              	.L14:
+  59:Core/Src/ws2812b_timer.c ****         }
+  60:Core/Src/ws2812b_timer.c ****         
+  61:Core/Src/ws2812b_timer.c ****         // Wait for 1.25us (timer period at 1MHz)
+  62:Core/Src/ws2812b_timer.c ****         while (__HAL_TIM_GET_FLAG(handle->htim, TIM_FLAG_UPDATE) == RESET);
+ 122              		.loc 1 62 66 discriminator 1 view .LVU20
+ 123              		.loc 1 62 16 is_stmt 0 discriminator 1 view .LVU21
+ 124 0012 2368     		ldr	r3, [r4]
+ 125 0014 1B68     		ldr	r3, [r3]
+ 126 0016 1A69     		ldr	r2, [r3, #16]
+ 127              		.loc 1 62 66 discriminator 1 view .LVU22
+ 128 0018 12F0010F 		tst	r2, #1
+ 129 001c F9D0     		beq	.L14
+  63:Core/Src/ws2812b_timer.c ****         __HAL_TIM_CLEAR_FLAG(handle->htim, TIM_FLAG_UPDATE);
+ 130              		.loc 1 63 9 is_stmt 1 view .LVU23
+ 131 001e 6FF00102 		mvn	r2, #1
+ 132 0022 1A61     		str	r2, [r3, #16]
+ 133              	.LBE3:
+  49:Core/Src/ws2812b_timer.c ****         // Get current bit (MSB first)
+ 134              		.loc 1 49 33 discriminator 2 view .LVU24
+ 135 0024 013D     		subs	r5, r5, #1
+ 136              	.LVL7:
+  49:Core/Src/ws2812b_timer.c ****         // Get current bit (MSB first)
+ 137              		.loc 1 49 33 is_stmt 0 discriminator 2 view .LVU25
+ 138 0026 6DB2     		sxtb	r5, r5
+ 139              	.LVL8:
+ 140              	.L11:
+  49:Core/Src/ws2812b_timer.c ****         // Get current bit (MSB first)
+ 141              		.loc 1 49 26 is_stmt 1 discriminator 1 view .LVU26
+ 142 0028 002D     		cmp	r5, #0
+ 143 002a 09DB     		blt	.L17
+ 144              	.LBB4:
+  51:Core/Src/ws2812b_timer.c ****         
+ 145              		.loc 1 51 9 view .LVU27
+  51:Core/Src/ws2812b_timer.c ****         
+ 146              		.loc 1 51 29 is_stmt 0 view .LVU28
+ 147 002c 46FA05F3 		asr	r3, r6, r5
+ 148              	.LVL9:
+  53:Core/Src/ws2812b_timer.c ****             // Send 1-bit: High for 700ns, Low for 600ns
+ 149              		.loc 1 53 9 is_stmt 1 view .LVU29
+  53:Core/Src/ws2812b_timer.c ****             // Send 1-bit: High for 700ns, Low for 600ns
+ 150              		.loc 1 53 12 is_stmt 0 view .LVU30
+ 151 0030 13F0010F 		tst	r3, #1
+ 152 0034 E9D0     		beq	.L12
+  55:Core/Src/ws2812b_timer.c ****         } else {
+ 153              		.loc 1 55 13 is_stmt 1 view .LVU31
+ 154 0036 3821     		movs	r1, #56
+ 155 0038 2046     		mov	r0, r4
+ 156 003a FFF7FEFF 		bl	set_pwm_duty
+ 157              	.LVL10:
+  55:Core/Src/ws2812b_timer.c ****         } else {
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 5
+
+
+ 158              		.loc 1 55 13 is_stmt 0 view .LVU32
+ 159 003e E8E7     		b	.L14
+ 160              	.LVL11:
+ 161              	.L17:
+  55:Core/Src/ws2812b_timer.c ****         } else {
+ 162              		.loc 1 55 13 view .LVU33
+ 163              	.LBE4:
+ 164              	.LBE2:
+  64:Core/Src/ws2812b_timer.c ****     }
+  65:Core/Src/ws2812b_timer.c **** }
+ 165              		.loc 1 65 1 view .LVU34
+ 166 0040 70BD     		pop	{r4, r5, r6, pc}
+ 167              		.loc 1 65 1 view .LVU35
+ 168              		.cfi_endproc
+ 169              	.LFE67:
+ 171              		.section	.text.send_reset_pwm,"ax",%progbits
+ 172              		.align	1
+ 173              		.syntax unified
+ 174              		.thumb
+ 175              		.thumb_func
+ 177              	send_reset_pwm:
+ 178              	.LVL12:
+ 179              	.LFB68:
+  66:Core/Src/ws2812b_timer.c **** 
+  67:Core/Src/ws2812b_timer.c **** static void send_reset_pwm(WS2812B_Timer_Handle_t* handle) {
+ 180              		.loc 1 67 60 is_stmt 1 view -0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              		.loc 1 67 60 is_stmt 0 view .LVU37
+ 185 0000 10B5     		push	{r4, lr}
+ 186              		.cfi_def_cfa_offset 8
+ 187              		.cfi_offset 4, -8
+ 188              		.cfi_offset 14, -4
+ 189 0002 0446     		mov	r4, r0
+  68:Core/Src/ws2812b_timer.c ****     // Send reset signal (0% duty cycle for 50us)
+  69:Core/Src/ws2812b_timer.c ****     set_pwm_duty(handle, 0);
+ 190              		.loc 1 69 5 is_stmt 1 view .LVU38
+ 191 0004 0021     		movs	r1, #0
+ 192 0006 FFF7FEFF 		bl	set_pwm_duty
+ 193              	.LVL13:
+  70:Core/Src/ws2812b_timer.c ****     
+  71:Core/Src/ws2812b_timer.c ****     // Wait for 50us (50 timer periods at 1MHz)
+  72:Core/Src/ws2812b_timer.c ****     for (int i = 0; i < 50; i++) {
+ 194              		.loc 1 72 5 view .LVU39
+ 195              	.LBB5:
+ 196              		.loc 1 72 10 view .LVU40
+ 197              		.loc 1 72 14 is_stmt 0 view .LVU41
+ 198 000a 0021     		movs	r1, #0
+ 199              		.loc 1 72 5 view .LVU42
+ 200 000c 09E0     		b	.L19
+ 201              	.LVL14:
+ 202              	.L20:
+  73:Core/Src/ws2812b_timer.c ****         while (__HAL_TIM_GET_FLAG(handle->htim, TIM_FLAG_UPDATE) == RESET);
+ 203              		.loc 1 73 66 is_stmt 1 discriminator 1 view .LVU43
+ 204              		.loc 1 73 16 is_stmt 0 discriminator 1 view .LVU44
+ 205 000e 2368     		ldr	r3, [r4]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 6
+
+
+ 206 0010 1B68     		ldr	r3, [r3]
+ 207 0012 1A69     		ldr	r2, [r3, #16]
+ 208              		.loc 1 73 66 discriminator 1 view .LVU45
+ 209 0014 12F0010F 		tst	r2, #1
+ 210 0018 F9D0     		beq	.L20
+  74:Core/Src/ws2812b_timer.c ****         __HAL_TIM_CLEAR_FLAG(handle->htim, TIM_FLAG_UPDATE);
+ 211              		.loc 1 74 9 is_stmt 1 view .LVU46
+ 212 001a 6FF00102 		mvn	r2, #1
+ 213 001e 1A61     		str	r2, [r3, #16]
+  72:Core/Src/ws2812b_timer.c ****         while (__HAL_TIM_GET_FLAG(handle->htim, TIM_FLAG_UPDATE) == RESET);
+ 214              		.loc 1 72 30 discriminator 2 view .LVU47
+ 215 0020 0131     		adds	r1, r1, #1
+ 216              	.LVL15:
+ 217              	.L19:
+  72:Core/Src/ws2812b_timer.c ****         while (__HAL_TIM_GET_FLAG(handle->htim, TIM_FLAG_UPDATE) == RESET);
+ 218              		.loc 1 72 23 discriminator 1 view .LVU48
+ 219 0022 3129     		cmp	r1, #49
+ 220 0024 F3DD     		ble	.L20
+ 221              	.LBE5:
+  75:Core/Src/ws2812b_timer.c ****     }
+  76:Core/Src/ws2812b_timer.c **** }
+ 222              		.loc 1 76 1 is_stmt 0 view .LVU49
+ 223 0026 10BD     		pop	{r4, pc}
+ 224              		.loc 1 76 1 view .LVU50
+ 225              		.cfi_endproc
+ 226              	.LFE68:
+ 228              		.section	.text.WS2812B_Timer_SetLED,"ax",%progbits
+ 229              		.align	1
+ 230              		.global	WS2812B_Timer_SetLED
+ 231              		.syntax unified
+ 232              		.thumb
+ 233              		.thumb_func
+ 235              	WS2812B_Timer_SetLED:
+ 236              	.LVL16:
+ 237              	.LFB69:
+  77:Core/Src/ws2812b_timer.c **** 
+  78:Core/Src/ws2812b_timer.c **** // ============================================================================
+  79:Core/Src/ws2812b_timer.c **** // CORE LED CONTROL FUNCTIONS
+  80:Core/Src/ws2812b_timer.c **** // ============================================================================
+  81:Core/Src/ws2812b_timer.c **** 
+  82:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_SetLED(WS2812B_Timer_Handle_t* handle, uint16_t index, RGBColor_t color) {
+ 238              		.loc 1 82 93 is_stmt 1 view -0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 16
+ 241              		@ frame_needed = 0, uses_anonymous_args = 0
+ 242              		@ link register save eliminated.
+ 243              		.loc 1 82 93 is_stmt 0 view .LVU52
+ 244 0000 84B0     		sub	sp, sp, #16
+ 245              		.cfi_def_cfa_offset 16
+ 246 0002 0192     		str	r2, [sp, #4]
+  83:Core/Src/ws2812b_timer.c ****     // Validate index
+  84:Core/Src/ws2812b_timer.c ****     if (index >= handle->led_count) return;
+ 247              		.loc 1 84 5 is_stmt 1 view .LVU53
+ 248              		.loc 1 84 24 is_stmt 0 view .LVU54
+ 249 0004 0389     		ldrh	r3, [r0, #8]
+ 250              		.loc 1 84 8 view .LVU55
+ 251 0006 8B42     		cmp	r3, r1
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 7
+
+
+ 252 0008 15D9     		bls	.L22
+  85:Core/Src/ws2812b_timer.c ****     
+  86:Core/Src/ws2812b_timer.c ****     // Clear the specific LED first to ensure no contamination
+  87:Core/Src/ws2812b_timer.c ****     RGBColor_t black = {0, 0, 0};
+ 253              		.loc 1 87 5 is_stmt 1 view .LVU56
+ 254              		.loc 1 87 16 is_stmt 0 view .LVU57
+ 255 000a 0023     		movs	r3, #0
+ 256 000c 8DF80C30 		strb	r3, [sp, #12]
+ 257 0010 8DF80D30 		strb	r3, [sp, #13]
+ 258 0014 8DF80E30 		strb	r3, [sp, #14]
+  88:Core/Src/ws2812b_timer.c ****     handle->led_buffer[index] = black;
+ 259              		.loc 1 88 5 is_stmt 1 view .LVU58
+ 260              		.loc 1 88 31 is_stmt 0 view .LVU59
+ 261 0018 01EB4101 		add	r1, r1, r1, lsl #1
+ 262              	.LVL17:
+ 263              		.loc 1 88 31 view .LVU60
+ 264 001c 0844     		add	r0, r0, r1
+ 265              	.LVL18:
+ 266              		.loc 1 88 31 view .LVU61
+ 267 001e BDF80C10 		ldrh	r1, [sp, #12]	@ unaligned
+ 268 0022 9DF80E20 		ldrb	r2, [sp, #14]	@ zero_extendqisi2
+ 269 0026 4181     		strh	r1, [r0, #10]	@ unaligned
+ 270 0028 0273     		strb	r2, [r0, #12]
+  89:Core/Src/ws2812b_timer.c ****     
+  90:Core/Src/ws2812b_timer.c ****     // Store color in buffer (WS2812B expects GRB order)
+  91:Core/Src/ws2812b_timer.c ****     handle->led_buffer[index] = color;
+ 271              		.loc 1 91 5 is_stmt 1 view .LVU62
+ 272              		.loc 1 91 31 is_stmt 0 view .LVU63
+ 273 002a BDF80410 		ldrh	r1, [sp, #4]	@ unaligned
+ 274 002e 9DF80620 		ldrb	r2, [sp, #6]	@ zero_extendqisi2
+ 275 0032 4181     		strh	r1, [r0, #10]	@ unaligned
+ 276 0034 0273     		strb	r2, [r0, #12]
+ 277              	.L22:
+  92:Core/Src/ws2812b_timer.c **** }
+ 278              		.loc 1 92 1 view .LVU64
+ 279 0036 04B0     		add	sp, sp, #16
+ 280              		.cfi_def_cfa_offset 0
+ 281              		@ sp needed
+ 282 0038 7047     		bx	lr
+ 283              		.cfi_endproc
+ 284              	.LFE69:
+ 286              		.section	.text.WS2812B_Timer_SetLED_RGB,"ax",%progbits
+ 287              		.align	1
+ 288              		.global	WS2812B_Timer_SetLED_RGB
+ 289              		.syntax unified
+ 290              		.thumb
+ 291              		.thumb_func
+ 293              	WS2812B_Timer_SetLED_RGB:
+ 294              	.LVL19:
+ 295              	.LFB70:
+  93:Core/Src/ws2812b_timer.c **** 
+  94:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_SetLED_RGB(WS2812B_Timer_Handle_t* handle, uint16_t index, uint8_t red, uint8_t 
+ 296              		.loc 1 94 121 is_stmt 1 view -0
+ 297              		.cfi_startproc
+ 298              		@ args = 4, pretend = 0, frame = 8
+ 299              		@ frame_needed = 0, uses_anonymous_args = 0
+ 300              		.loc 1 94 121 is_stmt 0 view .LVU66
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 8
+
+
+ 301 0000 00B5     		push	{lr}
+ 302              		.cfi_def_cfa_offset 4
+ 303              		.cfi_offset 14, -4
+ 304 0002 83B0     		sub	sp, sp, #12
+ 305              		.cfi_def_cfa_offset 16
+  95:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {red, green, blue};
+ 306              		.loc 1 95 5 is_stmt 1 view .LVU67
+ 307              		.loc 1 95 16 is_stmt 0 view .LVU68
+ 308 0004 8DF80420 		strb	r2, [sp, #4]
+ 309 0008 8DF80530 		strb	r3, [sp, #5]
+ 310 000c 9DF81030 		ldrb	r3, [sp, #16]	@ zero_extendqisi2
+ 311              	.LVL20:
+ 312              		.loc 1 95 16 view .LVU69
+ 313 0010 8DF80630 		strb	r3, [sp, #6]
+  96:Core/Src/ws2812b_timer.c ****     WS2812B_Timer_SetLED(handle, index, color);
+ 314              		.loc 1 96 5 is_stmt 1 view .LVU70
+ 315 0014 019A     		ldr	r2, [sp, #4]
+ 316              	.LVL21:
+ 317              		.loc 1 96 5 is_stmt 0 view .LVU71
+ 318 0016 FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 319              	.LVL22:
+  97:Core/Src/ws2812b_timer.c **** }
+ 320              		.loc 1 97 1 view .LVU72
+ 321 001a 03B0     		add	sp, sp, #12
+ 322              		.cfi_def_cfa_offset 4
+ 323              		@ sp needed
+ 324 001c 5DF804FB 		ldr	pc, [sp], #4
+ 325              		.loc 1 97 1 view .LVU73
+ 326              		.cfi_endproc
+ 327              	.LFE70:
+ 329              		.section	.text.WS2812B_Timer_ClearBuffer,"ax",%progbits
+ 330              		.align	1
+ 331              		.global	WS2812B_Timer_ClearBuffer
+ 332              		.syntax unified
+ 333              		.thumb
+ 334              		.thumb_func
+ 336              	WS2812B_Timer_ClearBuffer:
+ 337              	.LVL23:
+ 338              	.LFB73:
+  98:Core/Src/ws2812b_timer.c **** 
+  99:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_SetAllLEDs(WS2812B_Timer_Handle_t* handle, RGBColor_t color) {
+ 100:Core/Src/ws2812b_timer.c ****     // Clear the buffer first to ensure no contamination
+ 101:Core/Src/ws2812b_timer.c ****     WS2812B_Timer_ClearBuffer(handle);
+ 102:Core/Src/ws2812b_timer.c ****     
+ 103:Core/Src/ws2812b_timer.c ****     // Set all LEDs to the same color
+ 104:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 105:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 106:Core/Src/ws2812b_timer.c ****     }
+ 107:Core/Src/ws2812b_timer.c **** }
+ 108:Core/Src/ws2812b_timer.c **** 
+ 109:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_ClearAll(WS2812B_Timer_Handle_t* handle) {
+ 110:Core/Src/ws2812b_timer.c ****     // Turn off all LEDs
+ 111:Core/Src/ws2812b_timer.c ****     WS2812B_Timer_ClearBuffer(handle);
+ 112:Core/Src/ws2812b_timer.c **** }
+ 113:Core/Src/ws2812b_timer.c **** 
+ 114:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_ClearBuffer(WS2812B_Timer_Handle_t* handle) {
+ 339              		.loc 1 114 64 is_stmt 1 view -0
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 9
+
+
+ 340              		.cfi_startproc
+ 341              		@ args = 0, pretend = 0, frame = 8
+ 342              		@ frame_needed = 0, uses_anonymous_args = 0
+ 343              		@ link register save eliminated.
+ 344              		.loc 1 114 64 is_stmt 0 view .LVU75
+ 345 0000 82B0     		sub	sp, sp, #8
+ 346              		.cfi_def_cfa_offset 8
+ 115:Core/Src/ws2812b_timer.c ****     // Clear the entire LED buffer to black
+ 116:Core/Src/ws2812b_timer.c ****     RGBColor_t black = {0, 0, 0};
+ 347              		.loc 1 116 5 is_stmt 1 view .LVU76
+ 348              		.loc 1 116 16 is_stmt 0 view .LVU77
+ 349 0002 0023     		movs	r3, #0
+ 350 0004 8DF80430 		strb	r3, [sp, #4]
+ 351 0008 8DF80530 		strb	r3, [sp, #5]
+ 352 000c 8DF80630 		strb	r3, [sp, #6]
+ 117:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 353              		.loc 1 117 5 is_stmt 1 view .LVU78
+ 354              	.LBB6:
+ 355              		.loc 1 117 10 view .LVU79
+ 356              	.LVL24:
+ 357              		.loc 1 117 5 is_stmt 0 view .LVU80
+ 358 0010 0BE0     		b	.L29
+ 359              	.LVL25:
+ 360              	.L30:
+ 118:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = black;
+ 361              		.loc 1 118 9 is_stmt 1 view .LVU81
+ 362              		.loc 1 118 31 is_stmt 0 view .LVU82
+ 363 0012 03EB4302 		add	r2, r3, r3, lsl #1
+ 364 0016 0244     		add	r2, r2, r0
+ 365 0018 BDF804C0 		ldrh	ip, [sp, #4]	@ unaligned
+ 366 001c 9DF80610 		ldrb	r1, [sp, #6]	@ zero_extendqisi2
+ 367 0020 A2F80AC0 		strh	ip, [r2, #10]	@ unaligned
+ 368 0024 1173     		strb	r1, [r2, #12]
+ 117:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 369              		.loc 1 117 50 is_stmt 1 discriminator 3 view .LVU83
+ 370 0026 0133     		adds	r3, r3, #1
+ 371              	.LVL26:
+ 117:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 372              		.loc 1 117 50 is_stmt 0 discriminator 3 view .LVU84
+ 373 0028 9BB2     		uxth	r3, r3
+ 374              	.LVL27:
+ 375              	.L29:
+ 117:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 376              		.loc 1 117 28 is_stmt 1 discriminator 1 view .LVU85
+ 117:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 377              		.loc 1 117 36 is_stmt 0 discriminator 1 view .LVU86
+ 378 002a 0289     		ldrh	r2, [r0, #8]
+ 117:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 379              		.loc 1 117 28 discriminator 1 view .LVU87
+ 380 002c 9A42     		cmp	r2, r3
+ 381 002e F0D8     		bhi	.L30
+ 382              	.LBE6:
+ 119:Core/Src/ws2812b_timer.c ****     }
+ 120:Core/Src/ws2812b_timer.c **** }
+ 383              		.loc 1 120 1 view .LVU88
+ 384 0030 02B0     		add	sp, sp, #8
+ 385              		.cfi_def_cfa_offset 0
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 10
+
+
+ 386              		@ sp needed
+ 387 0032 7047     		bx	lr
+ 388              		.cfi_endproc
+ 389              	.LFE73:
+ 391              		.section	.text.WS2812B_Timer_SetAllLEDs,"ax",%progbits
+ 392              		.align	1
+ 393              		.global	WS2812B_Timer_SetAllLEDs
+ 394              		.syntax unified
+ 395              		.thumb
+ 396              		.thumb_func
+ 398              	WS2812B_Timer_SetAllLEDs:
+ 399              	.LVL28:
+ 400              	.LFB71:
+  99:Core/Src/ws2812b_timer.c ****     // Clear the buffer first to ensure no contamination
+ 401              		.loc 1 99 81 is_stmt 1 view -0
+ 402              		.cfi_startproc
+ 403              		@ args = 0, pretend = 0, frame = 8
+ 404              		@ frame_needed = 0, uses_anonymous_args = 0
+  99:Core/Src/ws2812b_timer.c ****     // Clear the buffer first to ensure no contamination
+ 405              		.loc 1 99 81 is_stmt 0 view .LVU90
+ 406 0000 10B5     		push	{r4, lr}
+ 407              		.cfi_def_cfa_offset 8
+ 408              		.cfi_offset 4, -8
+ 409              		.cfi_offset 14, -4
+ 410 0002 82B0     		sub	sp, sp, #8
+ 411              		.cfi_def_cfa_offset 16
+ 412 0004 0446     		mov	r4, r0
+ 413 0006 0191     		str	r1, [sp, #4]
+ 101:Core/Src/ws2812b_timer.c ****     
+ 414              		.loc 1 101 5 is_stmt 1 view .LVU91
+ 415 0008 FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 416              	.LVL29:
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 417              		.loc 1 104 5 view .LVU92
+ 418              	.LBB7:
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 419              		.loc 1 104 10 view .LVU93
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 420              		.loc 1 104 19 is_stmt 0 view .LVU94
+ 421 000c 0023     		movs	r3, #0
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 422              		.loc 1 104 5 view .LVU95
+ 423 000e 0AE0     		b	.L33
+ 424              	.LVL30:
+ 425              	.L34:
+ 105:Core/Src/ws2812b_timer.c ****     }
+ 426              		.loc 1 105 9 is_stmt 1 view .LVU96
+ 105:Core/Src/ws2812b_timer.c ****     }
+ 427              		.loc 1 105 31 is_stmt 0 view .LVU97
+ 428 0010 03EB4302 		add	r2, r3, r3, lsl #1
+ 429 0014 2244     		add	r2, r2, r4
+ 430 0016 BDF80400 		ldrh	r0, [sp, #4]	@ unaligned
+ 431 001a 9DF80610 		ldrb	r1, [sp, #6]	@ zero_extendqisi2
+ 432 001e 5081     		strh	r0, [r2, #10]	@ unaligned
+ 433 0020 1173     		strb	r1, [r2, #12]
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 434              		.loc 1 104 50 is_stmt 1 discriminator 3 view .LVU98
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 11
+
+
+ 435 0022 0133     		adds	r3, r3, #1
+ 436              	.LVL31:
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 437              		.loc 1 104 50 is_stmt 0 discriminator 3 view .LVU99
+ 438 0024 9BB2     		uxth	r3, r3
+ 439              	.LVL32:
+ 440              	.L33:
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 441              		.loc 1 104 28 is_stmt 1 discriminator 1 view .LVU100
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 442              		.loc 1 104 36 is_stmt 0 discriminator 1 view .LVU101
+ 443 0026 2289     		ldrh	r2, [r4, #8]
+ 104:Core/Src/ws2812b_timer.c ****         handle->led_buffer[i] = color;
+ 444              		.loc 1 104 28 discriminator 1 view .LVU102
+ 445 0028 9A42     		cmp	r2, r3
+ 446 002a F1D8     		bhi	.L34
+ 447              	.LBE7:
+ 107:Core/Src/ws2812b_timer.c **** 
+ 448              		.loc 1 107 1 view .LVU103
+ 449 002c 02B0     		add	sp, sp, #8
+ 450              		.cfi_def_cfa_offset 8
+ 451              		@ sp needed
+ 452 002e 10BD     		pop	{r4, pc}
+ 107:Core/Src/ws2812b_timer.c **** 
+ 453              		.loc 1 107 1 view .LVU104
+ 454              		.cfi_endproc
+ 455              	.LFE71:
+ 457              		.section	.text.WS2812B_Timer_ClearAll,"ax",%progbits
+ 458              		.align	1
+ 459              		.global	WS2812B_Timer_ClearAll
+ 460              		.syntax unified
+ 461              		.thumb
+ 462              		.thumb_func
+ 464              	WS2812B_Timer_ClearAll:
+ 465              	.LVL33:
+ 466              	.LFB72:
+ 109:Core/Src/ws2812b_timer.c ****     // Turn off all LEDs
+ 467              		.loc 1 109 61 is_stmt 1 view -0
+ 468              		.cfi_startproc
+ 469              		@ args = 0, pretend = 0, frame = 0
+ 470              		@ frame_needed = 0, uses_anonymous_args = 0
+ 109:Core/Src/ws2812b_timer.c ****     // Turn off all LEDs
+ 471              		.loc 1 109 61 is_stmt 0 view .LVU106
+ 472 0000 08B5     		push	{r3, lr}
+ 473              		.cfi_def_cfa_offset 8
+ 474              		.cfi_offset 3, -8
+ 475              		.cfi_offset 14, -4
+ 111:Core/Src/ws2812b_timer.c **** }
+ 476              		.loc 1 111 5 is_stmt 1 view .LVU107
+ 477 0002 FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 478              	.LVL34:
+ 112:Core/Src/ws2812b_timer.c **** 
+ 479              		.loc 1 112 1 is_stmt 0 view .LVU108
+ 480 0006 08BD     		pop	{r3, pc}
+ 481              		.cfi_endproc
+ 482              	.LFE72:
+ 484              		.section	.text.WS2812B_Timer_Init,"ax",%progbits
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 12
+
+
+ 485              		.align	1
+ 486              		.global	WS2812B_Timer_Init
+ 487              		.syntax unified
+ 488              		.thumb
+ 489              		.thumb_func
+ 491              	WS2812B_Timer_Init:
+ 492              	.LVL35:
+ 493              	.LFB65:
+  16:Core/Src/ws2812b_timer.c ****     // Initialize handle
+ 494              		.loc 1 16 119 is_stmt 1 view -0
+ 495              		.cfi_startproc
+ 496              		@ args = 0, pretend = 0, frame = 0
+ 497              		@ frame_needed = 0, uses_anonymous_args = 0
+  16:Core/Src/ws2812b_timer.c ****     // Initialize handle
+ 498              		.loc 1 16 119 is_stmt 0 view .LVU110
+ 499 0000 10B5     		push	{r4, lr}
+ 500              		.cfi_def_cfa_offset 8
+ 501              		.cfi_offset 4, -8
+ 502              		.cfi_offset 14, -4
+ 503 0002 0446     		mov	r4, r0
+  18:Core/Src/ws2812b_timer.c ****     handle->channel = channel;
+ 504              		.loc 1 18 5 is_stmt 1 view .LVU111
+  18:Core/Src/ws2812b_timer.c ****     handle->channel = channel;
+ 505              		.loc 1 18 18 is_stmt 0 view .LVU112
+ 506 0004 0160     		str	r1, [r0]
+  19:Core/Src/ws2812b_timer.c ****     
+ 507              		.loc 1 19 5 is_stmt 1 view .LVU113
+  19:Core/Src/ws2812b_timer.c ****     
+ 508              		.loc 1 19 21 is_stmt 0 view .LVU114
+ 509 0006 4260     		str	r2, [r0, #4]
+  22:Core/Src/ws2812b_timer.c ****         handle->led_count = WS2812B_MAX_LEDS;
+ 510              		.loc 1 22 5 is_stmt 1 view .LVU115
+  22:Core/Src/ws2812b_timer.c ****         handle->led_count = WS2812B_MAX_LEDS;
+ 511              		.loc 1 22 8 is_stmt 0 view .LVU116
+ 512 0008 202B     		cmp	r3, #32
+ 513 000a 09D9     		bls	.L39
+  23:Core/Src/ws2812b_timer.c ****     } else {
+ 514              		.loc 1 23 9 is_stmt 1 view .LVU117
+  23:Core/Src/ws2812b_timer.c ****     } else {
+ 515              		.loc 1 23 27 is_stmt 0 view .LVU118
+ 516 000c 2023     		movs	r3, #32
+ 517              	.LVL36:
+  23:Core/Src/ws2812b_timer.c ****     } else {
+ 518              		.loc 1 23 27 view .LVU119
+ 519 000e 0381     		strh	r3, [r0, #8]	@ movhi
+ 520              	.L40:
+  29:Core/Src/ws2812b_timer.c ****     
+ 521              		.loc 1 29 5 is_stmt 1 view .LVU120
+ 522 0010 2046     		mov	r0, r4
+ 523              	.LVL37:
+  29:Core/Src/ws2812b_timer.c ****     
+ 524              		.loc 1 29 5 is_stmt 0 view .LVU121
+ 525 0012 FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 526              	.LVL38:
+  32:Core/Src/ws2812b_timer.c **** }
+ 527              		.loc 1 32 5 is_stmt 1 view .LVU122
+ 528 0016 6168     		ldr	r1, [r4, #4]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 13
+
+
+ 529 0018 2068     		ldr	r0, [r4]
+ 530 001a FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 531              	.LVL39:
+  33:Core/Src/ws2812b_timer.c **** 
+ 532              		.loc 1 33 1 is_stmt 0 view .LVU123
+ 533 001e 10BD     		pop	{r4, pc}
+ 534              	.LVL40:
+ 535              	.L39:
+  25:Core/Src/ws2812b_timer.c ****     }
+ 536              		.loc 1 25 9 is_stmt 1 view .LVU124
+  25:Core/Src/ws2812b_timer.c ****     }
+ 537              		.loc 1 25 27 is_stmt 0 view .LVU125
+ 538 0020 0381     		strh	r3, [r0, #8]	@ movhi
+ 539 0022 F5E7     		b	.L40
+ 540              		.cfi_endproc
+ 541              	.LFE65:
+ 543              		.section	.text.WS2812B_Timer_Update,"ax",%progbits
+ 544              		.align	1
+ 545              		.global	WS2812B_Timer_Update
+ 546              		.syntax unified
+ 547              		.thumb
+ 548              		.thumb_func
+ 550              	WS2812B_Timer_Update:
+ 551              	.LVL41:
+ 552              	.LFB74:
+ 121:Core/Src/ws2812b_timer.c **** 
+ 122:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_Update(WS2812B_Timer_Handle_t* handle) {
+ 553              		.loc 1 122 59 is_stmt 1 view -0
+ 554              		.cfi_startproc
+ 555              		@ args = 0, pretend = 0, frame = 0
+ 556              		@ frame_needed = 0, uses_anonymous_args = 0
+ 557              		.loc 1 122 59 is_stmt 0 view .LVU127
+ 558 0000 70B5     		push	{r4, r5, r6, lr}
+ 559              		.cfi_def_cfa_offset 16
+ 560              		.cfi_offset 4, -16
+ 561              		.cfi_offset 5, -12
+ 562              		.cfi_offset 6, -8
+ 563              		.cfi_offset 14, -4
+ 564 0002 0646     		mov	r6, r0
+ 123:Core/Src/ws2812b_timer.c ****     // Send all LED data to the strip
+ 124:Core/Src/ws2812b_timer.c ****     for (uint16_t i = 0; i < handle->led_count; i++) {
+ 565              		.loc 1 124 5 is_stmt 1 view .LVU128
+ 566              	.LBB8:
+ 567              		.loc 1 124 10 view .LVU129
+ 568              	.LVL42:
+ 569              		.loc 1 124 19 is_stmt 0 view .LVU130
+ 570 0004 0024     		movs	r4, #0
+ 571              		.loc 1 124 5 view .LVU131
+ 572 0006 10E0     		b	.L43
+ 573              	.LVL43:
+ 574              	.L44:
+ 125:Core/Src/ws2812b_timer.c ****         // WS2812B expects GRB order, not RGB
+ 126:Core/Src/ws2812b_timer.c ****         send_byte_pwm(handle, handle->led_buffer[i].green);
+ 575              		.loc 1 126 9 is_stmt 1 view .LVU132
+ 576 0008 04EB4405 		add	r5, r4, r4, lsl #1
+ 577 000c 3544     		add	r5, r5, r6
+ 578 000e E97A     		ldrb	r1, [r5, #11]	@ zero_extendqisi2
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 14
+
+
+ 579 0010 3046     		mov	r0, r6
+ 580 0012 FFF7FEFF 		bl	send_byte_pwm
+ 581              	.LVL44:
+ 127:Core/Src/ws2812b_timer.c ****         send_byte_pwm(handle, handle->led_buffer[i].red);
+ 582              		.loc 1 127 9 view .LVU133
+ 583 0016 A97A     		ldrb	r1, [r5, #10]	@ zero_extendqisi2
+ 584 0018 3046     		mov	r0, r6
+ 585 001a FFF7FEFF 		bl	send_byte_pwm
+ 586              	.LVL45:
+ 128:Core/Src/ws2812b_timer.c ****         send_byte_pwm(handle, handle->led_buffer[i].blue);
+ 587              		.loc 1 128 9 view .LVU134
+ 588 001e 297B     		ldrb	r1, [r5, #12]	@ zero_extendqisi2
+ 589 0020 3046     		mov	r0, r6
+ 590 0022 FFF7FEFF 		bl	send_byte_pwm
+ 591              	.LVL46:
+ 124:Core/Src/ws2812b_timer.c ****         // WS2812B expects GRB order, not RGB
+ 592              		.loc 1 124 50 discriminator 3 view .LVU135
+ 593 0026 0134     		adds	r4, r4, #1
+ 594              	.LVL47:
+ 124:Core/Src/ws2812b_timer.c ****         // WS2812B expects GRB order, not RGB
+ 595              		.loc 1 124 50 is_stmt 0 discriminator 3 view .LVU136
+ 596 0028 A4B2     		uxth	r4, r4
+ 597              	.LVL48:
+ 598              	.L43:
+ 124:Core/Src/ws2812b_timer.c ****         // WS2812B expects GRB order, not RGB
+ 599              		.loc 1 124 28 is_stmt 1 discriminator 1 view .LVU137
+ 124:Core/Src/ws2812b_timer.c ****         // WS2812B expects GRB order, not RGB
+ 600              		.loc 1 124 36 is_stmt 0 discriminator 1 view .LVU138
+ 601 002a 3389     		ldrh	r3, [r6, #8]
+ 124:Core/Src/ws2812b_timer.c ****         // WS2812B expects GRB order, not RGB
+ 602              		.loc 1 124 28 discriminator 1 view .LVU139
+ 603 002c A342     		cmp	r3, r4
+ 604 002e EBD8     		bhi	.L44
+ 605              	.LBE8:
+ 129:Core/Src/ws2812b_timer.c ****     }
+ 130:Core/Src/ws2812b_timer.c ****     
+ 131:Core/Src/ws2812b_timer.c ****     // Send reset signal
+ 132:Core/Src/ws2812b_timer.c ****     send_reset_pwm(handle);
+ 606              		.loc 1 132 5 is_stmt 1 view .LVU140
+ 607 0030 3046     		mov	r0, r6
+ 608 0032 FFF7FEFF 		bl	send_reset_pwm
+ 609              	.LVL49:
+ 133:Core/Src/ws2812b_timer.c **** }
+ 610              		.loc 1 133 1 is_stmt 0 view .LVU141
+ 611 0036 70BD     		pop	{r4, r5, r6, pc}
+ 612              		.loc 1 133 1 view .LVU142
+ 613              		.cfi_endproc
+ 614              	.LFE74:
+ 616              		.section	.text.WS2812B_Timer_GetLEDCount,"ax",%progbits
+ 617              		.align	1
+ 618              		.global	WS2812B_Timer_GetLEDCount
+ 619              		.syntax unified
+ 620              		.thumb
+ 621              		.thumb_func
+ 623              	WS2812B_Timer_GetLEDCount:
+ 624              	.LVL50:
+ 625              	.LFB75:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 15
+
+
+ 134:Core/Src/ws2812b_timer.c **** 
+ 135:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 136:Core/Src/ws2812b_timer.c **** // UTILITY FUNCTIONS
+ 137:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 138:Core/Src/ws2812b_timer.c **** 
+ 139:Core/Src/ws2812b_timer.c **** uint16_t WS2812B_Timer_GetLEDCount(WS2812B_Timer_Handle_t* handle) {
+ 626              		.loc 1 139 68 is_stmt 1 view -0
+ 627              		.cfi_startproc
+ 628              		@ args = 0, pretend = 0, frame = 0
+ 629              		@ frame_needed = 0, uses_anonymous_args = 0
+ 630              		@ link register save eliminated.
+ 140:Core/Src/ws2812b_timer.c ****     return handle->led_count;
+ 631              		.loc 1 140 5 view .LVU144
+ 141:Core/Src/ws2812b_timer.c **** }
+ 632              		.loc 1 141 1 is_stmt 0 view .LVU145
+ 633 0000 0089     		ldrh	r0, [r0, #8]
+ 634              	.LVL51:
+ 635              		.loc 1 141 1 view .LVU146
+ 636 0002 7047     		bx	lr
+ 637              		.cfi_endproc
+ 638              	.LFE75:
+ 640              		.section	.text.WS2812B_Timer_GetMaxLEDs,"ax",%progbits
+ 641              		.align	1
+ 642              		.global	WS2812B_Timer_GetMaxLEDs
+ 643              		.syntax unified
+ 644              		.thumb
+ 645              		.thumb_func
+ 647              	WS2812B_Timer_GetMaxLEDs:
+ 648              	.LFB76:
+ 142:Core/Src/ws2812b_timer.c **** 
+ 143:Core/Src/ws2812b_timer.c **** uint16_t WS2812B_Timer_GetMaxLEDs(void) {
+ 649              		.loc 1 143 41 is_stmt 1 view -0
+ 650              		.cfi_startproc
+ 651              		@ args = 0, pretend = 0, frame = 0
+ 652              		@ frame_needed = 0, uses_anonymous_args = 0
+ 653              		@ link register save eliminated.
+ 144:Core/Src/ws2812b_timer.c ****     return WS2812B_MAX_LEDS;
+ 654              		.loc 1 144 5 view .LVU148
+ 145:Core/Src/ws2812b_timer.c **** }
+ 655              		.loc 1 145 1 is_stmt 0 view .LVU149
+ 656 0000 2020     		movs	r0, #32
+ 657 0002 7047     		bx	lr
+ 658              		.cfi_endproc
+ 659              	.LFE76:
+ 661              		.section	.text.WS2812B_Timer_ScaleBrightness,"ax",%progbits
+ 662              		.align	1
+ 663              		.global	WS2812B_Timer_ScaleBrightness
+ 664              		.syntax unified
+ 665              		.thumb
+ 666              		.thumb_func
+ 668              	WS2812B_Timer_ScaleBrightness:
+ 669              	.LFB77:
+ 146:Core/Src/ws2812b_timer.c **** 
+ 147:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 148:Core/Src/ws2812b_timer.c **** // BRIGHTNESS SCALING
+ 149:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 150:Core/Src/ws2812b_timer.c **** 
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 16
+
+
+ 151:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_ScaleBrightness(RGBColor_t color) {
+ 670              		.loc 1 151 60 is_stmt 1 view -0
+ 671              		.cfi_startproc
+ 672              		@ args = 0, pretend = 0, frame = 32
+ 673              		@ frame_needed = 0, uses_anonymous_args = 0
+ 674              		@ link register save eliminated.
+ 675 0000 88B0     		sub	sp, sp, #32
+ 676              		.cfi_def_cfa_offset 32
+ 677 0002 0190     		str	r0, [sp, #4]
+ 152:Core/Src/ws2812b_timer.c ****     RGBColor_t scaled_color;
+ 678              		.loc 1 152 5 view .LVU151
+ 153:Core/Src/ws2812b_timer.c ****     
+ 154:Core/Src/ws2812b_timer.c ****     // Handle edge cases first
+ 155:Core/Src/ws2812b_timer.c ****     if (WS2812B_MAX_BRIGHTNESS == 0) {
+ 679              		.loc 1 155 5 view .LVU152
+ 156:Core/Src/ws2812b_timer.c ****         // If brightness is 0, return black
+ 157:Core/Src/ws2812b_timer.c ****         scaled_color.red = 0;
+ 158:Core/Src/ws2812b_timer.c ****         scaled_color.green = 0;
+ 159:Core/Src/ws2812b_timer.c ****         scaled_color.blue = 0;
+ 160:Core/Src/ws2812b_timer.c ****         return scaled_color;
+ 161:Core/Src/ws2812b_timer.c ****     }
+ 162:Core/Src/ws2812b_timer.c ****     
+ 163:Core/Src/ws2812b_timer.c ****     if (WS2812B_MAX_BRIGHTNESS >= 255) {
+ 680              		.loc 1 163 5 view .LVU153
+ 164:Core/Src/ws2812b_timer.c ****         // If brightness is 255 or higher, return original color (no scaling needed)
+ 165:Core/Src/ws2812b_timer.c ****         return color;
+ 166:Core/Src/ws2812b_timer.c ****     }
+ 167:Core/Src/ws2812b_timer.c ****     
+ 168:Core/Src/ws2812b_timer.c ****     // Scale each color component using integer math with 100x scaling
+ 169:Core/Src/ws2812b_timer.c ****     // This eliminates floating-point precision issues
+ 170:Core/Src/ws2812b_timer.c ****     volatile uint32_t temp_red = (uint32_t)color.red * WS2812B_MAX_BRIGHTNESS * 100;
+ 681              		.loc 1 170 5 view .LVU154
+ 682              		.loc 1 170 49 is_stmt 0 view .LVU155
+ 683 0004 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 684              		.loc 1 170 79 view .LVU156
+ 685 0008 4FF44852 		mov	r2, #12800
+ 686 000c 02FB03F3 		mul	r3, r2, r3
+ 687              		.loc 1 170 23 view .LVU157
+ 688 0010 0593     		str	r3, [sp, #20]
+ 171:Core/Src/ws2812b_timer.c ****     volatile uint32_t temp_green = (uint32_t)color.green * WS2812B_MAX_BRIGHTNESS * 100;
+ 689              		.loc 1 171 5 is_stmt 1 view .LVU158
+ 690              		.loc 1 171 51 is_stmt 0 view .LVU159
+ 691 0012 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 692              		.loc 1 171 83 view .LVU160
+ 693 0016 02FB03F3 		mul	r3, r2, r3
+ 694              		.loc 1 171 23 view .LVU161
+ 695 001a 0493     		str	r3, [sp, #16]
+ 172:Core/Src/ws2812b_timer.c ****     volatile uint32_t temp_blue = (uint32_t)color.blue * WS2812B_MAX_BRIGHTNESS * 100;
+ 696              		.loc 1 172 5 is_stmt 1 view .LVU162
+ 697              		.loc 1 172 50 is_stmt 0 view .LVU163
+ 698 001c 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 699              		.loc 1 172 81 view .LVU164
+ 700 0020 02FB03F3 		mul	r3, r2, r3
+ 701              		.loc 1 172 23 view .LVU165
+ 702 0024 0393     		str	r3, [sp, #12]
+ 173:Core/Src/ws2812b_timer.c ****     
+ 174:Core/Src/ws2812b_timer.c ****     // Divide by 25500 (255 * 100) for proper scaling
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 17
+
+
+ 175:Core/Src/ws2812b_timer.c ****     temp_red = temp_red / 25500;
+ 703              		.loc 1 175 5 is_stmt 1 view .LVU166
+ 704              		.loc 1 175 25 is_stmt 0 view .LVU167
+ 705 0026 059B     		ldr	r3, [sp, #20]
+ 706 0028 9B08     		lsrs	r3, r3, #2
+ 707 002a 204A     		ldr	r2, .L56
+ 708 002c A2FB0313 		umull	r1, r3, r2, r3
+ 709 0030 9B0A     		lsrs	r3, r3, #10
+ 710              		.loc 1 175 14 view .LVU168
+ 711 0032 0593     		str	r3, [sp, #20]
+ 176:Core/Src/ws2812b_timer.c ****     temp_green = temp_green / 25500;
+ 712              		.loc 1 176 5 is_stmt 1 view .LVU169
+ 713              		.loc 1 176 29 is_stmt 0 view .LVU170
+ 714 0034 049B     		ldr	r3, [sp, #16]
+ 715 0036 9B08     		lsrs	r3, r3, #2
+ 716 0038 A2FB0313 		umull	r1, r3, r2, r3
+ 717 003c 9B0A     		lsrs	r3, r3, #10
+ 718              		.loc 1 176 16 view .LVU171
+ 719 003e 0493     		str	r3, [sp, #16]
+ 177:Core/Src/ws2812b_timer.c ****     temp_blue = temp_blue / 25500;
+ 720              		.loc 1 177 5 is_stmt 1 view .LVU172
+ 721              		.loc 1 177 27 is_stmt 0 view .LVU173
+ 722 0040 039B     		ldr	r3, [sp, #12]
+ 723 0042 9B08     		lsrs	r3, r3, #2
+ 724 0044 A2FB0323 		umull	r2, r3, r2, r3
+ 725 0048 9B0A     		lsrs	r3, r3, #10
+ 726              		.loc 1 177 15 view .LVU174
+ 727 004a 0393     		str	r3, [sp, #12]
+ 178:Core/Src/ws2812b_timer.c ****     
+ 179:Core/Src/ws2812b_timer.c ****     // Ensure values don't exceed 255
+ 180:Core/Src/ws2812b_timer.c ****     scaled_color.red = (temp_red > 255) ? 255 : (uint8_t)temp_red;
+ 728              		.loc 1 180 5 is_stmt 1 view .LVU175
+ 729              		.loc 1 180 34 is_stmt 0 view .LVU176
+ 730 004c 059B     		ldr	r3, [sp, #20]
+ 731              		.loc 1 180 22 view .LVU177
+ 732 004e FF2B     		cmp	r3, #255
+ 733 0050 26D8     		bhi	.L52
+ 734              		.loc 1 180 49 discriminator 1 view .LVU178
+ 735 0052 059B     		ldr	r3, [sp, #20]
+ 736              		.loc 1 180 22 discriminator 1 view .LVU179
+ 737 0054 DBB2     		uxtb	r3, r3
+ 738              	.L49:
+ 739              		.loc 1 180 22 discriminator 4 view .LVU180
+ 740 0056 8DF81830 		strb	r3, [sp, #24]
+ 181:Core/Src/ws2812b_timer.c ****     scaled_color.green = (temp_green > 255) ? 255 : (uint8_t)temp_green;
+ 741              		.loc 1 181 5 is_stmt 1 view .LVU181
+ 742              		.loc 1 181 38 is_stmt 0 view .LVU182
+ 743 005a 049B     		ldr	r3, [sp, #16]
+ 744              		.loc 1 181 24 view .LVU183
+ 745 005c FF2B     		cmp	r3, #255
+ 746 005e 21D8     		bhi	.L53
+ 747              		.loc 1 181 53 discriminator 1 view .LVU184
+ 748 0060 049B     		ldr	r3, [sp, #16]
+ 749              		.loc 1 181 24 discriminator 1 view .LVU185
+ 750 0062 DBB2     		uxtb	r3, r3
+ 751              	.L50:
+ 752              		.loc 1 181 24 discriminator 4 view .LVU186
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 18
+
+
+ 753 0064 8DF81930 		strb	r3, [sp, #25]
+ 182:Core/Src/ws2812b_timer.c ****     scaled_color.blue = (temp_blue > 255) ? 255 : (uint8_t)temp_blue;
+ 754              		.loc 1 182 5 is_stmt 1 view .LVU187
+ 755              		.loc 1 182 36 is_stmt 0 view .LVU188
+ 756 0068 039B     		ldr	r3, [sp, #12]
+ 757              		.loc 1 182 23 view .LVU189
+ 758 006a FF2B     		cmp	r3, #255
+ 759 006c 1CD8     		bhi	.L54
+ 760              		.loc 1 182 51 discriminator 1 view .LVU190
+ 761 006e 039B     		ldr	r3, [sp, #12]
+ 762              		.loc 1 182 23 discriminator 1 view .LVU191
+ 763 0070 DBB2     		uxtb	r3, r3
+ 764              	.L51:
+ 765              		.loc 1 182 23 discriminator 4 view .LVU192
+ 766 0072 8DF81A30 		strb	r3, [sp, #26]
+ 183:Core/Src/ws2812b_timer.c ****     
+ 184:Core/Src/ws2812b_timer.c ****     return scaled_color;
+ 767              		.loc 1 184 5 is_stmt 1 view .LVU193
+ 768              		.loc 1 184 12 is_stmt 0 view .LVU194
+ 769 0076 069B     		ldr	r3, [sp, #24]
+ 770 0078 ADF81C30 		strh	r3, [sp, #28]	@ movhi
+ 771 007c 1B0C     		lsrs	r3, r3, #16
+ 772 007e 8DF81E30 		strb	r3, [sp, #30]
+ 185:Core/Src/ws2812b_timer.c **** }
+ 773              		.loc 1 185 1 view .LVU195
+ 774 0082 0020     		movs	r0, #0
+ 775 0084 9DF81C30 		ldrb	r3, [sp, #28]	@ zero_extendqisi2
+ 776 0088 63F30700 		bfi	r0, r3, #0, #8
+ 777 008c 9DF81D30 		ldrb	r3, [sp, #29]	@ zero_extendqisi2
+ 778 0090 63F30F20 		bfi	r0, r3, #8, #8
+ 779 0094 9DF81E30 		ldrb	r3, [sp, #30]	@ zero_extendqisi2
+ 780 0098 63F31740 		bfi	r0, r3, #16, #8
+ 781 009c 08B0     		add	sp, sp, #32
+ 782              		.cfi_remember_state
+ 783              		.cfi_def_cfa_offset 0
+ 784              		@ sp needed
+ 785 009e 7047     		bx	lr
+ 786              	.L52:
+ 787              		.cfi_restore_state
+ 180:Core/Src/ws2812b_timer.c ****     scaled_color.green = (temp_green > 255) ? 255 : (uint8_t)temp_green;
+ 788              		.loc 1 180 22 discriminator 2 view .LVU196
+ 789 00a0 FF23     		movs	r3, #255
+ 790 00a2 D8E7     		b	.L49
+ 791              	.L53:
+ 181:Core/Src/ws2812b_timer.c ****     scaled_color.blue = (temp_blue > 255) ? 255 : (uint8_t)temp_blue;
+ 792              		.loc 1 181 24 discriminator 2 view .LVU197
+ 793 00a4 FF23     		movs	r3, #255
+ 794 00a6 DDE7     		b	.L50
+ 795              	.L54:
+ 182:Core/Src/ws2812b_timer.c ****     
+ 796              		.loc 1 182 23 discriminator 2 view .LVU198
+ 797 00a8 FF23     		movs	r3, #255
+ 798 00aa E2E7     		b	.L51
+ 799              	.L57:
+ 800              		.align	2
+ 801              	.L56:
+ 802 00ac 71E11E29 		.word	689889649
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 19
+
+
+ 803              		.cfi_endproc
+ 804              	.LFE77:
+ 806              		.section	.text.WS2812B_Timer_Color_Red,"ax",%progbits
+ 807              		.align	1
+ 808              		.global	WS2812B_Timer_Color_Red
+ 809              		.syntax unified
+ 810              		.thumb
+ 811              		.thumb_func
+ 813              	WS2812B_Timer_Color_Red:
+ 814              	.LFB78:
+ 186:Core/Src/ws2812b_timer.c **** 
+ 187:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 188:Core/Src/ws2812b_timer.c **** // PREDEFINED COLORS (AUTOMATICALLY SCALED TO MAX BRIGHTNESS)
+ 189:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 190:Core/Src/ws2812b_timer.c **** 
+ 191:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_Red(void) {
+ 815              		.loc 1 191 42 is_stmt 1 view -0
+ 816              		.cfi_startproc
+ 817              		@ args = 0, pretend = 0, frame = 16
+ 818              		@ frame_needed = 0, uses_anonymous_args = 0
+ 819 0000 10B5     		push	{r4, lr}
+ 820              		.cfi_def_cfa_offset 8
+ 821              		.cfi_offset 4, -8
+ 822              		.cfi_offset 14, -4
+ 823 0002 84B0     		sub	sp, sp, #16
+ 824              		.cfi_def_cfa_offset 24
+ 192:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {255, 0, 0};  // Full red
+ 825              		.loc 1 192 5 view .LVU200
+ 826              		.loc 1 192 16 is_stmt 0 view .LVU201
+ 827 0004 FF23     		movs	r3, #255
+ 828 0006 8DF80830 		strb	r3, [sp, #8]
+ 829 000a 0024     		movs	r4, #0
+ 830 000c 8DF80940 		strb	r4, [sp, #9]
+ 831 0010 8DF80A40 		strb	r4, [sp, #10]
+ 193:Core/Src/ws2812b_timer.c ****     RGBColor_t scaled = WS2812B_Timer_ScaleBrightness(color);
+ 832              		.loc 1 193 5 is_stmt 1 view .LVU202
+ 833              		.loc 1 193 25 is_stmt 0 view .LVU203
+ 834 0014 0298     		ldr	r0, [sp, #8]
+ 835 0016 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 836              	.LVL52:
+ 837 001a 8DF80400 		strb	r0, [sp, #4]
+ 838 001e C0F30723 		ubfx	r3, r0, #8, #8
+ 839 0022 8DF80530 		strb	r3, [sp, #5]
+ 840 0026 C0F30740 		ubfx	r0, r0, #16, #8
+ 841 002a 8DF80600 		strb	r0, [sp, #6]
+ 194:Core/Src/ws2812b_timer.c ****     // Ensure red component is preserved and others are 0
+ 195:Core/Src/ws2812b_timer.c ****     scaled.green = 0;
+ 842              		.loc 1 195 5 is_stmt 1 view .LVU204
+ 843              		.loc 1 195 18 is_stmt 0 view .LVU205
+ 844 002e 8DF80540 		strb	r4, [sp, #5]
+ 196:Core/Src/ws2812b_timer.c ****     scaled.blue = 0;
+ 845              		.loc 1 196 5 is_stmt 1 view .LVU206
+ 846              		.loc 1 196 17 is_stmt 0 view .LVU207
+ 847 0032 8DF80640 		strb	r4, [sp, #6]
+ 197:Core/Src/ws2812b_timer.c ****     return scaled;
+ 848              		.loc 1 197 5 is_stmt 1 view .LVU208
+ 849              		.loc 1 197 12 is_stmt 0 view .LVU209
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 20
+
+
+ 850 0036 019B     		ldr	r3, [sp, #4]
+ 851 0038 ADF80C30 		strh	r3, [sp, #12]	@ movhi
+ 852 003c 1B0C     		lsrs	r3, r3, #16
+ 853 003e 8DF80E30 		strb	r3, [sp, #14]
+ 854 0042 2046     		mov	r0, r4
+ 855 0044 9DF80C30 		ldrb	r3, [sp, #12]	@ zero_extendqisi2
+ 856 0048 63F30700 		bfi	r0, r3, #0, #8
+ 857 004c 9DF80D30 		ldrb	r3, [sp, #13]	@ zero_extendqisi2
+ 858 0050 63F30F20 		bfi	r0, r3, #8, #8
+ 859 0054 9DF80E30 		ldrb	r3, [sp, #14]	@ zero_extendqisi2
+ 860 0058 63F31740 		bfi	r0, r3, #16, #8
+ 198:Core/Src/ws2812b_timer.c **** }
+ 861              		.loc 1 198 1 view .LVU210
+ 862 005c 04B0     		add	sp, sp, #16
+ 863              		.cfi_def_cfa_offset 8
+ 864              		@ sp needed
+ 865 005e 10BD     		pop	{r4, pc}
+ 866              		.cfi_endproc
+ 867              	.LFE78:
+ 869              		.section	.text.WS2812B_Timer_Color_Green,"ax",%progbits
+ 870              		.align	1
+ 871              		.global	WS2812B_Timer_Color_Green
+ 872              		.syntax unified
+ 873              		.thumb
+ 874              		.thumb_func
+ 876              	WS2812B_Timer_Color_Green:
+ 877              	.LFB79:
+ 199:Core/Src/ws2812b_timer.c **** 
+ 200:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_Green(void) {
+ 878              		.loc 1 200 44 is_stmt 1 view -0
+ 879              		.cfi_startproc
+ 880              		@ args = 0, pretend = 0, frame = 16
+ 881              		@ frame_needed = 0, uses_anonymous_args = 0
+ 882 0000 10B5     		push	{r4, lr}
+ 883              		.cfi_def_cfa_offset 8
+ 884              		.cfi_offset 4, -8
+ 885              		.cfi_offset 14, -4
+ 886 0002 84B0     		sub	sp, sp, #16
+ 887              		.cfi_def_cfa_offset 24
+ 201:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {0, 255, 0};  // Full green
+ 888              		.loc 1 201 5 view .LVU212
+ 889              		.loc 1 201 16 is_stmt 0 view .LVU213
+ 890 0004 0024     		movs	r4, #0
+ 891 0006 8DF80840 		strb	r4, [sp, #8]
+ 892 000a FF23     		movs	r3, #255
+ 893 000c 8DF80930 		strb	r3, [sp, #9]
+ 894 0010 8DF80A40 		strb	r4, [sp, #10]
+ 202:Core/Src/ws2812b_timer.c ****     RGBColor_t scaled = WS2812B_Timer_ScaleBrightness(color);
+ 895              		.loc 1 202 5 is_stmt 1 view .LVU214
+ 896              		.loc 1 202 25 is_stmt 0 view .LVU215
+ 897 0014 0298     		ldr	r0, [sp, #8]
+ 898 0016 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 899              	.LVL53:
+ 900 001a 8DF80400 		strb	r0, [sp, #4]
+ 901 001e C0F30723 		ubfx	r3, r0, #8, #8
+ 902 0022 8DF80530 		strb	r3, [sp, #5]
+ 903 0026 C0F30740 		ubfx	r0, r0, #16, #8
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 21
+
+
+ 904 002a 8DF80600 		strb	r0, [sp, #6]
+ 203:Core/Src/ws2812b_timer.c ****     // Ensure green component is preserved and others are 0
+ 204:Core/Src/ws2812b_timer.c ****     scaled.red = 0;
+ 905              		.loc 1 204 5 is_stmt 1 view .LVU216
+ 906              		.loc 1 204 16 is_stmt 0 view .LVU217
+ 907 002e 8DF80440 		strb	r4, [sp, #4]
+ 205:Core/Src/ws2812b_timer.c ****     scaled.blue = 0;
+ 908              		.loc 1 205 5 is_stmt 1 view .LVU218
+ 909              		.loc 1 205 17 is_stmt 0 view .LVU219
+ 910 0032 8DF80640 		strb	r4, [sp, #6]
+ 206:Core/Src/ws2812b_timer.c ****     return scaled;
+ 911              		.loc 1 206 5 is_stmt 1 view .LVU220
+ 912              		.loc 1 206 12 is_stmt 0 view .LVU221
+ 913 0036 019B     		ldr	r3, [sp, #4]
+ 914 0038 ADF80C30 		strh	r3, [sp, #12]	@ movhi
+ 915 003c 1B0C     		lsrs	r3, r3, #16
+ 916 003e 8DF80E30 		strb	r3, [sp, #14]
+ 917 0042 2046     		mov	r0, r4
+ 918 0044 9DF80C30 		ldrb	r3, [sp, #12]	@ zero_extendqisi2
+ 919 0048 63F30700 		bfi	r0, r3, #0, #8
+ 920 004c 9DF80D30 		ldrb	r3, [sp, #13]	@ zero_extendqisi2
+ 921 0050 63F30F20 		bfi	r0, r3, #8, #8
+ 922 0054 9DF80E30 		ldrb	r3, [sp, #14]	@ zero_extendqisi2
+ 923 0058 63F31740 		bfi	r0, r3, #16, #8
+ 207:Core/Src/ws2812b_timer.c **** }
+ 924              		.loc 1 207 1 view .LVU222
+ 925 005c 04B0     		add	sp, sp, #16
+ 926              		.cfi_def_cfa_offset 8
+ 927              		@ sp needed
+ 928 005e 10BD     		pop	{r4, pc}
+ 929              		.cfi_endproc
+ 930              	.LFE79:
+ 932              		.section	.text.WS2812B_Timer_Color_Blue,"ax",%progbits
+ 933              		.align	1
+ 934              		.global	WS2812B_Timer_Color_Blue
+ 935              		.syntax unified
+ 936              		.thumb
+ 937              		.thumb_func
+ 939              	WS2812B_Timer_Color_Blue:
+ 940              	.LFB80:
+ 208:Core/Src/ws2812b_timer.c **** 
+ 209:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_Blue(void) {
+ 941              		.loc 1 209 43 is_stmt 1 view -0
+ 942              		.cfi_startproc
+ 943              		@ args = 0, pretend = 0, frame = 16
+ 944              		@ frame_needed = 0, uses_anonymous_args = 0
+ 945 0000 10B5     		push	{r4, lr}
+ 946              		.cfi_def_cfa_offset 8
+ 947              		.cfi_offset 4, -8
+ 948              		.cfi_offset 14, -4
+ 949 0002 84B0     		sub	sp, sp, #16
+ 950              		.cfi_def_cfa_offset 24
+ 210:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {0, 0, 255};  // Full blue
+ 951              		.loc 1 210 5 view .LVU224
+ 952              		.loc 1 210 16 is_stmt 0 view .LVU225
+ 953 0004 0024     		movs	r4, #0
+ 954 0006 8DF80840 		strb	r4, [sp, #8]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 22
+
+
+ 955 000a 8DF80940 		strb	r4, [sp, #9]
+ 956 000e FF23     		movs	r3, #255
+ 957 0010 8DF80A30 		strb	r3, [sp, #10]
+ 211:Core/Src/ws2812b_timer.c ****     RGBColor_t scaled = WS2812B_Timer_ScaleBrightness(color);
+ 958              		.loc 1 211 5 is_stmt 1 view .LVU226
+ 959              		.loc 1 211 25 is_stmt 0 view .LVU227
+ 960 0014 0298     		ldr	r0, [sp, #8]
+ 961 0016 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 962              	.LVL54:
+ 963 001a 8DF80400 		strb	r0, [sp, #4]
+ 964 001e C0F30723 		ubfx	r3, r0, #8, #8
+ 965 0022 8DF80530 		strb	r3, [sp, #5]
+ 966 0026 C0F30740 		ubfx	r0, r0, #16, #8
+ 967 002a 8DF80600 		strb	r0, [sp, #6]
+ 212:Core/Src/ws2812b_timer.c ****     // Ensure blue component is preserved and others are 0
+ 213:Core/Src/ws2812b_timer.c ****     scaled.red = 0;
+ 968              		.loc 1 213 5 is_stmt 1 view .LVU228
+ 969              		.loc 1 213 16 is_stmt 0 view .LVU229
+ 970 002e 8DF80440 		strb	r4, [sp, #4]
+ 214:Core/Src/ws2812b_timer.c ****     scaled.green = 0;
+ 971              		.loc 1 214 5 is_stmt 1 view .LVU230
+ 972              		.loc 1 214 18 is_stmt 0 view .LVU231
+ 973 0032 8DF80540 		strb	r4, [sp, #5]
+ 215:Core/Src/ws2812b_timer.c ****     return scaled;
+ 974              		.loc 1 215 5 is_stmt 1 view .LVU232
+ 975              		.loc 1 215 12 is_stmt 0 view .LVU233
+ 976 0036 019B     		ldr	r3, [sp, #4]
+ 977 0038 ADF80C30 		strh	r3, [sp, #12]	@ movhi
+ 978 003c 1B0C     		lsrs	r3, r3, #16
+ 979 003e 8DF80E30 		strb	r3, [sp, #14]
+ 980 0042 2046     		mov	r0, r4
+ 981 0044 9DF80C30 		ldrb	r3, [sp, #12]	@ zero_extendqisi2
+ 982 0048 63F30700 		bfi	r0, r3, #0, #8
+ 983 004c 9DF80D30 		ldrb	r3, [sp, #13]	@ zero_extendqisi2
+ 984 0050 63F30F20 		bfi	r0, r3, #8, #8
+ 985 0054 9DF80E30 		ldrb	r3, [sp, #14]	@ zero_extendqisi2
+ 986 0058 63F31740 		bfi	r0, r3, #16, #8
+ 216:Core/Src/ws2812b_timer.c **** }
+ 987              		.loc 1 216 1 view .LVU234
+ 988 005c 04B0     		add	sp, sp, #16
+ 989              		.cfi_def_cfa_offset 8
+ 990              		@ sp needed
+ 991 005e 10BD     		pop	{r4, pc}
+ 992              		.cfi_endproc
+ 993              	.LFE80:
+ 995              		.section	.text.WS2812B_Timer_Color_White,"ax",%progbits
+ 996              		.align	1
+ 997              		.global	WS2812B_Timer_Color_White
+ 998              		.syntax unified
+ 999              		.thumb
+ 1000              		.thumb_func
+ 1002              	WS2812B_Timer_Color_White:
+ 1003              	.LFB81:
+ 217:Core/Src/ws2812b_timer.c **** 
+ 218:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_White(void) {
+ 1004              		.loc 1 218 44 is_stmt 1 view -0
+ 1005              		.cfi_startproc
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 23
+
+
+ 1006              		@ args = 0, pretend = 0, frame = 8
+ 1007              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1008 0000 00B5     		push	{lr}
+ 1009              		.cfi_def_cfa_offset 4
+ 1010              		.cfi_offset 14, -4
+ 1011 0002 83B0     		sub	sp, sp, #12
+ 1012              		.cfi_def_cfa_offset 16
+ 219:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {255, 255, 255};  // Full white
+ 1013              		.loc 1 219 5 view .LVU236
+ 1014              		.loc 1 219 16 is_stmt 0 view .LVU237
+ 1015 0004 114B     		ldr	r3, .L66
+ 1016 0006 1B68     		ldr	r3, [r3]
+ 1017 0008 ADF80030 		strh	r3, [sp]	@ movhi
+ 1018 000c 1B0C     		lsrs	r3, r3, #16
+ 1019 000e 8DF80230 		strb	r3, [sp, #2]
+ 220:Core/Src/ws2812b_timer.c ****     return WS2812B_Timer_ScaleBrightness(color);
+ 1020              		.loc 1 220 5 is_stmt 1 view .LVU238
+ 1021              		.loc 1 220 12 is_stmt 0 view .LVU239
+ 1022 0012 0098     		ldr	r0, [sp]
+ 1023 0014 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 1024              	.LVL55:
+ 1025 0018 8DF80400 		strb	r0, [sp, #4]
+ 1026 001c C0F30723 		ubfx	r3, r0, #8, #8
+ 1027 0020 8DF80530 		strb	r3, [sp, #5]
+ 1028 0024 C0F30740 		ubfx	r0, r0, #16, #8
+ 1029 0028 8DF80600 		strb	r0, [sp, #6]
+ 1030 002c 0020     		movs	r0, #0
+ 1031 002e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 1032 0032 63F30700 		bfi	r0, r3, #0, #8
+ 1033 0036 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 1034 003a 63F30F20 		bfi	r0, r3, #8, #8
+ 1035 003e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1036 0042 63F31740 		bfi	r0, r3, #16, #8
+ 221:Core/Src/ws2812b_timer.c **** }
+ 1037              		.loc 1 221 1 view .LVU240
+ 1038 0046 03B0     		add	sp, sp, #12
+ 1039              		.cfi_def_cfa_offset 4
+ 1040              		@ sp needed
+ 1041 0048 5DF804FB 		ldr	pc, [sp], #4
+ 1042              	.L67:
+ 1043              		.align	2
+ 1044              	.L66:
+ 1045 004c 00000000 		.word	.LANCHOR0
+ 1046              		.cfi_endproc
+ 1047              	.LFE81:
+ 1049              		.section	.text.WS2812B_Timer_Color_Black,"ax",%progbits
+ 1050              		.align	1
+ 1051              		.global	WS2812B_Timer_Color_Black
+ 1052              		.syntax unified
+ 1053              		.thumb
+ 1054              		.thumb_func
+ 1056              	WS2812B_Timer_Color_Black:
+ 1057              	.LFB82:
+ 222:Core/Src/ws2812b_timer.c **** 
+ 223:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_Black(void) {
+ 1058              		.loc 1 223 44 is_stmt 1 view -0
+ 1059              		.cfi_startproc
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 24
+
+
+ 1060              		@ args = 0, pretend = 0, frame = 8
+ 1061              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1062              		@ link register save eliminated.
+ 1063 0000 82B0     		sub	sp, sp, #8
+ 1064              		.cfi_def_cfa_offset 8
+ 224:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {0, 0, 0};
+ 1065              		.loc 1 224 5 view .LVU242
+ 1066              		.loc 1 224 16 is_stmt 0 view .LVU243
+ 1067 0002 0020     		movs	r0, #0
+ 1068 0004 8DF80000 		strb	r0, [sp]
+ 1069 0008 8DF80100 		strb	r0, [sp, #1]
+ 1070 000c 8DF80200 		strb	r0, [sp, #2]
+ 225:Core/Src/ws2812b_timer.c ****     return color;  // Black is always black, no scaling needed
+ 1071              		.loc 1 225 5 is_stmt 1 view .LVU244
+ 1072              		.loc 1 225 12 is_stmt 0 view .LVU245
+ 1073 0010 009B     		ldr	r3, [sp]
+ 1074 0012 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 1075 0016 1B0C     		lsrs	r3, r3, #16
+ 1076 0018 8DF80630 		strb	r3, [sp, #6]
+ 1077 001c 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 1078 0020 63F30700 		bfi	r0, r3, #0, #8
+ 1079 0024 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 1080 0028 63F30F20 		bfi	r0, r3, #8, #8
+ 1081 002c 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1082 0030 63F31740 		bfi	r0, r3, #16, #8
+ 226:Core/Src/ws2812b_timer.c **** }
+ 1083              		.loc 1 226 1 view .LVU246
+ 1084 0034 02B0     		add	sp, sp, #8
+ 1085              		.cfi_def_cfa_offset 0
+ 1086              		@ sp needed
+ 1087 0036 7047     		bx	lr
+ 1088              		.cfi_endproc
+ 1089              	.LFE82:
+ 1091              		.section	.text.WS2812B_Timer_Color_Yellow,"ax",%progbits
+ 1092              		.align	1
+ 1093              		.global	WS2812B_Timer_Color_Yellow
+ 1094              		.syntax unified
+ 1095              		.thumb
+ 1096              		.thumb_func
+ 1098              	WS2812B_Timer_Color_Yellow:
+ 1099              	.LFB83:
+ 227:Core/Src/ws2812b_timer.c **** 
+ 228:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_Yellow(void) {
+ 1100              		.loc 1 228 45 is_stmt 1 view -0
+ 1101              		.cfi_startproc
+ 1102              		@ args = 0, pretend = 0, frame = 8
+ 1103              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1104 0000 00B5     		push	{lr}
+ 1105              		.cfi_def_cfa_offset 4
+ 1106              		.cfi_offset 14, -4
+ 1107 0002 83B0     		sub	sp, sp, #12
+ 1108              		.cfi_def_cfa_offset 16
+ 229:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {255, 255, 0};  // Full yellow
+ 1109              		.loc 1 229 5 view .LVU248
+ 1110              		.loc 1 229 16 is_stmt 0 view .LVU249
+ 1111 0004 114B     		ldr	r3, .L72
+ 1112 0006 5B68     		ldr	r3, [r3, #4]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 25
+
+
+ 1113 0008 ADF80030 		strh	r3, [sp]	@ movhi
+ 1114 000c 1B0C     		lsrs	r3, r3, #16
+ 1115 000e 8DF80230 		strb	r3, [sp, #2]
+ 230:Core/Src/ws2812b_timer.c ****     return WS2812B_Timer_ScaleBrightness(color);
+ 1116              		.loc 1 230 5 is_stmt 1 view .LVU250
+ 1117              		.loc 1 230 12 is_stmt 0 view .LVU251
+ 1118 0012 0098     		ldr	r0, [sp]
+ 1119 0014 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 1120              	.LVL56:
+ 1121 0018 8DF80400 		strb	r0, [sp, #4]
+ 1122 001c C0F30723 		ubfx	r3, r0, #8, #8
+ 1123 0020 8DF80530 		strb	r3, [sp, #5]
+ 1124 0024 C0F30740 		ubfx	r0, r0, #16, #8
+ 1125 0028 8DF80600 		strb	r0, [sp, #6]
+ 1126 002c 0020     		movs	r0, #0
+ 1127 002e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 1128 0032 63F30700 		bfi	r0, r3, #0, #8
+ 1129 0036 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 1130 003a 63F30F20 		bfi	r0, r3, #8, #8
+ 1131 003e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1132 0042 63F31740 		bfi	r0, r3, #16, #8
+ 231:Core/Src/ws2812b_timer.c **** }
+ 1133              		.loc 1 231 1 view .LVU252
+ 1134 0046 03B0     		add	sp, sp, #12
+ 1135              		.cfi_def_cfa_offset 4
+ 1136              		@ sp needed
+ 1137 0048 5DF804FB 		ldr	pc, [sp], #4
+ 1138              	.L73:
+ 1139              		.align	2
+ 1140              	.L72:
+ 1141 004c 00000000 		.word	.LANCHOR0
+ 1142              		.cfi_endproc
+ 1143              	.LFE83:
+ 1145              		.section	.text.WS2812B_Timer_Color_Purple,"ax",%progbits
+ 1146              		.align	1
+ 1147              		.global	WS2812B_Timer_Color_Purple
+ 1148              		.syntax unified
+ 1149              		.thumb
+ 1150              		.thumb_func
+ 1152              	WS2812B_Timer_Color_Purple:
+ 1153              	.LFB84:
+ 232:Core/Src/ws2812b_timer.c **** 
+ 233:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_Purple(void) {
+ 1154              		.loc 1 233 45 is_stmt 1 view -0
+ 1155              		.cfi_startproc
+ 1156              		@ args = 0, pretend = 0, frame = 8
+ 1157              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1158 0000 00B5     		push	{lr}
+ 1159              		.cfi_def_cfa_offset 4
+ 1160              		.cfi_offset 14, -4
+ 1161 0002 83B0     		sub	sp, sp, #12
+ 1162              		.cfi_def_cfa_offset 16
+ 234:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {255, 0, 255};  // Full purple
+ 1163              		.loc 1 234 5 view .LVU254
+ 1164              		.loc 1 234 16 is_stmt 0 view .LVU255
+ 1165 0004 114B     		ldr	r3, .L76
+ 1166 0006 9B68     		ldr	r3, [r3, #8]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 26
+
+
+ 1167 0008 ADF80030 		strh	r3, [sp]	@ movhi
+ 1168 000c 1B0C     		lsrs	r3, r3, #16
+ 1169 000e 8DF80230 		strb	r3, [sp, #2]
+ 235:Core/Src/ws2812b_timer.c ****     return WS2812B_Timer_ScaleBrightness(color);
+ 1170              		.loc 1 235 5 is_stmt 1 view .LVU256
+ 1171              		.loc 1 235 12 is_stmt 0 view .LVU257
+ 1172 0012 0098     		ldr	r0, [sp]
+ 1173 0014 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 1174              	.LVL57:
+ 1175 0018 8DF80400 		strb	r0, [sp, #4]
+ 1176 001c C0F30723 		ubfx	r3, r0, #8, #8
+ 1177 0020 8DF80530 		strb	r3, [sp, #5]
+ 1178 0024 C0F30740 		ubfx	r0, r0, #16, #8
+ 1179 0028 8DF80600 		strb	r0, [sp, #6]
+ 1180 002c 0020     		movs	r0, #0
+ 1181 002e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 1182 0032 63F30700 		bfi	r0, r3, #0, #8
+ 1183 0036 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 1184 003a 63F30F20 		bfi	r0, r3, #8, #8
+ 1185 003e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1186 0042 63F31740 		bfi	r0, r3, #16, #8
+ 236:Core/Src/ws2812b_timer.c **** }
+ 1187              		.loc 1 236 1 view .LVU258
+ 1188 0046 03B0     		add	sp, sp, #12
+ 1189              		.cfi_def_cfa_offset 4
+ 1190              		@ sp needed
+ 1191 0048 5DF804FB 		ldr	pc, [sp], #4
+ 1192              	.L77:
+ 1193              		.align	2
+ 1194              	.L76:
+ 1195 004c 00000000 		.word	.LANCHOR0
+ 1196              		.cfi_endproc
+ 1197              	.LFE84:
+ 1199              		.section	.text.WS2812B_Timer_Color_Cyan,"ax",%progbits
+ 1200              		.align	1
+ 1201              		.global	WS2812B_Timer_Color_Cyan
+ 1202              		.syntax unified
+ 1203              		.thumb
+ 1204              		.thumb_func
+ 1206              	WS2812B_Timer_Color_Cyan:
+ 1207              	.LFB85:
+ 237:Core/Src/ws2812b_timer.c **** 
+ 238:Core/Src/ws2812b_timer.c **** RGBColor_t WS2812B_Timer_Color_Cyan(void) {
+ 1208              		.loc 1 238 43 is_stmt 1 view -0
+ 1209              		.cfi_startproc
+ 1210              		@ args = 0, pretend = 0, frame = 8
+ 1211              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1212 0000 00B5     		push	{lr}
+ 1213              		.cfi_def_cfa_offset 4
+ 1214              		.cfi_offset 14, -4
+ 1215 0002 83B0     		sub	sp, sp, #12
+ 1216              		.cfi_def_cfa_offset 16
+ 239:Core/Src/ws2812b_timer.c ****     RGBColor_t color = {0, 255, 255};  // Full cyan
+ 1217              		.loc 1 239 5 view .LVU260
+ 1218              		.loc 1 239 16 is_stmt 0 view .LVU261
+ 1219 0004 114B     		ldr	r3, .L80
+ 1220 0006 DB68     		ldr	r3, [r3, #12]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 27
+
+
+ 1221 0008 ADF80030 		strh	r3, [sp]	@ movhi
+ 1222 000c 1B0C     		lsrs	r3, r3, #16
+ 1223 000e 8DF80230 		strb	r3, [sp, #2]
+ 240:Core/Src/ws2812b_timer.c ****     return WS2812B_Timer_ScaleBrightness(color);
+ 1224              		.loc 1 240 5 is_stmt 1 view .LVU262
+ 1225              		.loc 1 240 12 is_stmt 0 view .LVU263
+ 1226 0012 0098     		ldr	r0, [sp]
+ 1227 0014 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 1228              	.LVL58:
+ 1229 0018 8DF80400 		strb	r0, [sp, #4]
+ 1230 001c C0F30723 		ubfx	r3, r0, #8, #8
+ 1231 0020 8DF80530 		strb	r3, [sp, #5]
+ 1232 0024 C0F30740 		ubfx	r0, r0, #16, #8
+ 1233 0028 8DF80600 		strb	r0, [sp, #6]
+ 1234 002c 0020     		movs	r0, #0
+ 1235 002e 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 1236 0032 63F30700 		bfi	r0, r3, #0, #8
+ 1237 0036 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 1238 003a 63F30F20 		bfi	r0, r3, #8, #8
+ 1239 003e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1240 0042 63F31740 		bfi	r0, r3, #16, #8
+ 241:Core/Src/ws2812b_timer.c **** }
+ 1241              		.loc 1 241 1 view .LVU264
+ 1242 0046 03B0     		add	sp, sp, #12
+ 1243              		.cfi_def_cfa_offset 4
+ 1244              		@ sp needed
+ 1245 0048 5DF804FB 		ldr	pc, [sp], #4
+ 1246              	.L81:
+ 1247              		.align	2
+ 1248              	.L80:
+ 1249 004c 00000000 		.word	.LANCHOR0
+ 1250              		.cfi_endproc
+ 1251              	.LFE85:
+ 1253              		.section	.text.WS2812B_Timer_TestIndividualLEDs,"ax",%progbits
+ 1254              		.align	1
+ 1255              		.global	WS2812B_Timer_TestIndividualLEDs
+ 1256              		.syntax unified
+ 1257              		.thumb
+ 1258              		.thumb_func
+ 1260              	WS2812B_Timer_TestIndividualLEDs:
+ 1261              	.LVL59:
+ 1262              	.LFB86:
+ 242:Core/Src/ws2812b_timer.c **** 
+ 243:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 244:Core/Src/ws2812b_timer.c **** // TEST FUNCTIONS
+ 245:Core/Src/ws2812b_timer.c **** // ============================================================================
+ 246:Core/Src/ws2812b_timer.c **** 
+ 247:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_TestIndividualLEDs(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 1263              		.loc 1 247 90 is_stmt 1 view -0
+ 1264              		.cfi_startproc
+ 1265              		@ args = 0, pretend = 0, frame = 8
+ 1266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1267              		.loc 1 247 90 is_stmt 0 view .LVU266
+ 1268 0000 30B5     		push	{r4, r5, lr}
+ 1269              		.cfi_def_cfa_offset 12
+ 1270              		.cfi_offset 4, -12
+ 1271              		.cfi_offset 5, -8
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 28
+
+
+ 1272              		.cfi_offset 14, -4
+ 1273 0002 83B0     		sub	sp, sp, #12
+ 1274              		.cfi_def_cfa_offset 24
+ 1275 0004 0446     		mov	r4, r0
+ 1276 0006 0D46     		mov	r5, r1
+ 248:Core/Src/ws2812b_timer.c ****     static uint8_t test_led = 0;
+ 1277              		.loc 1 248 5 is_stmt 1 view .LVU267
+ 249:Core/Src/ws2812b_timer.c ****     static uint32_t last_test = 0;
+ 1278              		.loc 1 249 5 view .LVU268
+ 250:Core/Src/ws2812b_timer.c ****     
+ 251:Core/Src/ws2812b_timer.c ****     if (HAL_GetTick() - last_test > delay_ms) {
+ 1279              		.loc 1 251 5 view .LVU269
+ 1280              		.loc 1 251 9 is_stmt 0 view .LVU270
+ 1281 0008 FFF7FEFF 		bl	HAL_GetTick
+ 1282              	.LVL60:
+ 1283              		.loc 1 251 23 discriminator 1 view .LVU271
+ 1284 000c 194B     		ldr	r3, .L89
+ 1285 000e 1B68     		ldr	r3, [r3]
+ 1286 0010 C01A     		subs	r0, r0, r3
+ 1287              		.loc 1 251 8 discriminator 1 view .LVU272
+ 1288 0012 A842     		cmp	r0, r5
+ 1289 0014 01D8     		bhi	.L87
+ 1290              	.LVL61:
+ 1291              	.L82:
+ 252:Core/Src/ws2812b_timer.c ****         // Clear all LEDs first
+ 253:Core/Src/ws2812b_timer.c ****         WS2812B_Timer_ClearAll(handle);
+ 254:Core/Src/ws2812b_timer.c ****         
+ 255:Core/Src/ws2812b_timer.c ****         // Light up only the current test LED
+ 256:Core/Src/ws2812b_timer.c ****         if (test_led < handle->led_count) {
+ 257:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetLED(handle, test_led, WS2812B_Timer_Color_Red());
+ 258:Core/Src/ws2812b_timer.c ****         }
+ 259:Core/Src/ws2812b_timer.c ****         
+ 260:Core/Src/ws2812b_timer.c ****         WS2812B_Timer_Update(handle);
+ 261:Core/Src/ws2812b_timer.c ****         test_led++;
+ 262:Core/Src/ws2812b_timer.c ****         if (test_led >= handle->led_count) {
+ 263:Core/Src/ws2812b_timer.c ****             test_led = 0;  // Loop back to first LED
+ 264:Core/Src/ws2812b_timer.c ****         }
+ 265:Core/Src/ws2812b_timer.c ****         last_test = HAL_GetTick();
+ 266:Core/Src/ws2812b_timer.c ****     }
+ 267:Core/Src/ws2812b_timer.c **** }
+ 1292              		.loc 1 267 1 view .LVU273
+ 1293 0016 03B0     		add	sp, sp, #12
+ 1294              		.cfi_remember_state
+ 1295              		.cfi_def_cfa_offset 12
+ 1296              		@ sp needed
+ 1297 0018 30BD     		pop	{r4, r5, pc}
+ 1298              	.LVL62:
+ 1299              	.L87:
+ 1300              		.cfi_restore_state
+ 253:Core/Src/ws2812b_timer.c ****         
+ 1301              		.loc 1 253 9 is_stmt 1 view .LVU274
+ 1302 001a 2046     		mov	r0, r4
+ 1303 001c FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 1304              	.LVL63:
+ 256:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetLED(handle, test_led, WS2812B_Timer_Color_Red());
+ 1305              		.loc 1 256 9 view .LVU275
+ 256:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetLED(handle, test_led, WS2812B_Timer_Color_Red());
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 29
+
+
+ 1306              		.loc 1 256 22 is_stmt 0 view .LVU276
+ 1307 0020 154B     		ldr	r3, .L89+4
+ 1308 0022 1D78     		ldrb	r5, [r3]	@ zero_extendqisi2
+ 1309              	.LVL64:
+ 256:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetLED(handle, test_led, WS2812B_Timer_Color_Red());
+ 1310              		.loc 1 256 30 view .LVU277
+ 1311 0024 2389     		ldrh	r3, [r4, #8]
+ 256:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetLED(handle, test_led, WS2812B_Timer_Color_Red());
+ 1312              		.loc 1 256 12 view .LVU278
+ 1313 0026 9D42     		cmp	r5, r3
+ 1314 0028 12D3     		bcc	.L88
+ 1315              	.L84:
+ 260:Core/Src/ws2812b_timer.c ****         test_led++;
+ 1316              		.loc 1 260 9 is_stmt 1 view .LVU279
+ 1317 002a 2046     		mov	r0, r4
+ 1318 002c FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1319              	.LVL65:
+ 261:Core/Src/ws2812b_timer.c ****         if (test_led >= handle->led_count) {
+ 1320              		.loc 1 261 9 view .LVU280
+ 261:Core/Src/ws2812b_timer.c ****         if (test_led >= handle->led_count) {
+ 1321              		.loc 1 261 17 is_stmt 0 view .LVU281
+ 1322 0030 114A     		ldr	r2, .L89+4
+ 1323 0032 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 1324 0034 0133     		adds	r3, r3, #1
+ 1325 0036 DBB2     		uxtb	r3, r3
+ 1326 0038 1370     		strb	r3, [r2]
+ 262:Core/Src/ws2812b_timer.c ****             test_led = 0;  // Loop back to first LED
+ 1327              		.loc 1 262 9 is_stmt 1 view .LVU282
+ 262:Core/Src/ws2812b_timer.c ****             test_led = 0;  // Loop back to first LED
+ 1328              		.loc 1 262 31 is_stmt 0 view .LVU283
+ 1329 003a 2289     		ldrh	r2, [r4, #8]
+ 262:Core/Src/ws2812b_timer.c ****             test_led = 0;  // Loop back to first LED
+ 1330              		.loc 1 262 12 view .LVU284
+ 1331 003c 9342     		cmp	r3, r2
+ 1332 003e 02D3     		bcc	.L85
+ 263:Core/Src/ws2812b_timer.c ****         }
+ 1333              		.loc 1 263 13 is_stmt 1 view .LVU285
+ 263:Core/Src/ws2812b_timer.c ****         }
+ 1334              		.loc 1 263 22 is_stmt 0 view .LVU286
+ 1335 0040 0D4B     		ldr	r3, .L89+4
+ 1336 0042 0022     		movs	r2, #0
+ 1337 0044 1A70     		strb	r2, [r3]
+ 1338              	.L85:
+ 265:Core/Src/ws2812b_timer.c ****     }
+ 1339              		.loc 1 265 9 is_stmt 1 view .LVU287
+ 265:Core/Src/ws2812b_timer.c ****     }
+ 1340              		.loc 1 265 21 is_stmt 0 view .LVU288
+ 1341 0046 FFF7FEFF 		bl	HAL_GetTick
+ 1342              	.LVL66:
+ 265:Core/Src/ws2812b_timer.c ****     }
+ 1343              		.loc 1 265 19 discriminator 1 view .LVU289
+ 1344 004a 0A4B     		ldr	r3, .L89
+ 1345 004c 1860     		str	r0, [r3]
+ 1346              		.loc 1 267 1 view .LVU290
+ 1347 004e E2E7     		b	.L82
+ 1348              	.L88:
+ 257:Core/Src/ws2812b_timer.c ****         }
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 30
+
+
+ 1349              		.loc 1 257 13 is_stmt 1 view .LVU291
+ 1350 0050 FFF7FEFF 		bl	WS2812B_Timer_Color_Red
+ 1351              	.LVL67:
+ 1352 0054 8DF80400 		strb	r0, [sp, #4]
+ 1353 0058 C0F30723 		ubfx	r3, r0, #8, #8
+ 1354 005c 8DF80530 		strb	r3, [sp, #5]
+ 1355 0060 C0F30740 		ubfx	r0, r0, #16, #8
+ 1356 0064 8DF80600 		strb	r0, [sp, #6]
+ 257:Core/Src/ws2812b_timer.c ****         }
+ 1357              		.loc 1 257 13 is_stmt 0 discriminator 1 view .LVU292
+ 1358 0068 019A     		ldr	r2, [sp, #4]
+ 1359 006a 2946     		mov	r1, r5
+ 1360 006c 2046     		mov	r0, r4
+ 1361 006e FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 1362              	.LVL68:
+ 1363 0072 DAE7     		b	.L84
+ 1364              	.L90:
+ 1365              		.align	2
+ 1366              	.L89:
+ 1367 0074 00000000 		.word	last_test.5
+ 1368 0078 00000000 		.word	test_led.4
+ 1369              		.cfi_endproc
+ 1370              	.LFE86:
+ 1372              		.section	.text.WS2812B_Timer_TestSolidColor,"ax",%progbits
+ 1373              		.align	1
+ 1374              		.global	WS2812B_Timer_TestSolidColor
+ 1375              		.syntax unified
+ 1376              		.thumb
+ 1377              		.thumb_func
+ 1379              	WS2812B_Timer_TestSolidColor:
+ 1380              	.LVL69:
+ 1381              	.LFB87:
+ 268:Core/Src/ws2812b_timer.c **** 
+ 269:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_TestSolidColor(WS2812B_Timer_Handle_t* handle, RGBColor_t color, uint32_t delay_
+ 1382              		.loc 1 269 104 is_stmt 1 view -0
+ 1383              		.cfi_startproc
+ 1384              		@ args = 0, pretend = 0, frame = 8
+ 1385              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1386              		.loc 1 269 104 is_stmt 0 view .LVU294
+ 1387 0000 30B5     		push	{r4, r5, lr}
+ 1388              		.cfi_def_cfa_offset 12
+ 1389              		.cfi_offset 4, -12
+ 1390              		.cfi_offset 5, -8
+ 1391              		.cfi_offset 14, -4
+ 1392 0002 83B0     		sub	sp, sp, #12
+ 1393              		.cfi_def_cfa_offset 24
+ 1394 0004 0446     		mov	r4, r0
+ 1395 0006 0191     		str	r1, [sp, #4]
+ 1396 0008 1546     		mov	r5, r2
+ 270:Core/Src/ws2812b_timer.c ****     static uint8_t test_state = 0;
+ 1397              		.loc 1 270 5 is_stmt 1 view .LVU295
+ 271:Core/Src/ws2812b_timer.c ****     static uint32_t last_test = 0;
+ 1398              		.loc 1 271 5 view .LVU296
+ 272:Core/Src/ws2812b_timer.c ****     
+ 273:Core/Src/ws2812b_timer.c ****     if (HAL_GetTick() - last_test > delay_ms) {
+ 1399              		.loc 1 273 5 view .LVU297
+ 1400              		.loc 1 273 9 is_stmt 0 view .LVU298
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 31
+
+
+ 1401 000a FFF7FEFF 		bl	HAL_GetTick
+ 1402              	.LVL70:
+ 1403              		.loc 1 273 23 discriminator 1 view .LVU299
+ 1404 000e 0F4B     		ldr	r3, .L96
+ 1405 0010 1B68     		ldr	r3, [r3]
+ 1406 0012 C01A     		subs	r0, r0, r3
+ 1407              		.loc 1 273 8 discriminator 1 view .LVU300
+ 1408 0014 A842     		cmp	r0, r5
+ 1409 0016 13D9     		bls	.L91
+ 274:Core/Src/ws2812b_timer.c ****         if (test_state) {
+ 1410              		.loc 1 274 9 is_stmt 1 view .LVU301
+ 1411              		.loc 1 274 13 is_stmt 0 view .LVU302
+ 1412 0018 0D4B     		ldr	r3, .L96+4
+ 1413 001a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1414              		.loc 1 274 12 view .LVU303
+ 1415 001c 93B1     		cbz	r3, .L93
+ 275:Core/Src/ws2812b_timer.c ****             // Set all LEDs to the specified color
+ 276:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetAllLEDs(handle, color);
+ 1416              		.loc 1 276 13 is_stmt 1 view .LVU304
+ 1417 001e 0199     		ldr	r1, [sp, #4]
+ 1418 0020 2046     		mov	r0, r4
+ 1419 0022 FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 1420              	.LVL71:
+ 1421              	.L94:
+ 277:Core/Src/ws2812b_timer.c ****         } else {
+ 278:Core/Src/ws2812b_timer.c ****             // Turn all LEDs off
+ 279:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_ClearAll(handle);
+ 280:Core/Src/ws2812b_timer.c ****         }
+ 281:Core/Src/ws2812b_timer.c ****         
+ 282:Core/Src/ws2812b_timer.c ****         WS2812B_Timer_Update(handle);
+ 1422              		.loc 1 282 9 view .LVU305
+ 1423 0026 2046     		mov	r0, r4
+ 1424 0028 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1425              	.LVL72:
+ 283:Core/Src/ws2812b_timer.c ****         test_state = !test_state;  // Toggle state
+ 1426              		.loc 1 283 9 view .LVU306
+ 1427              		.loc 1 283 22 is_stmt 0 view .LVU307
+ 1428 002c 084A     		ldr	r2, .L96+4
+ 1429 002e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 1430 0030 B3FA83F3 		clz	r3, r3
+ 1431 0034 5B09     		lsrs	r3, r3, #5
+ 1432              		.loc 1 283 20 view .LVU308
+ 1433 0036 1370     		strb	r3, [r2]
+ 284:Core/Src/ws2812b_timer.c ****         last_test = HAL_GetTick();
+ 1434              		.loc 1 284 9 is_stmt 1 view .LVU309
+ 1435              		.loc 1 284 21 is_stmt 0 view .LVU310
+ 1436 0038 FFF7FEFF 		bl	HAL_GetTick
+ 1437              	.LVL73:
+ 1438              		.loc 1 284 19 discriminator 1 view .LVU311
+ 1439 003c 034B     		ldr	r3, .L96
+ 1440 003e 1860     		str	r0, [r3]
+ 1441              	.L91:
+ 285:Core/Src/ws2812b_timer.c ****     }
+ 286:Core/Src/ws2812b_timer.c **** }
+ 1442              		.loc 1 286 1 view .LVU312
+ 1443 0040 03B0     		add	sp, sp, #12
+ 1444              		.cfi_remember_state
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 32
+
+
+ 1445              		.cfi_def_cfa_offset 12
+ 1446              		@ sp needed
+ 1447 0042 30BD     		pop	{r4, r5, pc}
+ 1448              	.LVL74:
+ 1449              	.L93:
+ 1450              		.cfi_restore_state
+ 279:Core/Src/ws2812b_timer.c ****         }
+ 1451              		.loc 1 279 13 is_stmt 1 view .LVU313
+ 1452 0044 2046     		mov	r0, r4
+ 1453 0046 FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 1454              	.LVL75:
+ 1455 004a ECE7     		b	.L94
+ 1456              	.L97:
+ 1457              		.align	2
+ 1458              	.L96:
+ 1459 004c 00000000 		.word	last_test.3
+ 1460 0050 00000000 		.word	test_state.2
+ 1461              		.cfi_endproc
+ 1462              	.LFE87:
+ 1464              		.section	.text.WS2812B_Timer_TestLastLEDColors,"ax",%progbits
+ 1465              		.align	1
+ 1466              		.global	WS2812B_Timer_TestLastLEDColors
+ 1467              		.syntax unified
+ 1468              		.thumb
+ 1469              		.thumb_func
+ 1471              	WS2812B_Timer_TestLastLEDColors:
+ 1472              	.LVL76:
+ 1473              	.LFB88:
+ 287:Core/Src/ws2812b_timer.c **** 
+ 288:Core/Src/ws2812b_timer.c **** void WS2812B_Timer_TestLastLEDColors(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 1474              		.loc 1 288 89 view -0
+ 1475              		.cfi_startproc
+ 1476              		@ args = 0, pretend = 0, frame = 24
+ 1477              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1478              		.loc 1 288 89 is_stmt 0 view .LVU315
+ 1479 0000 30B5     		push	{r4, r5, lr}
+ 1480              		.cfi_def_cfa_offset 12
+ 1481              		.cfi_offset 4, -12
+ 1482              		.cfi_offset 5, -8
+ 1483              		.cfi_offset 14, -4
+ 1484 0002 87B0     		sub	sp, sp, #28
+ 1485              		.cfi_def_cfa_offset 40
+ 1486 0004 0446     		mov	r4, r0
+ 1487 0006 0D46     		mov	r5, r1
+ 289:Core/Src/ws2812b_timer.c ****     static uint8_t color_index = 0;
+ 1488              		.loc 1 289 5 is_stmt 1 view .LVU316
+ 290:Core/Src/ws2812b_timer.c ****     static uint32_t last_test = 0;
+ 1489              		.loc 1 290 5 view .LVU317
+ 291:Core/Src/ws2812b_timer.c ****     
+ 292:Core/Src/ws2812b_timer.c ****     if (HAL_GetTick() - last_test > delay_ms) {
+ 1490              		.loc 1 292 5 view .LVU318
+ 1491              		.loc 1 292 9 is_stmt 0 view .LVU319
+ 1492 0008 FFF7FEFF 		bl	HAL_GetTick
+ 1493              	.LVL77:
+ 1494              		.loc 1 292 23 discriminator 1 view .LVU320
+ 1495 000c 474B     		ldr	r3, .L104
+ 1496 000e 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 33
+
+
+ 1497 0010 C01A     		subs	r0, r0, r3
+ 1498              		.loc 1 292 8 discriminator 1 view .LVU321
+ 1499 0012 A842     		cmp	r0, r5
+ 1500 0014 01D8     		bhi	.L102
+ 1501              	.LVL78:
+ 1502              	.L98:
+ 293:Core/Src/ws2812b_timer.c ****         // Get the last LED index
+ 294:Core/Src/ws2812b_timer.c ****         uint16_t last_led_index = handle->led_count - 1;
+ 295:Core/Src/ws2812b_timer.c ****         
+ 296:Core/Src/ws2812b_timer.c ****         // Clear all LEDs
+ 297:Core/Src/ws2812b_timer.c ****         WS2812B_Timer_ClearAll(handle);
+ 298:Core/Src/ws2812b_timer.c ****         
+ 299:Core/Src/ws2812b_timer.c ****         // Define color sequence: Red, Green, Blue, White, Yellow, Purple, Cyan
+ 300:Core/Src/ws2812b_timer.c ****         RGBColor_t colors[] = {
+ 301:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Red(),
+ 302:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Green(),
+ 303:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Blue(),
+ 304:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_White(),
+ 305:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Yellow(),
+ 306:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Purple(),
+ 307:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Cyan()
+ 308:Core/Src/ws2812b_timer.c ****         };
+ 309:Core/Src/ws2812b_timer.c ****         
+ 310:Core/Src/ws2812b_timer.c ****         // Set last LED to current color
+ 311:Core/Src/ws2812b_timer.c ****         if (last_led_index < handle->led_count) {
+ 312:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetLED(handle, last_led_index, colors[color_index]);
+ 313:Core/Src/ws2812b_timer.c ****         }
+ 314:Core/Src/ws2812b_timer.c ****         
+ 315:Core/Src/ws2812b_timer.c ****         // Update display
+ 316:Core/Src/ws2812b_timer.c ****         WS2812B_Timer_Update(handle);
+ 317:Core/Src/ws2812b_timer.c ****         
+ 318:Core/Src/ws2812b_timer.c ****         // Move to next color
+ 319:Core/Src/ws2812b_timer.c ****         color_index = (color_index + 1) % 7;
+ 320:Core/Src/ws2812b_timer.c ****         last_test = HAL_GetTick();
+ 321:Core/Src/ws2812b_timer.c ****     }
+ 322:Core/Src/ws2812b_timer.c **** } ...
+ 1503              		.loc 1 322 1 view .LVU322
+ 1504 0016 07B0     		add	sp, sp, #28
+ 1505              		.cfi_remember_state
+ 1506              		.cfi_def_cfa_offset 12
+ 1507              		@ sp needed
+ 1508 0018 30BD     		pop	{r4, r5, pc}
+ 1509              	.LVL79:
+ 1510              	.L102:
+ 1511              		.cfi_restore_state
+ 1512              	.LBB9:
+ 294:Core/Src/ws2812b_timer.c ****         uint16_t last_led_index = handle->led_count - 1;
+ 1513              		.loc 1 294 9 is_stmt 1 view .LVU323
+ 294:Core/Src/ws2812b_timer.c ****         uint16_t last_led_index = handle->led_count - 1;
+ 1514              		.loc 1 294 41 is_stmt 0 view .LVU324
+ 1515 001a 2589     		ldrh	r5, [r4, #8]
+ 1516              	.LVL80:
+ 294:Core/Src/ws2812b_timer.c ****         uint16_t last_led_index = handle->led_count - 1;
+ 1517              		.loc 1 294 18 view .LVU325
+ 1518 001c 013D     		subs	r5, r5, #1
+ 1519 001e ADB2     		uxth	r5, r5
+ 1520              	.LVL81:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 34
+
+
+ 297:Core/Src/ws2812b_timer.c ****         WS2812B_Timer_ClearAll(handle);
+ 1521              		.loc 1 297 9 is_stmt 1 view .LVU326
+ 1522 0020 2046     		mov	r0, r4
+ 1523 0022 FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 1524              	.LVL82:
+ 300:Core/Src/ws2812b_timer.c ****         RGBColor_t colors[] = {
+ 1525              		.loc 1 300 9 view .LVU327
+ 301:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Red(),
+ 1526              		.loc 1 301 13 is_stmt 0 view .LVU328
+ 1527 0026 FFF7FEFF 		bl	WS2812B_Timer_Color_Red
+ 1528              	.LVL83:
+ 1529 002a 8DF80000 		strb	r0, [sp]
+ 1530 002e C0F30723 		ubfx	r3, r0, #8, #8
+ 1531 0032 8DF80130 		strb	r3, [sp, #1]
+ 1532 0036 C0F30740 		ubfx	r0, r0, #16, #8
+ 1533 003a 8DF80200 		strb	r0, [sp, #2]
+ 302:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Green(),
+ 1534              		.loc 1 302 13 view .LVU329
+ 1535 003e FFF7FEFF 		bl	WS2812B_Timer_Color_Green
+ 1536              	.LVL84:
+ 1537 0042 8DF80300 		strb	r0, [sp, #3]
+ 1538 0046 C0F30723 		ubfx	r3, r0, #8, #8
+ 1539 004a 8DF80430 		strb	r3, [sp, #4]
+ 1540 004e C0F30740 		ubfx	r0, r0, #16, #8
+ 1541 0052 8DF80500 		strb	r0, [sp, #5]
+ 303:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Blue(),
+ 1542              		.loc 1 303 13 view .LVU330
+ 1543 0056 FFF7FEFF 		bl	WS2812B_Timer_Color_Blue
+ 1544              	.LVL85:
+ 1545 005a 8DF80600 		strb	r0, [sp, #6]
+ 1546 005e C0F30723 		ubfx	r3, r0, #8, #8
+ 1547 0062 8DF80730 		strb	r3, [sp, #7]
+ 1548 0066 C0F30740 		ubfx	r0, r0, #16, #8
+ 1549 006a 8DF80800 		strb	r0, [sp, #8]
+ 304:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_White(),
+ 1550              		.loc 1 304 13 view .LVU331
+ 1551 006e FFF7FEFF 		bl	WS2812B_Timer_Color_White
+ 1552              	.LVL86:
+ 1553 0072 8DF80900 		strb	r0, [sp, #9]
+ 1554 0076 C0F30723 		ubfx	r3, r0, #8, #8
+ 1555 007a 8DF80A30 		strb	r3, [sp, #10]
+ 1556 007e C0F30740 		ubfx	r0, r0, #16, #8
+ 1557 0082 8DF80B00 		strb	r0, [sp, #11]
+ 305:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Yellow(),
+ 1558              		.loc 1 305 13 view .LVU332
+ 1559 0086 FFF7FEFF 		bl	WS2812B_Timer_Color_Yellow
+ 1560              	.LVL87:
+ 1561 008a 8DF80C00 		strb	r0, [sp, #12]
+ 1562 008e C0F30723 		ubfx	r3, r0, #8, #8
+ 1563 0092 8DF80D30 		strb	r3, [sp, #13]
+ 1564 0096 C0F30740 		ubfx	r0, r0, #16, #8
+ 1565 009a 8DF80E00 		strb	r0, [sp, #14]
+ 306:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Purple(),
+ 1566              		.loc 1 306 13 view .LVU333
+ 1567 009e FFF7FEFF 		bl	WS2812B_Timer_Color_Purple
+ 1568              	.LVL88:
+ 1569 00a2 8DF80F00 		strb	r0, [sp, #15]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 35
+
+
+ 1570 00a6 C0F30723 		ubfx	r3, r0, #8, #8
+ 1571 00aa 8DF81030 		strb	r3, [sp, #16]
+ 1572 00ae C0F30740 		ubfx	r0, r0, #16, #8
+ 1573 00b2 8DF81100 		strb	r0, [sp, #17]
+ 307:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_Color_Cyan()
+ 1574              		.loc 1 307 13 view .LVU334
+ 1575 00b6 FFF7FEFF 		bl	WS2812B_Timer_Color_Cyan
+ 1576              	.LVL89:
+ 1577 00ba 8DF81200 		strb	r0, [sp, #18]
+ 1578 00be C0F30723 		ubfx	r3, r0, #8, #8
+ 1579 00c2 8DF81330 		strb	r3, [sp, #19]
+ 1580 00c6 C0F30740 		ubfx	r0, r0, #16, #8
+ 1581 00ca 8DF81400 		strb	r0, [sp, #20]
+ 311:Core/Src/ws2812b_timer.c ****         if (last_led_index < handle->led_count) {
+ 1582              		.loc 1 311 9 is_stmt 1 view .LVU335
+ 311:Core/Src/ws2812b_timer.c ****         if (last_led_index < handle->led_count) {
+ 1583              		.loc 1 311 36 is_stmt 0 view .LVU336
+ 1584 00ce 2389     		ldrh	r3, [r4, #8]
+ 311:Core/Src/ws2812b_timer.c ****         if (last_led_index < handle->led_count) {
+ 1585              		.loc 1 311 12 view .LVU337
+ 1586 00d0 AB42     		cmp	r3, r5
+ 1587 00d2 13D8     		bhi	.L103
+ 1588              	.L100:
+ 316:Core/Src/ws2812b_timer.c ****         WS2812B_Timer_Update(handle);
+ 1589              		.loc 1 316 9 is_stmt 1 view .LVU338
+ 1590 00d4 2046     		mov	r0, r4
+ 1591 00d6 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1592              	.LVL90:
+ 319:Core/Src/ws2812b_timer.c ****         color_index = (color_index + 1) % 7;
+ 1593              		.loc 1 319 9 view .LVU339
+ 319:Core/Src/ws2812b_timer.c ****         color_index = (color_index + 1) % 7;
+ 1594              		.loc 1 319 36 is_stmt 0 view .LVU340
+ 1595 00da 1549     		ldr	r1, .L104+4
+ 1596 00dc 0A78     		ldrb	r2, [r1]	@ zero_extendqisi2
+ 1597 00de 0132     		adds	r2, r2, #1
+ 319:Core/Src/ws2812b_timer.c ****         color_index = (color_index + 1) % 7;
+ 1598              		.loc 1 319 41 view .LVU341
+ 1599 00e0 144B     		ldr	r3, .L104+8
+ 1600 00e2 83FB0203 		smull	r0, r3, r3, r2
+ 1601 00e6 1344     		add	r3, r3, r2
+ 1602 00e8 9B10     		asrs	r3, r3, #2
+ 1603 00ea C3EBC303 		rsb	r3, r3, r3, lsl #3
+ 1604 00ee D31A     		subs	r3, r2, r3
+ 319:Core/Src/ws2812b_timer.c ****         color_index = (color_index + 1) % 7;
+ 1605              		.loc 1 319 21 view .LVU342
+ 1606 00f0 0B70     		strb	r3, [r1]
+ 320:Core/Src/ws2812b_timer.c ****         last_test = HAL_GetTick();
+ 1607              		.loc 1 320 9 is_stmt 1 view .LVU343
+ 320:Core/Src/ws2812b_timer.c ****         last_test = HAL_GetTick();
+ 1608              		.loc 1 320 21 is_stmt 0 view .LVU344
+ 1609 00f2 FFF7FEFF 		bl	HAL_GetTick
+ 1610              	.LVL91:
+ 320:Core/Src/ws2812b_timer.c ****         last_test = HAL_GetTick();
+ 1611              		.loc 1 320 19 discriminator 1 view .LVU345
+ 1612 00f6 0D4B     		ldr	r3, .L104
+ 1613 00f8 1860     		str	r0, [r3]
+ 1614              	.LBE9:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 36
+
+
+ 1615              		.loc 1 322 1 view .LVU346
+ 1616 00fa 8CE7     		b	.L98
+ 1617              	.L103:
+ 1618              	.LBB10:
+ 312:Core/Src/ws2812b_timer.c ****             WS2812B_Timer_SetLED(handle, last_led_index, colors[color_index]);
+ 1619              		.loc 1 312 13 is_stmt 1 view .LVU347
+ 1620 00fc 0C4B     		ldr	r3, .L104+4
+ 1621 00fe 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1622 0100 03EB4303 		add	r3, r3, r3, lsl #1
+ 1623 0104 1833     		adds	r3, r3, #24
+ 1624 0106 6B44     		add	r3, sp, r3
+ 1625 0108 13F8182C 		ldrb	r2, [r3, #-24]	@ zero_extendqisi2
+ 1626 010c 13F8171C 		ldrb	r1, [r3, #-23]	@ zero_extendqisi2
+ 1627 0110 42EA0122 		orr	r2, r2, r1, lsl #8
+ 1628 0114 13F8163C 		ldrb	r3, [r3, #-22]	@ zero_extendqisi2
+ 1629 0118 42EA0342 		orr	r2, r2, r3, lsl #16
+ 1630 011c 22F07F42 		bic	r2, r2, #-16777216
+ 1631 0120 2946     		mov	r1, r5
+ 1632 0122 2046     		mov	r0, r4
+ 1633 0124 FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 1634              	.LVL92:
+ 1635 0128 D4E7     		b	.L100
+ 1636              	.L105:
+ 1637 012a 00BF     		.align	2
+ 1638              	.L104:
+ 1639 012c 00000000 		.word	last_test.1
+ 1640 0130 00000000 		.word	color_index.0
+ 1641 0134 93244992 		.word	-1840700269
+ 1642              	.LBE10:
+ 1643              		.cfi_endproc
+ 1644              	.LFE88:
+ 1646              		.section	.bss.color_index.0,"aw",%nobits
+ 1649              	color_index.0:
+ 1650 0000 00       		.space	1
+ 1651              		.section	.bss.last_test.1,"aw",%nobits
+ 1652              		.align	2
+ 1655              	last_test.1:
+ 1656 0000 00000000 		.space	4
+ 1657              		.section	.bss.test_state.2,"aw",%nobits
+ 1660              	test_state.2:
+ 1661 0000 00       		.space	1
+ 1662              		.section	.bss.last_test.3,"aw",%nobits
+ 1663              		.align	2
+ 1666              	last_test.3:
+ 1667 0000 00000000 		.space	4
+ 1668              		.section	.bss.test_led.4,"aw",%nobits
+ 1671              	test_led.4:
+ 1672 0000 00       		.space	1
+ 1673              		.section	.bss.last_test.5,"aw",%nobits
+ 1674              		.align	2
+ 1677              	last_test.5:
+ 1678 0000 00000000 		.space	4
+ 1679              		.section	.rodata
+ 1680              		.align	2
+ 1681              		.set	.LANCHOR0,. + 0
+ 1682              	.LC0:
+ 1683 0000 FF       		.byte	-1
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 37
+
+
+ 1684 0001 FF       		.byte	-1
+ 1685 0002 FF       		.byte	-1
+ 1686 0003 00       		.space	1
+ 1687              	.LC1:
+ 1688 0004 FF       		.byte	-1
+ 1689 0005 FF       		.byte	-1
+ 1690 0006 00       		.byte	0
+ 1691 0007 00       		.space	1
+ 1692              	.LC2:
+ 1693 0008 FF       		.byte	-1
+ 1694 0009 00       		.byte	0
+ 1695 000a FF       		.byte	-1
+ 1696 000b 00       		.space	1
+ 1697              	.LC3:
+ 1698 000c 00       		.byte	0
+ 1699 000d FF       		.byte	-1
+ 1700 000e FF       		.byte	-1
+ 1701              		.text
+ 1702              	.Letext0:
+ 1703              		.file 2 "C:/Users/PanTalir/AppData/Roaming/Cursor/User/globalStorage/bmd.stm32-for-vscode/@xpack-d
+ 1704              		.file 3 "C:/Users/PanTalir/AppData/Roaming/Cursor/User/globalStorage/bmd.stm32-for-vscode/@xpack-d
+ 1705              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 1706              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h"
+ 1707              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 1708              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 1709              		.file 8 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
+ 1710              		.file 9 "Core/Inc/ws2812b_timer.h"
+ 1711              		.file 10 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 38
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 ws2812b_timer.c
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:19     .text.set_pwm_duty:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:24     .text.set_pwm_duty:00000000 set_pwm_duty
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:79     .text.set_pwm_duty:0000003c $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:84     .text.send_byte_pwm:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:89     .text.send_byte_pwm:00000000 send_byte_pwm
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:172    .text.send_reset_pwm:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:177    .text.send_reset_pwm:00000000 send_reset_pwm
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:229    .text.WS2812B_Timer_SetLED:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:235    .text.WS2812B_Timer_SetLED:00000000 WS2812B_Timer_SetLED
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:287    .text.WS2812B_Timer_SetLED_RGB:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:293    .text.WS2812B_Timer_SetLED_RGB:00000000 WS2812B_Timer_SetLED_RGB
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:330    .text.WS2812B_Timer_ClearBuffer:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:336    .text.WS2812B_Timer_ClearBuffer:00000000 WS2812B_Timer_ClearBuffer
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:392    .text.WS2812B_Timer_SetAllLEDs:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:398    .text.WS2812B_Timer_SetAllLEDs:00000000 WS2812B_Timer_SetAllLEDs
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:458    .text.WS2812B_Timer_ClearAll:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:464    .text.WS2812B_Timer_ClearAll:00000000 WS2812B_Timer_ClearAll
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:485    .text.WS2812B_Timer_Init:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:491    .text.WS2812B_Timer_Init:00000000 WS2812B_Timer_Init
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:544    .text.WS2812B_Timer_Update:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:550    .text.WS2812B_Timer_Update:00000000 WS2812B_Timer_Update
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:617    .text.WS2812B_Timer_GetLEDCount:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:623    .text.WS2812B_Timer_GetLEDCount:00000000 WS2812B_Timer_GetLEDCount
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:641    .text.WS2812B_Timer_GetMaxLEDs:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:647    .text.WS2812B_Timer_GetMaxLEDs:00000000 WS2812B_Timer_GetMaxLEDs
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:662    .text.WS2812B_Timer_ScaleBrightness:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:668    .text.WS2812B_Timer_ScaleBrightness:00000000 WS2812B_Timer_ScaleBrightness
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:802    .text.WS2812B_Timer_ScaleBrightness:000000ac $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:807    .text.WS2812B_Timer_Color_Red:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:813    .text.WS2812B_Timer_Color_Red:00000000 WS2812B_Timer_Color_Red
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:870    .text.WS2812B_Timer_Color_Green:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:876    .text.WS2812B_Timer_Color_Green:00000000 WS2812B_Timer_Color_Green
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:933    .text.WS2812B_Timer_Color_Blue:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:939    .text.WS2812B_Timer_Color_Blue:00000000 WS2812B_Timer_Color_Blue
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:996    .text.WS2812B_Timer_Color_White:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1002   .text.WS2812B_Timer_Color_White:00000000 WS2812B_Timer_Color_White
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1045   .text.WS2812B_Timer_Color_White:0000004c $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1050   .text.WS2812B_Timer_Color_Black:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1056   .text.WS2812B_Timer_Color_Black:00000000 WS2812B_Timer_Color_Black
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1092   .text.WS2812B_Timer_Color_Yellow:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1098   .text.WS2812B_Timer_Color_Yellow:00000000 WS2812B_Timer_Color_Yellow
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1141   .text.WS2812B_Timer_Color_Yellow:0000004c $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1146   .text.WS2812B_Timer_Color_Purple:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1152   .text.WS2812B_Timer_Color_Purple:00000000 WS2812B_Timer_Color_Purple
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1195   .text.WS2812B_Timer_Color_Purple:0000004c $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1200   .text.WS2812B_Timer_Color_Cyan:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1206   .text.WS2812B_Timer_Color_Cyan:00000000 WS2812B_Timer_Color_Cyan
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1249   .text.WS2812B_Timer_Color_Cyan:0000004c $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1254   .text.WS2812B_Timer_TestIndividualLEDs:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1260   .text.WS2812B_Timer_TestIndividualLEDs:00000000 WS2812B_Timer_TestIndividualLEDs
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1367   .text.WS2812B_Timer_TestIndividualLEDs:00000074 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1677   .bss.last_test.5:00000000 last_test.5
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1671   .bss.test_led.4:00000000 test_led.4
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1373   .text.WS2812B_Timer_TestSolidColor:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1379   .text.WS2812B_Timer_TestSolidColor:00000000 WS2812B_Timer_TestSolidColor
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s 			page 39
+
+
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1459   .text.WS2812B_Timer_TestSolidColor:0000004c $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1666   .bss.last_test.3:00000000 last_test.3
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1660   .bss.test_state.2:00000000 test_state.2
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1465   .text.WS2812B_Timer_TestLastLEDColors:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1471   .text.WS2812B_Timer_TestLastLEDColors:00000000 WS2812B_Timer_TestLastLEDColors
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1639   .text.WS2812B_Timer_TestLastLEDColors:0000012c $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1655   .bss.last_test.1:00000000 last_test.1
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1649   .bss.color_index.0:00000000 color_index.0
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1650   .bss.color_index.0:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1652   .bss.last_test.1:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1661   .bss.test_state.2:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1663   .bss.last_test.3:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1672   .bss.test_led.4:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1674   .bss.last_test.5:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccBJO9lz.s:1680   .rodata:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_TIM_PWM_Start
+HAL_GetTick

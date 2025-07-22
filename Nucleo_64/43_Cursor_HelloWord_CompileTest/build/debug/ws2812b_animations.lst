@@ -1,0 +1,3138 @@
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"ws2812b_animations.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "Core/Src/ws2812b_animations.c"
+  18              		.section	.text.WS2812B_Animation_ColorWheel,"ax",%progbits
+  19              		.align	1
+  20              		.global	WS2812B_Animation_ColorWheel
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	WS2812B_Animation_ColorWheel:
+  26              	.LVL0:
+  27              	.LFB65:
+   1:Core/Src/ws2812b_animations.c **** #include "ws2812b_animations.h"
+   2:Core/Src/ws2812b_animations.c **** #include <stdlib.h>
+   3:Core/Src/ws2812b_animations.c **** 
+   4:Core/Src/ws2812b_animations.c **** // ============================================================================
+   5:Core/Src/ws2812b_animations.c **** // UTILITY FUNCTIONS
+   6:Core/Src/ws2812b_animations.c **** // ============================================================================
+   7:Core/Src/ws2812b_animations.c **** 
+   8:Core/Src/ws2812b_animations.c **** RGBColor_t WS2812B_Animation_ColorWheel(uint8_t position) {
+  28              		.loc 1 8 59 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 8 59 is_stmt 0 view .LVU1
+  33 0000 00B5     		push	{lr}
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 14, -4
+  36 0002 83B0     		sub	sp, sp, #12
+  37              		.cfi_def_cfa_offset 16
+   9:Core/Src/ws2812b_animations.c ****     // Position must be 0-255
+  10:Core/Src/ws2812b_animations.c ****     position = 255 - position;
+  38              		.loc 1 10 5 is_stmt 1 view .LVU2
+  39              		.loc 1 10 14 is_stmt 0 view .LVU3
+  40 0004 C343     		mvns	r3, r0
+  41 0006 DBB2     		uxtb	r3, r3
+  42              	.LVL1:
+  11:Core/Src/ws2812b_animations.c ****     
+  12:Core/Src/ws2812b_animations.c ****     RGBColor_t color = {0, 0, 0};
+  43              		.loc 1 12 5 is_stmt 1 view .LVU4
+  44              		.loc 1 12 16 is_stmt 0 view .LVU5
+  45 0008 0022     		movs	r2, #0
+  46 000a 8DF80020 		strb	r2, [sp]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 2
+
+
+  47 000e 8DF80120 		strb	r2, [sp, #1]
+  48 0012 8DF80220 		strb	r2, [sp, #2]
+  13:Core/Src/ws2812b_animations.c ****     
+  14:Core/Src/ws2812b_animations.c ****     if (position < 85) {
+  49              		.loc 1 14 5 is_stmt 1 view .LVU6
+  50              		.loc 1 14 8 is_stmt 0 view .LVU7
+  51 0016 542B     		cmp	r3, #84
+  52 0018 25D8     		bhi	.L2
+  15:Core/Src/ws2812b_animations.c ****         color.red = 255 - position * 3;
+  53              		.loc 1 15 9 is_stmt 1 view .LVU8
+  54              		.loc 1 15 25 is_stmt 0 view .LVU9
+  55 001a A3EB8303 		sub	r3, r3, r3, lsl #2
+  56              	.LVL2:
+  57              		.loc 1 15 25 view .LVU10
+  58 001e DBB2     		uxtb	r3, r3
+  59 0020 5A1E     		subs	r2, r3, #1
+  60              		.loc 1 15 19 view .LVU11
+  61 0022 8DF80020 		strb	r2, [sp]
+  16:Core/Src/ws2812b_animations.c ****         color.green = position * 3;
+  62              		.loc 1 16 9 is_stmt 1 view .LVU12
+  63              		.loc 1 16 21 is_stmt 0 view .LVU13
+  64 0026 5B42     		rsbs	r3, r3, #0
+  65 0028 8DF80130 		strb	r3, [sp, #1]
+  17:Core/Src/ws2812b_animations.c ****         color.blue = 0;
+  66              		.loc 1 17 9 is_stmt 1 view .LVU14
+  67              	.LVL3:
+  68              	.L3:
+  18:Core/Src/ws2812b_animations.c ****     } else if (position < 170) {
+  19:Core/Src/ws2812b_animations.c ****         position -= 85;
+  20:Core/Src/ws2812b_animations.c ****         color.red = 0;
+  21:Core/Src/ws2812b_animations.c ****         color.green = 255 - position * 3;
+  22:Core/Src/ws2812b_animations.c ****         color.blue = position * 3;
+  23:Core/Src/ws2812b_animations.c ****     } else {
+  24:Core/Src/ws2812b_animations.c ****         position -= 170;
+  25:Core/Src/ws2812b_animations.c ****         color.red = position * 3;
+  26:Core/Src/ws2812b_animations.c ****         color.green = 0;
+  27:Core/Src/ws2812b_animations.c ****         color.blue = 255 - position * 3;
+  28:Core/Src/ws2812b_animations.c ****     }
+  29:Core/Src/ws2812b_animations.c ****     
+  30:Core/Src/ws2812b_animations.c ****     // Scale to max brightness
+  31:Core/Src/ws2812b_animations.c ****     return WS2812B_Timer_ScaleBrightness(color);
+  69              		.loc 1 31 5 view .LVU15
+  70              		.loc 1 31 12 is_stmt 0 view .LVU16
+  71 002c 0098     		ldr	r0, [sp]
+  72 002e FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+  73              	.LVL4:
+  74 0032 8DF80400 		strb	r0, [sp, #4]
+  75 0036 C0F30723 		ubfx	r3, r0, #8, #8
+  76 003a 8DF80530 		strb	r3, [sp, #5]
+  77 003e C0F30740 		ubfx	r0, r0, #16, #8
+  78 0042 8DF80600 		strb	r0, [sp, #6]
+  79 0046 0020     		movs	r0, #0
+  80 0048 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+  81 004c 63F30700 		bfi	r0, r3, #0, #8
+  82 0050 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+  83 0054 63F30F20 		bfi	r0, r3, #8, #8
+  84 0058 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 3
+
+
+  85 005c 63F31740 		bfi	r0, r3, #16, #8
+  32:Core/Src/ws2812b_animations.c **** }
+  86              		.loc 1 32 1 view .LVU17
+  87 0060 03B0     		add	sp, sp, #12
+  88              		.cfi_remember_state
+  89              		.cfi_def_cfa_offset 4
+  90              		@ sp needed
+  91 0062 5DF804FB 		ldr	pc, [sp], #4
+  92              	.LVL5:
+  93              	.L2:
+  94              		.cfi_restore_state
+  18:Core/Src/ws2812b_animations.c ****     } else if (position < 170) {
+  95              		.loc 1 18 12 is_stmt 1 view .LVU18
+  18:Core/Src/ws2812b_animations.c ****     } else if (position < 170) {
+  96              		.loc 1 18 15 is_stmt 0 view .LVU19
+  97 0066 A92B     		cmp	r3, #169
+  98 0068 0CD8     		bhi	.L4
+  19:Core/Src/ws2812b_animations.c ****         color.red = 0;
+  99              		.loc 1 19 9 is_stmt 1 view .LVU20
+  19:Core/Src/ws2812b_animations.c ****         color.red = 0;
+ 100              		.loc 1 19 18 is_stmt 0 view .LVU21
+ 101 006a C0F1AA00 		rsb	r0, r0, #170
+ 102 006e C3B2     		uxtb	r3, r0
+ 103              	.LVL6:
+  20:Core/Src/ws2812b_animations.c ****         color.green = 255 - position * 3;
+ 104              		.loc 1 20 9 is_stmt 1 view .LVU22
+  21:Core/Src/ws2812b_animations.c ****         color.blue = position * 3;
+ 105              		.loc 1 21 9 view .LVU23
+  21:Core/Src/ws2812b_animations.c ****         color.blue = position * 3;
+ 106              		.loc 1 21 27 is_stmt 0 view .LVU24
+ 107 0070 A3EB8303 		sub	r3, r3, r3, lsl #2
+ 108              	.LVL7:
+  21:Core/Src/ws2812b_animations.c ****         color.blue = position * 3;
+ 109              		.loc 1 21 27 view .LVU25
+ 110 0074 DBB2     		uxtb	r3, r3
+ 111 0076 5A1E     		subs	r2, r3, #1
+  21:Core/Src/ws2812b_animations.c ****         color.blue = position * 3;
+ 112              		.loc 1 21 21 view .LVU26
+ 113 0078 8DF80120 		strb	r2, [sp, #1]
+  22:Core/Src/ws2812b_animations.c ****     } else {
+ 114              		.loc 1 22 9 is_stmt 1 view .LVU27
+  22:Core/Src/ws2812b_animations.c ****     } else {
+ 115              		.loc 1 22 20 is_stmt 0 view .LVU28
+ 116 007c 5B42     		rsbs	r3, r3, #0
+ 117 007e 8DF80230 		strb	r3, [sp, #2]
+ 118 0082 D3E7     		b	.L3
+ 119              	.LVL8:
+ 120              	.L4:
+  24:Core/Src/ws2812b_animations.c ****         color.red = position * 3;
+ 121              		.loc 1 24 9 is_stmt 1 view .LVU29
+  24:Core/Src/ws2812b_animations.c ****         color.red = position * 3;
+ 122              		.loc 1 24 18 is_stmt 0 view .LVU30
+ 123 0084 C0F15500 		rsb	r0, r0, #85
+ 124 0088 C3B2     		uxtb	r3, r0
+ 125              	.LVL9:
+  25:Core/Src/ws2812b_animations.c ****         color.green = 0;
+ 126              		.loc 1 25 9 is_stmt 1 view .LVU31
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 4
+
+
+  25:Core/Src/ws2812b_animations.c ****         color.green = 0;
+ 127              		.loc 1 25 19 is_stmt 0 view .LVU32
+ 128 008a 03EB4303 		add	r3, r3, r3, lsl #1
+ 129              	.LVL10:
+  25:Core/Src/ws2812b_animations.c ****         color.green = 0;
+ 130              		.loc 1 25 19 view .LVU33
+ 131 008e DBB2     		uxtb	r3, r3
+ 132 0090 8DF80030 		strb	r3, [sp]
+  26:Core/Src/ws2812b_animations.c ****         color.blue = 255 - position * 3;
+ 133              		.loc 1 26 9 is_stmt 1 view .LVU34
+  27:Core/Src/ws2812b_animations.c ****     }
+ 134              		.loc 1 27 9 view .LVU35
+  27:Core/Src/ws2812b_animations.c ****     }
+ 135              		.loc 1 27 20 is_stmt 0 view .LVU36
+ 136 0094 DB43     		mvns	r3, r3
+ 137 0096 8DF80230 		strb	r3, [sp, #2]
+ 138 009a C7E7     		b	.L3
+ 139              		.cfi_endproc
+ 140              	.LFE65:
+ 142              		.section	.text.WS2812B_Animation_ScaleBrightness,"ax",%progbits
+ 143              		.align	1
+ 144              		.global	WS2812B_Animation_ScaleBrightness
+ 145              		.syntax unified
+ 146              		.thumb
+ 147              		.thumb_func
+ 149              	WS2812B_Animation_ScaleBrightness:
+ 150              	.LVL11:
+ 151              	.LFB66:
+  33:Core/Src/ws2812b_animations.c **** 
+  34:Core/Src/ws2812b_animations.c **** uint8_t WS2812B_Animation_ScaleBrightness(uint8_t color, uint8_t brightness) {
+ 152              		.loc 1 34 78 is_stmt 1 view -0
+ 153              		.cfi_startproc
+ 154              		@ args = 0, pretend = 0, frame = 0
+ 155              		@ frame_needed = 0, uses_anonymous_args = 0
+ 156              		@ link register save eliminated.
+  35:Core/Src/ws2812b_animations.c ****     return (color * brightness) / 255;
+ 157              		.loc 1 35 5 view .LVU38
+ 158              		.loc 1 35 19 is_stmt 0 view .LVU39
+ 159 0000 00FB01F1 		mul	r1, r0, r1
+ 160              	.LVL12:
+ 161              		.loc 1 35 33 view .LVU40
+ 162 0004 0348     		ldr	r0, .L7
+ 163              	.LVL13:
+ 164              		.loc 1 35 33 view .LVU41
+ 165 0006 80FB0130 		smull	r3, r0, r0, r1
+ 166 000a 0844     		add	r0, r0, r1
+  36:Core/Src/ws2812b_animations.c **** }
+ 167              		.loc 1 36 1 view .LVU42
+ 168 000c C0F3C710 		ubfx	r0, r0, #7, #8
+ 169 0010 7047     		bx	lr
+ 170              	.L8:
+ 171 0012 00BF     		.align	2
+ 172              	.L7:
+ 173 0014 81808080 		.word	-2139062143
+ 174              		.cfi_endproc
+ 175              	.LFE66:
+ 177              		.section	.text.WS2812B_Animation_Rainbow,"ax",%progbits
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 5
+
+
+ 178              		.align	1
+ 179              		.global	WS2812B_Animation_Rainbow
+ 180              		.syntax unified
+ 181              		.thumb
+ 182              		.thumb_func
+ 184              	WS2812B_Animation_Rainbow:
+ 185              	.LVL14:
+ 186              	.LFB67:
+  37:Core/Src/ws2812b_animations.c **** 
+  38:Core/Src/ws2812b_animations.c **** // ============================================================================
+  39:Core/Src/ws2812b_animations.c **** // BASIC ANIMATIONS
+  40:Core/Src/ws2812b_animations.c **** // ============================================================================
+  41:Core/Src/ws2812b_animations.c **** 
+  42:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Rainbow(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 187              		.loc 1 42 83 is_stmt 1 view -0
+ 188              		.cfi_startproc
+ 189              		@ args = 0, pretend = 0, frame = 8
+ 190              		@ frame_needed = 0, uses_anonymous_args = 0
+ 191              		.loc 1 42 83 is_stmt 0 view .LVU44
+ 192 0000 30B5     		push	{r4, r5, lr}
+ 193              		.cfi_def_cfa_offset 12
+ 194              		.cfi_offset 4, -12
+ 195              		.cfi_offset 5, -8
+ 196              		.cfi_offset 14, -4
+ 197 0002 83B0     		sub	sp, sp, #12
+ 198              		.cfi_def_cfa_offset 24
+ 199 0004 0546     		mov	r5, r0
+ 200 0006 0C46     		mov	r4, r1
+  43:Core/Src/ws2812b_animations.c ****     static uint8_t offset = 0;
+ 201              		.loc 1 43 5 is_stmt 1 view .LVU45
+  44:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 202              		.loc 1 44 5 view .LVU46
+  45:Core/Src/ws2812b_animations.c ****     
+  46:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 203              		.loc 1 46 5 view .LVU47
+ 204              		.loc 1 46 9 is_stmt 0 view .LVU48
+ 205 0008 FFF7FEFF 		bl	HAL_GetTick
+ 206              	.LVL15:
+ 207              		.loc 1 46 23 discriminator 1 view .LVU49
+ 208 000c 1C4B     		ldr	r3, .L15
+ 209 000e 1B68     		ldr	r3, [r3]
+ 210 0010 C01A     		subs	r0, r0, r3
+ 211              		.loc 1 46 8 discriminator 1 view .LVU50
+ 212 0012 A042     		cmp	r0, r4
+ 213 0014 32D8     		bhi	.L13
+ 214              	.LVL16:
+ 215              	.L9:
+  47:Core/Src/ws2812b_animations.c ****         // Create rainbow effect flowing along the linear strip
+  48:Core/Src/ws2812b_animations.c ****         for (uint16_t i = 0; i < handle->led_count; i++) {
+  49:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+  50:Core/Src/ws2812b_animations.c ****             uint8_t color_pos = (i * 32 + offset) % 256;  // 32 steps per LED for smooth transition
+  51:Core/Src/ws2812b_animations.c ****             RGBColor_t color = WS2812B_Animation_ColorWheel(color_pos);
+  52:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, color);
+  53:Core/Src/ws2812b_animations.c ****         }
+  54:Core/Src/ws2812b_animations.c ****         
+  55:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+  56:Core/Src/ws2812b_animations.c ****         offset = (offset + 2) % 256;  // Slower movement for linear strip
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 6
+
+
+  57:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+  58:Core/Src/ws2812b_animations.c ****     }
+  59:Core/Src/ws2812b_animations.c **** }
+ 216              		.loc 1 59 1 view .LVU51
+ 217 0016 03B0     		add	sp, sp, #12
+ 218              		.cfi_remember_state
+ 219              		.cfi_def_cfa_offset 12
+ 220              		@ sp needed
+ 221 0018 30BD     		pop	{r4, r5, pc}
+ 222              	.LVL17:
+ 223              	.L12:
+ 224              		.cfi_restore_state
+ 225              	.LBB2:
+ 226              	.LBB3:
+  50:Core/Src/ws2812b_animations.c ****             RGBColor_t color = WS2812B_Animation_ColorWheel(color_pos);
+ 227              		.loc 1 50 13 is_stmt 1 view .LVU52
+  50:Core/Src/ws2812b_animations.c ****             RGBColor_t color = WS2812B_Animation_ColorWheel(color_pos);
+ 228              		.loc 1 50 41 is_stmt 0 view .LVU53
+ 229 001a 1A4B     		ldr	r3, .L15+4
+ 230 001c 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 231 001e 00EB4410 		add	r0, r0, r4, lsl #5
+  50:Core/Src/ws2812b_animations.c ****             RGBColor_t color = WS2812B_Animation_ColorWheel(color_pos);
+ 232              		.loc 1 50 51 view .LVU54
+ 233 0022 4342     		rsbs	r3, r0, #0
+ 234 0024 C0B2     		uxtb	r0, r0
+ 235 0026 DBB2     		uxtb	r3, r3
+ 236 0028 58BF     		it	pl
+ 237 002a 5842     		rsbpl	r0, r3, #0
+ 238              	.LVL18:
+  51:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, color);
+ 239              		.loc 1 51 13 is_stmt 1 view .LVU55
+  51:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, color);
+ 240              		.loc 1 51 32 is_stmt 0 view .LVU56
+ 241 002c C0B2     		uxtb	r0, r0
+  51:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, color);
+ 242              		.loc 1 51 32 view .LVU57
+ 243 002e FFF7FEFF 		bl	WS2812B_Animation_ColorWheel
+ 244              	.LVL19:
+  51:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, color);
+ 245              		.loc 1 51 32 view .LVU58
+ 246 0032 8DF80400 		strb	r0, [sp, #4]
+ 247 0036 C0F30723 		ubfx	r3, r0, #8, #8
+ 248 003a 8DF80530 		strb	r3, [sp, #5]
+ 249 003e C0F30740 		ubfx	r0, r0, #16, #8
+ 250 0042 8DF80600 		strb	r0, [sp, #6]
+  52:Core/Src/ws2812b_animations.c ****         }
+ 251              		.loc 1 52 13 is_stmt 1 view .LVU59
+ 252 0046 019A     		ldr	r2, [sp, #4]
+ 253 0048 2146     		mov	r1, r4
+ 254 004a 2846     		mov	r0, r5
+ 255 004c FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 256              	.LVL20:
+ 257              	.LBE3:
+  48:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+ 258              		.loc 1 48 54 discriminator 3 view .LVU60
+ 259 0050 0134     		adds	r4, r4, #1
+ 260              	.LVL21:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 7
+
+
+  48:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+ 261              		.loc 1 48 54 is_stmt 0 discriminator 3 view .LVU61
+ 262 0052 A4B2     		uxth	r4, r4
+ 263              	.LVL22:
+ 264              	.L10:
+  48:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+ 265              		.loc 1 48 32 is_stmt 1 discriminator 1 view .LVU62
+  48:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+ 266              		.loc 1 48 40 is_stmt 0 discriminator 1 view .LVU63
+ 267 0054 2B89     		ldrh	r3, [r5, #8]
+  48:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+ 268              		.loc 1 48 32 discriminator 1 view .LVU64
+ 269 0056 A342     		cmp	r3, r4
+ 270 0058 DFD8     		bhi	.L12
+ 271              	.LBE2:
+  55:Core/Src/ws2812b_animations.c ****         offset = (offset + 2) % 256;  // Slower movement for linear strip
+ 272              		.loc 1 55 9 is_stmt 1 view .LVU65
+ 273 005a 2846     		mov	r0, r5
+ 274 005c FFF7FEFF 		bl	WS2812B_Timer_Update
+ 275              	.LVL23:
+  56:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 276              		.loc 1 56 9 view .LVU66
+  56:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 277              		.loc 1 56 26 is_stmt 0 view .LVU67
+ 278 0060 0849     		ldr	r1, .L15+4
+ 279 0062 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 280 0064 0233     		adds	r3, r3, #2
+  56:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 281              		.loc 1 56 31 view .LVU68
+ 282 0066 5A42     		rsbs	r2, r3, #0
+ 283 0068 DBB2     		uxtb	r3, r3
+ 284 006a D2B2     		uxtb	r2, r2
+ 285 006c 58BF     		it	pl
+ 286 006e 5342     		rsbpl	r3, r2, #0
+  56:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 287              		.loc 1 56 16 view .LVU69
+ 288 0070 0B70     		strb	r3, [r1]
+  57:Core/Src/ws2812b_animations.c ****     }
+ 289              		.loc 1 57 9 is_stmt 1 view .LVU70
+  57:Core/Src/ws2812b_animations.c ****     }
+ 290              		.loc 1 57 23 is_stmt 0 view .LVU71
+ 291 0072 FFF7FEFF 		bl	HAL_GetTick
+ 292              	.LVL24:
+  57:Core/Src/ws2812b_animations.c ****     }
+ 293              		.loc 1 57 21 discriminator 1 view .LVU72
+ 294 0076 024B     		ldr	r3, .L15
+ 295 0078 1860     		str	r0, [r3]
+ 296              		.loc 1 59 1 view .LVU73
+ 297 007a CCE7     		b	.L9
+ 298              	.LVL25:
+ 299              	.L13:
+ 300              	.LBB4:
+  48:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+ 301              		.loc 1 48 23 view .LVU74
+ 302 007c 0024     		movs	r4, #0
+ 303              	.LVL26:
+  48:Core/Src/ws2812b_animations.c ****             // Create smooth gradient across the line
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 8
+
+
+ 304              		.loc 1 48 23 view .LVU75
+ 305 007e E9E7     		b	.L10
+ 306              	.L16:
+ 307              		.align	2
+ 308              	.L15:
+ 309 0080 00000000 		.word	last_update.18
+ 310 0084 00000000 		.word	offset.17
+ 311              	.LBE4:
+ 312              		.cfi_endproc
+ 313              	.LFE67:
+ 315              		.section	.text.WS2812B_Animation_Chase,"ax",%progbits
+ 316              		.align	1
+ 317              		.global	WS2812B_Animation_Chase
+ 318              		.syntax unified
+ 319              		.thumb
+ 320              		.thumb_func
+ 322              	WS2812B_Animation_Chase:
+ 323              	.LVL27:
+ 324              	.LFB68:
+  60:Core/Src/ws2812b_animations.c **** 
+  61:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Chase(WS2812B_Timer_Handle_t* handle, RGBColor_t color, uint32_t delay_ms) {
+ 325              		.loc 1 61 99 is_stmt 1 view -0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 8
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 329              		.loc 1 61 99 is_stmt 0 view .LVU77
+ 330 0000 30B5     		push	{r4, r5, lr}
+ 331              		.cfi_def_cfa_offset 12
+ 332              		.cfi_offset 4, -12
+ 333              		.cfi_offset 5, -8
+ 334              		.cfi_offset 14, -4
+ 335 0002 83B0     		sub	sp, sp, #12
+ 336              		.cfi_def_cfa_offset 24
+ 337 0004 0446     		mov	r4, r0
+ 338 0006 0191     		str	r1, [sp, #4]
+ 339 0008 1546     		mov	r5, r2
+  62:Core/Src/ws2812b_animations.c ****     static uint16_t position = 0;
+ 340              		.loc 1 62 5 is_stmt 1 view .LVU78
+  63:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 341              		.loc 1 63 5 view .LVU79
+  64:Core/Src/ws2812b_animations.c ****     
+  65:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 342              		.loc 1 65 5 view .LVU80
+ 343              		.loc 1 65 9 is_stmt 0 view .LVU81
+ 344 000a FFF7FEFF 		bl	HAL_GetTick
+ 345              	.LVL28:
+ 346              		.loc 1 65 23 discriminator 1 view .LVU82
+ 347 000e 124B     		ldr	r3, .L23
+ 348 0010 1B68     		ldr	r3, [r3]
+ 349 0012 C01A     		subs	r0, r0, r3
+ 350              		.loc 1 65 8 discriminator 1 view .LVU83
+ 351 0014 A842     		cmp	r0, r5
+ 352 0016 01D8     		bhi	.L21
+ 353              	.L17:
+  66:Core/Src/ws2812b_animations.c ****         // Clear all LEDs
+  67:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_ClearAll(handle);
+  68:Core/Src/ws2812b_animations.c ****         
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 9
+
+
+  69:Core/Src/ws2812b_animations.c ****         // Light up current position
+  70:Core/Src/ws2812b_animations.c ****         if (position < handle->led_count) {
+  71:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, position, color);
+  72:Core/Src/ws2812b_animations.c ****         }
+  73:Core/Src/ws2812b_animations.c ****         
+  74:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+  75:Core/Src/ws2812b_animations.c ****         
+  76:Core/Src/ws2812b_animations.c ****         // Move to next position
+  77:Core/Src/ws2812b_animations.c ****         position = (position + 1) % handle->led_count;
+  78:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+  79:Core/Src/ws2812b_animations.c ****     }
+  80:Core/Src/ws2812b_animations.c **** }
+ 354              		.loc 1 80 1 view .LVU84
+ 355 0018 03B0     		add	sp, sp, #12
+ 356              		.cfi_remember_state
+ 357              		.cfi_def_cfa_offset 12
+ 358              		@ sp needed
+ 359 001a 30BD     		pop	{r4, r5, pc}
+ 360              	.LVL29:
+ 361              	.L21:
+ 362              		.cfi_restore_state
+  67:Core/Src/ws2812b_animations.c ****         
+ 363              		.loc 1 67 9 is_stmt 1 view .LVU85
+ 364 001c 2046     		mov	r0, r4
+ 365 001e FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 366              	.LVL30:
+  70:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, position, color);
+ 367              		.loc 1 70 9 view .LVU86
+  70:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, position, color);
+ 368              		.loc 1 70 30 is_stmt 0 view .LVU87
+ 369 0022 2389     		ldrh	r3, [r4, #8]
+  70:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, position, color);
+ 370              		.loc 1 70 22 view .LVU88
+ 371 0024 0D4A     		ldr	r2, .L23+4
+ 372 0026 1188     		ldrh	r1, [r2]
+  70:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, position, color);
+ 373              		.loc 1 70 12 view .LVU89
+ 374 0028 8B42     		cmp	r3, r1
+ 375 002a 10D8     		bhi	.L22
+ 376              	.L19:
+  74:Core/Src/ws2812b_animations.c ****         
+ 377              		.loc 1 74 9 is_stmt 1 view .LVU90
+ 378 002c 2046     		mov	r0, r4
+ 379 002e FFF7FEFF 		bl	WS2812B_Timer_Update
+ 380              	.LVL31:
+  77:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 381              		.loc 1 77 9 view .LVU91
+  77:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 382              		.loc 1 77 30 is_stmt 0 view .LVU92
+ 383 0032 0A4A     		ldr	r2, .L23+4
+ 384 0034 1388     		ldrh	r3, [r2]
+ 385 0036 0133     		adds	r3, r3, #1
+  77:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 386              		.loc 1 77 43 view .LVU93
+ 387 0038 2189     		ldrh	r1, [r4, #8]
+  77:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 388              		.loc 1 77 35 view .LVU94
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 10
+
+
+ 389 003a 93FBF1F0 		sdiv	r0, r3, r1
+ 390 003e 01FB1033 		mls	r3, r1, r0, r3
+  77:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 391              		.loc 1 77 18 view .LVU95
+ 392 0042 1380     		strh	r3, [r2]	@ movhi
+  78:Core/Src/ws2812b_animations.c ****     }
+ 393              		.loc 1 78 9 is_stmt 1 view .LVU96
+  78:Core/Src/ws2812b_animations.c ****     }
+ 394              		.loc 1 78 23 is_stmt 0 view .LVU97
+ 395 0044 FFF7FEFF 		bl	HAL_GetTick
+ 396              	.LVL32:
+  78:Core/Src/ws2812b_animations.c ****     }
+ 397              		.loc 1 78 21 discriminator 1 view .LVU98
+ 398 0048 034B     		ldr	r3, .L23
+ 399 004a 1860     		str	r0, [r3]
+ 400              		.loc 1 80 1 view .LVU99
+ 401 004c E4E7     		b	.L17
+ 402              	.L22:
+  71:Core/Src/ws2812b_animations.c ****         }
+ 403              		.loc 1 71 13 is_stmt 1 view .LVU100
+ 404 004e 019A     		ldr	r2, [sp, #4]
+ 405 0050 2046     		mov	r0, r4
+ 406 0052 FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 407              	.LVL33:
+ 408 0056 E9E7     		b	.L19
+ 409              	.L24:
+ 410              		.align	2
+ 411              	.L23:
+ 412 0058 00000000 		.word	last_update.16
+ 413 005c 00000000 		.word	position.15
+ 414              		.cfi_endproc
+ 415              	.LFE68:
+ 417              		.section	.text.WS2812B_Animation_Fade,"ax",%progbits
+ 418              		.align	1
+ 419              		.global	WS2812B_Animation_Fade
+ 420              		.syntax unified
+ 421              		.thumb
+ 422              		.thumb_func
+ 424              	WS2812B_Animation_Fade:
+ 425              	.LVL34:
+ 426              	.LFB69:
+  81:Core/Src/ws2812b_animations.c **** 
+  82:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Fade(WS2812B_Timer_Handle_t* handle, RGBColor_t color, uint32_t delay_ms) {
+ 427              		.loc 1 82 98 view -0
+ 428              		.cfi_startproc
+ 429              		@ args = 0, pretend = 0, frame = 16
+ 430              		@ frame_needed = 0, uses_anonymous_args = 0
+ 431              		.loc 1 82 98 is_stmt 0 view .LVU102
+ 432 0000 30B5     		push	{r4, r5, lr}
+ 433              		.cfi_def_cfa_offset 12
+ 434              		.cfi_offset 4, -12
+ 435              		.cfi_offset 5, -8
+ 436              		.cfi_offset 14, -4
+ 437 0002 85B0     		sub	sp, sp, #20
+ 438              		.cfi_def_cfa_offset 32
+ 439 0004 0546     		mov	r5, r0
+ 440 0006 0191     		str	r1, [sp, #4]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 11
+
+
+ 441 0008 1446     		mov	r4, r2
+  83:Core/Src/ws2812b_animations.c ****     static uint8_t brightness = 0;
+ 442              		.loc 1 83 5 is_stmt 1 view .LVU103
+  84:Core/Src/ws2812b_animations.c ****     static uint8_t direction = 1;
+ 443              		.loc 1 84 5 view .LVU104
+  85:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 444              		.loc 1 85 5 view .LVU105
+  86:Core/Src/ws2812b_animations.c ****     
+  87:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 445              		.loc 1 87 5 view .LVU106
+ 446              		.loc 1 87 9 is_stmt 0 view .LVU107
+ 447 000a FFF7FEFF 		bl	HAL_GetTick
+ 448              	.LVL35:
+ 449              		.loc 1 87 23 discriminator 1 view .LVU108
+ 450 000e 214B     		ldr	r3, .L32
+ 451 0010 1B68     		ldr	r3, [r3]
+ 452 0012 C31A     		subs	r3, r0, r3
+ 453              		.loc 1 87 8 discriminator 1 view .LVU109
+ 454 0014 A342     		cmp	r3, r4
+ 455 0016 01D8     		bhi	.L30
+ 456              	.LVL36:
+ 457              	.L25:
+  88:Core/Src/ws2812b_animations.c ****         // Create faded color
+  89:Core/Src/ws2812b_animations.c ****         RGBColor_t faded_color;
+  90:Core/Src/ws2812b_animations.c ****         faded_color.red = WS2812B_Animation_ScaleBrightness(color.red, brightness);
+  91:Core/Src/ws2812b_animations.c ****         faded_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+  92:Core/Src/ws2812b_animations.c ****         faded_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+  93:Core/Src/ws2812b_animations.c ****         
+  94:Core/Src/ws2812b_animations.c ****         // Set all LEDs to faded color
+  95:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_SetAllLEDs(handle, faded_color);
+  96:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+  97:Core/Src/ws2812b_animations.c ****         
+  98:Core/Src/ws2812b_animations.c ****         // Update brightness
+  99:Core/Src/ws2812b_animations.c ****         if (direction) {
+ 100:Core/Src/ws2812b_animations.c ****             brightness++;
+ 101:Core/Src/ws2812b_animations.c ****             if (brightness >= 255) direction = 0;
+ 102:Core/Src/ws2812b_animations.c ****         } else {
+ 103:Core/Src/ws2812b_animations.c ****             brightness--;
+ 104:Core/Src/ws2812b_animations.c ****             if (brightness == 0) direction = 1;
+ 105:Core/Src/ws2812b_animations.c ****         }
+ 106:Core/Src/ws2812b_animations.c ****         
+ 107:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 108:Core/Src/ws2812b_animations.c ****     }
+ 109:Core/Src/ws2812b_animations.c **** }
+ 458              		.loc 1 109 1 view .LVU110
+ 459 0018 05B0     		add	sp, sp, #20
+ 460              		.cfi_remember_state
+ 461              		.cfi_def_cfa_offset 12
+ 462              		@ sp needed
+ 463 001a 30BD     		pop	{r4, r5, pc}
+ 464              	.LVL37:
+ 465              	.L30:
+ 466              		.cfi_restore_state
+ 467              	.LBB5:
+  89:Core/Src/ws2812b_animations.c ****         faded_color.red = WS2812B_Animation_ScaleBrightness(color.red, brightness);
+ 468              		.loc 1 89 9 is_stmt 1 view .LVU111
+  90:Core/Src/ws2812b_animations.c ****         faded_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 12
+
+
+ 469              		.loc 1 90 9 view .LVU112
+  90:Core/Src/ws2812b_animations.c ****         faded_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 470              		.loc 1 90 27 is_stmt 0 view .LVU113
+ 471 001c 1E4B     		ldr	r3, .L32+4
+ 472 001e 1C78     		ldrb	r4, [r3]	@ zero_extendqisi2
+ 473              	.LVL38:
+  90:Core/Src/ws2812b_animations.c ****         faded_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 474              		.loc 1 90 27 view .LVU114
+ 475 0020 2146     		mov	r1, r4
+ 476 0022 9DF80400 		ldrb	r0, [sp, #4]	@ zero_extendqisi2
+ 477 0026 FFF7FEFF 		bl	WS2812B_Animation_ScaleBrightness
+ 478              	.LVL39:
+  90:Core/Src/ws2812b_animations.c ****         faded_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 479              		.loc 1 90 25 discriminator 1 view .LVU115
+ 480 002a 8DF80C00 		strb	r0, [sp, #12]
+  91:Core/Src/ws2812b_animations.c ****         faded_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+ 481              		.loc 1 91 9 is_stmt 1 view .LVU116
+  91:Core/Src/ws2812b_animations.c ****         faded_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+ 482              		.loc 1 91 29 is_stmt 0 view .LVU117
+ 483 002e 2146     		mov	r1, r4
+ 484 0030 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 485 0034 FFF7FEFF 		bl	WS2812B_Animation_ScaleBrightness
+ 486              	.LVL40:
+  91:Core/Src/ws2812b_animations.c ****         faded_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+ 487              		.loc 1 91 27 discriminator 1 view .LVU118
+ 488 0038 8DF80D00 		strb	r0, [sp, #13]
+  92:Core/Src/ws2812b_animations.c ****         
+ 489              		.loc 1 92 9 is_stmt 1 view .LVU119
+  92:Core/Src/ws2812b_animations.c ****         
+ 490              		.loc 1 92 28 is_stmt 0 view .LVU120
+ 491 003c 2146     		mov	r1, r4
+ 492 003e 9DF80600 		ldrb	r0, [sp, #6]	@ zero_extendqisi2
+ 493 0042 FFF7FEFF 		bl	WS2812B_Animation_ScaleBrightness
+ 494              	.LVL41:
+  92:Core/Src/ws2812b_animations.c ****         
+ 495              		.loc 1 92 26 discriminator 1 view .LVU121
+ 496 0046 8DF80E00 		strb	r0, [sp, #14]
+  95:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ 497              		.loc 1 95 9 is_stmt 1 view .LVU122
+ 498 004a 0399     		ldr	r1, [sp, #12]
+ 499 004c 2846     		mov	r0, r5
+ 500 004e FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 501              	.LVL42:
+  96:Core/Src/ws2812b_animations.c ****         
+ 502              		.loc 1 96 9 view .LVU123
+ 503 0052 2846     		mov	r0, r5
+ 504 0054 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 505              	.LVL43:
+  99:Core/Src/ws2812b_animations.c ****             brightness++;
+ 506              		.loc 1 99 9 view .LVU124
+  99:Core/Src/ws2812b_animations.c ****             brightness++;
+ 507              		.loc 1 99 13 is_stmt 0 view .LVU125
+ 508 0058 104B     		ldr	r3, .L32+8
+ 509 005a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  99:Core/Src/ws2812b_animations.c ****             brightness++;
+ 510              		.loc 1 99 12 view .LVU126
+ 511 005c 7BB1     		cbz	r3, .L27
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 13
+
+
+ 100:Core/Src/ws2812b_animations.c ****             if (brightness >= 255) direction = 0;
+ 512              		.loc 1 100 13 is_stmt 1 view .LVU127
+ 100:Core/Src/ws2812b_animations.c ****             if (brightness >= 255) direction = 0;
+ 513              		.loc 1 100 23 is_stmt 0 view .LVU128
+ 514 005e 0E4A     		ldr	r2, .L32+4
+ 515 0060 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 516 0062 0133     		adds	r3, r3, #1
+ 517 0064 DBB2     		uxtb	r3, r3
+ 518 0066 1370     		strb	r3, [r2]
+ 101:Core/Src/ws2812b_animations.c ****         } else {
+ 519              		.loc 1 101 13 is_stmt 1 view .LVU129
+ 101:Core/Src/ws2812b_animations.c ****         } else {
+ 520              		.loc 1 101 16 is_stmt 0 view .LVU130
+ 521 0068 FF2B     		cmp	r3, #255
+ 522 006a 04D0     		beq	.L31
+ 523              	.L28:
+ 107:Core/Src/ws2812b_animations.c ****     }
+ 524              		.loc 1 107 9 is_stmt 1 view .LVU131
+ 107:Core/Src/ws2812b_animations.c ****     }
+ 525              		.loc 1 107 23 is_stmt 0 view .LVU132
+ 526 006c FFF7FEFF 		bl	HAL_GetTick
+ 527              	.LVL44:
+ 107:Core/Src/ws2812b_animations.c ****     }
+ 528              		.loc 1 107 21 discriminator 1 view .LVU133
+ 529 0070 084B     		ldr	r3, .L32
+ 530 0072 1860     		str	r0, [r3]
+ 531              	.LBE5:
+ 532              		.loc 1 109 1 view .LVU134
+ 533 0074 D0E7     		b	.L25
+ 534              	.L31:
+ 535              	.LBB6:
+ 101:Core/Src/ws2812b_animations.c ****         } else {
+ 536              		.loc 1 101 36 is_stmt 1 discriminator 1 view .LVU135
+ 101:Core/Src/ws2812b_animations.c ****         } else {
+ 537              		.loc 1 101 46 is_stmt 0 discriminator 1 view .LVU136
+ 538 0076 094B     		ldr	r3, .L32+8
+ 539 0078 0022     		movs	r2, #0
+ 540 007a 1A70     		strb	r2, [r3]
+ 541 007c F6E7     		b	.L28
+ 542              	.L27:
+ 103:Core/Src/ws2812b_animations.c ****             if (brightness == 0) direction = 1;
+ 543              		.loc 1 103 13 is_stmt 1 view .LVU137
+ 103:Core/Src/ws2812b_animations.c ****             if (brightness == 0) direction = 1;
+ 544              		.loc 1 103 23 is_stmt 0 view .LVU138
+ 545 007e 064A     		ldr	r2, .L32+4
+ 546 0080 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 547 0082 013B     		subs	r3, r3, #1
+ 548 0084 DBB2     		uxtb	r3, r3
+ 549 0086 1370     		strb	r3, [r2]
+ 104:Core/Src/ws2812b_animations.c ****         }
+ 550              		.loc 1 104 13 is_stmt 1 view .LVU139
+ 104:Core/Src/ws2812b_animations.c ****         }
+ 551              		.loc 1 104 16 is_stmt 0 view .LVU140
+ 552 0088 002B     		cmp	r3, #0
+ 553 008a EFD1     		bne	.L28
+ 104:Core/Src/ws2812b_animations.c ****         }
+ 554              		.loc 1 104 34 is_stmt 1 discriminator 1 view .LVU141
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 14
+
+
+ 104:Core/Src/ws2812b_animations.c ****         }
+ 555              		.loc 1 104 44 is_stmt 0 discriminator 1 view .LVU142
+ 556 008c 034B     		ldr	r3, .L32+8
+ 557 008e 0122     		movs	r2, #1
+ 558 0090 1A70     		strb	r2, [r3]
+ 559 0092 EBE7     		b	.L28
+ 560              	.L33:
+ 561              		.align	2
+ 562              	.L32:
+ 563 0094 00000000 		.word	last_update.14
+ 564 0098 00000000 		.word	brightness.13
+ 565 009c 00000000 		.word	direction.12
+ 566              	.LBE6:
+ 567              		.cfi_endproc
+ 568              	.LFE69:
+ 570              		.section	.text.WS2812B_Animation_Breath,"ax",%progbits
+ 571              		.align	1
+ 572              		.global	WS2812B_Animation_Breath
+ 573              		.syntax unified
+ 574              		.thumb
+ 575              		.thumb_func
+ 577              	WS2812B_Animation_Breath:
+ 578              	.LVL45:
+ 579              	.LFB70:
+ 110:Core/Src/ws2812b_animations.c **** 
+ 111:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Breath(WS2812B_Timer_Handle_t* handle, RGBColor_t color, uint32_t delay_ms) 
+ 580              		.loc 1 111 100 is_stmt 1 view -0
+ 581              		.cfi_startproc
+ 582              		@ args = 0, pretend = 0, frame = 16
+ 583              		@ frame_needed = 0, uses_anonymous_args = 0
+ 584              		.loc 1 111 100 is_stmt 0 view .LVU144
+ 585 0000 30B5     		push	{r4, r5, lr}
+ 586              		.cfi_def_cfa_offset 12
+ 587              		.cfi_offset 4, -12
+ 588              		.cfi_offset 5, -8
+ 589              		.cfi_offset 14, -4
+ 590 0002 85B0     		sub	sp, sp, #20
+ 591              		.cfi_def_cfa_offset 32
+ 592 0004 0546     		mov	r5, r0
+ 593 0006 0191     		str	r1, [sp, #4]
+ 594 0008 1446     		mov	r4, r2
+ 112:Core/Src/ws2812b_animations.c ****     static uint8_t brightness = 0;
+ 595              		.loc 1 112 5 is_stmt 1 view .LVU145
+ 113:Core/Src/ws2812b_animations.c ****     static uint8_t direction = 1;
+ 596              		.loc 1 113 5 view .LVU146
+ 114:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 597              		.loc 1 114 5 view .LVU147
+ 115:Core/Src/ws2812b_animations.c ****     
+ 116:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 598              		.loc 1 116 5 view .LVU148
+ 599              		.loc 1 116 9 is_stmt 0 view .LVU149
+ 600 000a FFF7FEFF 		bl	HAL_GetTick
+ 601              	.LVL46:
+ 602              		.loc 1 116 23 discriminator 1 view .LVU150
+ 603 000e 244B     		ldr	r3, .L41
+ 604 0010 1B68     		ldr	r3, [r3]
+ 605 0012 C31A     		subs	r3, r0, r3
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 15
+
+
+ 606              		.loc 1 116 8 discriminator 1 view .LVU151
+ 607 0014 A342     		cmp	r3, r4
+ 608 0016 01D8     		bhi	.L39
+ 609              	.LVL47:
+ 610              	.L34:
+ 117:Core/Src/ws2812b_animations.c ****         // Create breathing effect with smooth brightness change
+ 118:Core/Src/ws2812b_animations.c ****         RGBColor_t breath_color;
+ 119:Core/Src/ws2812b_animations.c ****         breath_color.red = WS2812B_Animation_ScaleBrightness(color.red, brightness);
+ 120:Core/Src/ws2812b_animations.c ****         breath_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 121:Core/Src/ws2812b_animations.c ****         breath_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+ 122:Core/Src/ws2812b_animations.c ****         
+ 123:Core/Src/ws2812b_animations.c ****         // Set all LEDs to breathing color
+ 124:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_SetAllLEDs(handle, breath_color);
+ 125:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ 126:Core/Src/ws2812b_animations.c ****         
+ 127:Core/Src/ws2812b_animations.c ****         // Update brightness with slower change
+ 128:Core/Src/ws2812b_animations.c ****         if (direction) {
+ 129:Core/Src/ws2812b_animations.c ****             brightness += 2;
+ 130:Core/Src/ws2812b_animations.c ****             if (brightness >= 255) {
+ 131:Core/Src/ws2812b_animations.c ****                 brightness = 255;
+ 132:Core/Src/ws2812b_animations.c ****                 direction = 0;
+ 133:Core/Src/ws2812b_animations.c ****             }
+ 134:Core/Src/ws2812b_animations.c ****         } else {
+ 135:Core/Src/ws2812b_animations.c ****             brightness -= 2;
+ 136:Core/Src/ws2812b_animations.c ****             if (brightness == 0) {
+ 137:Core/Src/ws2812b_animations.c ****                 brightness = 0;
+ 138:Core/Src/ws2812b_animations.c ****                 direction = 1;
+ 139:Core/Src/ws2812b_animations.c ****             }
+ 140:Core/Src/ws2812b_animations.c ****         }
+ 141:Core/Src/ws2812b_animations.c ****         
+ 142:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 143:Core/Src/ws2812b_animations.c ****     }
+ 144:Core/Src/ws2812b_animations.c **** }
+ 611              		.loc 1 144 1 view .LVU152
+ 612 0018 05B0     		add	sp, sp, #20
+ 613              		.cfi_remember_state
+ 614              		.cfi_def_cfa_offset 12
+ 615              		@ sp needed
+ 616 001a 30BD     		pop	{r4, r5, pc}
+ 617              	.LVL48:
+ 618              	.L39:
+ 619              		.cfi_restore_state
+ 620              	.LBB7:
+ 118:Core/Src/ws2812b_animations.c ****         breath_color.red = WS2812B_Animation_ScaleBrightness(color.red, brightness);
+ 621              		.loc 1 118 9 is_stmt 1 view .LVU153
+ 119:Core/Src/ws2812b_animations.c ****         breath_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 622              		.loc 1 119 9 view .LVU154
+ 119:Core/Src/ws2812b_animations.c ****         breath_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 623              		.loc 1 119 28 is_stmt 0 view .LVU155
+ 624 001c 214B     		ldr	r3, .L41+4
+ 625 001e 1C78     		ldrb	r4, [r3]	@ zero_extendqisi2
+ 626              	.LVL49:
+ 119:Core/Src/ws2812b_animations.c ****         breath_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 627              		.loc 1 119 28 view .LVU156
+ 628 0020 2146     		mov	r1, r4
+ 629 0022 9DF80400 		ldrb	r0, [sp, #4]	@ zero_extendqisi2
+ 630 0026 FFF7FEFF 		bl	WS2812B_Animation_ScaleBrightness
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 16
+
+
+ 631              	.LVL50:
+ 119:Core/Src/ws2812b_animations.c ****         breath_color.green = WS2812B_Animation_ScaleBrightness(color.green, brightness);
+ 632              		.loc 1 119 26 discriminator 1 view .LVU157
+ 633 002a 8DF80C00 		strb	r0, [sp, #12]
+ 120:Core/Src/ws2812b_animations.c ****         breath_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+ 634              		.loc 1 120 9 is_stmt 1 view .LVU158
+ 120:Core/Src/ws2812b_animations.c ****         breath_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+ 635              		.loc 1 120 30 is_stmt 0 view .LVU159
+ 636 002e 2146     		mov	r1, r4
+ 637 0030 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 638 0034 FFF7FEFF 		bl	WS2812B_Animation_ScaleBrightness
+ 639              	.LVL51:
+ 120:Core/Src/ws2812b_animations.c ****         breath_color.blue = WS2812B_Animation_ScaleBrightness(color.blue, brightness);
+ 640              		.loc 1 120 28 discriminator 1 view .LVU160
+ 641 0038 8DF80D00 		strb	r0, [sp, #13]
+ 121:Core/Src/ws2812b_animations.c ****         
+ 642              		.loc 1 121 9 is_stmt 1 view .LVU161
+ 121:Core/Src/ws2812b_animations.c ****         
+ 643              		.loc 1 121 29 is_stmt 0 view .LVU162
+ 644 003c 2146     		mov	r1, r4
+ 645 003e 9DF80600 		ldrb	r0, [sp, #6]	@ zero_extendqisi2
+ 646 0042 FFF7FEFF 		bl	WS2812B_Animation_ScaleBrightness
+ 647              	.LVL52:
+ 121:Core/Src/ws2812b_animations.c ****         
+ 648              		.loc 1 121 27 discriminator 1 view .LVU163
+ 649 0046 8DF80E00 		strb	r0, [sp, #14]
+ 124:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ 650              		.loc 1 124 9 is_stmt 1 view .LVU164
+ 651 004a 0399     		ldr	r1, [sp, #12]
+ 652 004c 2846     		mov	r0, r5
+ 653 004e FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 654              	.LVL53:
+ 125:Core/Src/ws2812b_animations.c ****         
+ 655              		.loc 1 125 9 view .LVU165
+ 656 0052 2846     		mov	r0, r5
+ 657 0054 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 658              	.LVL54:
+ 128:Core/Src/ws2812b_animations.c ****             brightness += 2;
+ 659              		.loc 1 128 9 view .LVU166
+ 128:Core/Src/ws2812b_animations.c ****             brightness += 2;
+ 660              		.loc 1 128 13 is_stmt 0 view .LVU167
+ 661 0058 134B     		ldr	r3, .L41+8
+ 662 005a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 128:Core/Src/ws2812b_animations.c ****             brightness += 2;
+ 663              		.loc 1 128 12 view .LVU168
+ 664 005c 93B1     		cbz	r3, .L36
+ 129:Core/Src/ws2812b_animations.c ****             if (brightness >= 255) {
+ 665              		.loc 1 129 13 is_stmt 1 view .LVU169
+ 129:Core/Src/ws2812b_animations.c ****             if (brightness >= 255) {
+ 666              		.loc 1 129 24 is_stmt 0 view .LVU170
+ 667 005e 114A     		ldr	r2, .L41+4
+ 668 0060 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 669 0062 0233     		adds	r3, r3, #2
+ 670 0064 DBB2     		uxtb	r3, r3
+ 671 0066 1370     		strb	r3, [r2]
+ 130:Core/Src/ws2812b_animations.c ****                 brightness = 255;
+ 672              		.loc 1 130 13 is_stmt 1 view .LVU171
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 17
+
+
+ 130:Core/Src/ws2812b_animations.c ****                 brightness = 255;
+ 673              		.loc 1 130 16 is_stmt 0 view .LVU172
+ 674 0068 FF2B     		cmp	r3, #255
+ 675 006a 04D0     		beq	.L40
+ 676              	.L37:
+ 142:Core/Src/ws2812b_animations.c ****     }
+ 677              		.loc 1 142 9 is_stmt 1 view .LVU173
+ 142:Core/Src/ws2812b_animations.c ****     }
+ 678              		.loc 1 142 23 is_stmt 0 view .LVU174
+ 679 006c FFF7FEFF 		bl	HAL_GetTick
+ 680              	.LVL55:
+ 142:Core/Src/ws2812b_animations.c ****     }
+ 681              		.loc 1 142 21 discriminator 1 view .LVU175
+ 682 0070 0B4B     		ldr	r3, .L41
+ 683 0072 1860     		str	r0, [r3]
+ 684              	.LBE7:
+ 685              		.loc 1 144 1 view .LVU176
+ 686 0074 D0E7     		b	.L34
+ 687              	.L40:
+ 688              	.LBB8:
+ 131:Core/Src/ws2812b_animations.c ****                 direction = 0;
+ 689              		.loc 1 131 17 is_stmt 1 view .LVU177
+ 131:Core/Src/ws2812b_animations.c ****                 direction = 0;
+ 690              		.loc 1 131 28 is_stmt 0 view .LVU178
+ 691 0076 1346     		mov	r3, r2
+ 692 0078 FF22     		movs	r2, #255
+ 693 007a 1A70     		strb	r2, [r3]
+ 132:Core/Src/ws2812b_animations.c ****             }
+ 694              		.loc 1 132 17 is_stmt 1 view .LVU179
+ 132:Core/Src/ws2812b_animations.c ****             }
+ 695              		.loc 1 132 27 is_stmt 0 view .LVU180
+ 696 007c 0A4B     		ldr	r3, .L41+8
+ 697 007e 0022     		movs	r2, #0
+ 698 0080 1A70     		strb	r2, [r3]
+ 699 0082 F3E7     		b	.L37
+ 700              	.L36:
+ 135:Core/Src/ws2812b_animations.c ****             if (brightness == 0) {
+ 701              		.loc 1 135 13 is_stmt 1 view .LVU181
+ 135:Core/Src/ws2812b_animations.c ****             if (brightness == 0) {
+ 702              		.loc 1 135 24 is_stmt 0 view .LVU182
+ 703 0084 074A     		ldr	r2, .L41+4
+ 704 0086 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 705 0088 023B     		subs	r3, r3, #2
+ 706 008a DBB2     		uxtb	r3, r3
+ 707 008c 1370     		strb	r3, [r2]
+ 136:Core/Src/ws2812b_animations.c ****                 brightness = 0;
+ 708              		.loc 1 136 13 is_stmt 1 view .LVU183
+ 136:Core/Src/ws2812b_animations.c ****                 brightness = 0;
+ 709              		.loc 1 136 16 is_stmt 0 view .LVU184
+ 710 008e 002B     		cmp	r3, #0
+ 711 0090 ECD1     		bne	.L37
+ 137:Core/Src/ws2812b_animations.c ****                 direction = 1;
+ 712              		.loc 1 137 17 is_stmt 1 view .LVU185
+ 137:Core/Src/ws2812b_animations.c ****                 direction = 1;
+ 713              		.loc 1 137 28 is_stmt 0 view .LVU186
+ 714 0092 1346     		mov	r3, r2
+ 715 0094 0022     		movs	r2, #0
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 18
+
+
+ 716 0096 1A70     		strb	r2, [r3]
+ 138:Core/Src/ws2812b_animations.c ****             }
+ 717              		.loc 1 138 17 is_stmt 1 view .LVU187
+ 138:Core/Src/ws2812b_animations.c ****             }
+ 718              		.loc 1 138 27 is_stmt 0 view .LVU188
+ 719 0098 034B     		ldr	r3, .L41+8
+ 720 009a 0122     		movs	r2, #1
+ 721 009c 1A70     		strb	r2, [r3]
+ 722 009e E5E7     		b	.L37
+ 723              	.L42:
+ 724              		.align	2
+ 725              	.L41:
+ 726 00a0 00000000 		.word	last_update.11
+ 727 00a4 00000000 		.word	brightness.10
+ 728 00a8 00000000 		.word	direction.9
+ 729              	.LBE8:
+ 730              		.cfi_endproc
+ 731              	.LFE70:
+ 733              		.section	.text.WS2812B_Animation_Fire,"ax",%progbits
+ 734              		.align	1
+ 735              		.global	WS2812B_Animation_Fire
+ 736              		.syntax unified
+ 737              		.thumb
+ 738              		.thumb_func
+ 740              	WS2812B_Animation_Fire:
+ 741              	.LVL56:
+ 742              	.LFB71:
+ 145:Core/Src/ws2812b_animations.c **** 
+ 146:Core/Src/ws2812b_animations.c **** // ============================================================================
+ 147:Core/Src/ws2812b_animations.c **** // ADVANCED ANIMATIONS
+ 148:Core/Src/ws2812b_animations.c **** // ============================================================================
+ 149:Core/Src/ws2812b_animations.c **** 
+ 150:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Fire(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 743              		.loc 1 150 80 is_stmt 1 view -0
+ 744              		.cfi_startproc
+ 745              		@ args = 0, pretend = 0, frame = 8
+ 746              		@ frame_needed = 0, uses_anonymous_args = 0
+ 747              		.loc 1 150 80 is_stmt 0 view .LVU190
+ 748 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 749              		.cfi_def_cfa_offset 20
+ 750              		.cfi_offset 4, -20
+ 751              		.cfi_offset 5, -16
+ 752              		.cfi_offset 6, -12
+ 753              		.cfi_offset 7, -8
+ 754              		.cfi_offset 14, -4
+ 755 0002 83B0     		sub	sp, sp, #12
+ 756              		.cfi_def_cfa_offset 32
+ 757 0004 0646     		mov	r6, r0
+ 758 0006 0C46     		mov	r4, r1
+ 151:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 759              		.loc 1 151 5 is_stmt 1 view .LVU191
+ 152:Core/Src/ws2812b_animations.c ****     
+ 153:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 760              		.loc 1 153 5 view .LVU192
+ 761              		.loc 1 153 9 is_stmt 0 view .LVU193
+ 762 0008 FFF7FEFF 		bl	HAL_GetTick
+ 763              	.LVL57:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 19
+
+
+ 764              		.loc 1 153 23 discriminator 1 view .LVU194
+ 765 000c 244B     		ldr	r3, .L54
+ 766 000e 1B68     		ldr	r3, [r3]
+ 767 0010 C01A     		subs	r0, r0, r3
+ 768              		.loc 1 153 8 discriminator 1 view .LVU195
+ 769 0012 A042     		cmp	r0, r4
+ 770 0014 42D9     		bls	.L43
+ 771              	.LBB9:
+ 154:Core/Src/ws2812b_animations.c ****         // Create fire effect flowing along the linear strip
+ 155:Core/Src/ws2812b_animations.c ****         for (uint16_t i = 0; i < handle->led_count; i++) {
+ 772              		.loc 1 155 23 view .LVU196
+ 773 0016 0025     		movs	r5, #0
+ 774 0018 2EE0     		b	.L44
+ 775              	.LVL58:
+ 776              	.L46:
+ 777              	.LBB10:
+ 156:Core/Src/ws2812b_animations.c ****             // Create fire gradient - hotter at the start, cooler at the end
+ 157:Core/Src/ws2812b_animations.c ****             uint8_t heat_factor = 255 - (i * 32);  // 255, 223, 191, 159, 127, 95, 63, 31
+ 158:Core/Src/ws2812b_animations.c ****             if (heat_factor < 64) heat_factor = 64;  // Minimum brightness
+ 159:Core/Src/ws2812b_animations.c ****             
+ 160:Core/Src/ws2812b_animations.c ****             uint8_t red = 128 + (heat_factor / 2);  // 128-255 based on position
+ 778              		.loc 1 160 13 is_stmt 1 view .LVU197
+ 779              		.loc 1 160 31 is_stmt 0 view .LVU198
+ 780 001a 5C08     		lsrs	r4, r3, #1
+ 781              		.loc 1 160 21 view .LVU199
+ 782 001c 803C     		subs	r4, r4, #128
+ 783 001e E4B2     		uxtb	r4, r4
+ 784              	.LVL59:
+ 161:Core/Src/ws2812b_animations.c ****             uint8_t green = heat_factor / 4;        // 0-63 based on position
+ 785              		.loc 1 161 13 is_stmt 1 view .LVU200
+ 786              		.loc 1 161 21 is_stmt 0 view .LVU201
+ 787 0020 9F08     		lsrs	r7, r3, #2
+ 788              	.LVL60:
+ 162:Core/Src/ws2812b_animations.c ****             uint8_t blue = 0;                       // No blue in fire
+ 789              		.loc 1 162 13 is_stmt 1 view .LVU202
+ 163:Core/Src/ws2812b_animations.c ****             
+ 164:Core/Src/ws2812b_animations.c ****             // Add some randomness for flicker effect
+ 165:Core/Src/ws2812b_animations.c ****             red += (rand() % 32) - 16;  // ±16 random variation
+ 790              		.loc 1 165 13 view .LVU203
+ 791              		.loc 1 165 21 is_stmt 0 view .LVU204
+ 792 0022 FFF7FEFF 		bl	rand
+ 793              	.LVL61:
+ 794              		.loc 1 165 28 discriminator 1 view .LVU205
+ 795 0026 4342     		rsbs	r3, r0, #0
+ 796 0028 00F01F00 		and	r0, r0, #31
+ 797 002c 03F01F03 		and	r3, r3, #31
+ 798 0030 58BF     		it	pl
+ 799 0032 5842     		rsbpl	r0, r3, #0
+ 800              		.loc 1 165 34 discriminator 1 view .LVU206
+ 801 0034 1038     		subs	r0, r0, #16
+ 802              		.loc 1 165 17 discriminator 1 view .LVU207
+ 803 0036 0444     		add	r4, r4, r0
+ 804              	.LVL62:
+ 805              		.loc 1 165 17 discriminator 1 view .LVU208
+ 806 0038 E3B2     		uxtb	r3, r4
+ 807              	.LVL63:
+ 166:Core/Src/ws2812b_animations.c ****             if (red > 255) red = 255;
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 20
+
+
+ 808              		.loc 1 166 13 is_stmt 1 view .LVU209
+ 167:Core/Src/ws2812b_animations.c ****             if (red < 128) red = 128;
+ 809              		.loc 1 167 13 view .LVU210
+ 810              		.loc 1 167 16 is_stmt 0 view .LVU211
+ 811 003a 14F0800F 		tst	r4, #128
+ 812 003e 00D1     		bne	.L47
+ 813              		.loc 1 167 32 discriminator 1 view .LVU212
+ 814 0040 8023     		movs	r3, #128
+ 815              	.LVL64:
+ 816              	.L47:
+ 168:Core/Src/ws2812b_animations.c ****             
+ 169:Core/Src/ws2812b_animations.c ****             RGBColor_t fire_color = {red, green, blue};
+ 817              		.loc 1 169 13 is_stmt 1 view .LVU213
+ 818              		.loc 1 169 24 is_stmt 0 view .LVU214
+ 819 0042 8DF80430 		strb	r3, [sp, #4]
+ 820 0046 8DF80570 		strb	r7, [sp, #5]
+ 821 004a 0023     		movs	r3, #0
+ 822              	.LVL65:
+ 823              		.loc 1 169 24 view .LVU215
+ 824 004c 8DF80630 		strb	r3, [sp, #6]
+ 170:Core/Src/ws2812b_animations.c ****             fire_color = WS2812B_Timer_ScaleBrightness(fire_color);
+ 825              		.loc 1 170 13 is_stmt 1 view .LVU216
+ 826              		.loc 1 170 26 is_stmt 0 view .LVU217
+ 827 0050 0198     		ldr	r0, [sp, #4]
+ 828 0052 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 829              	.LVL66:
+ 830 0056 8DF80400 		strb	r0, [sp, #4]
+ 831              	.LVL67:
+ 832              		.loc 1 170 26 view .LVU218
+ 833 005a C0F30723 		ubfx	r3, r0, #8, #8
+ 834 005e 8DF80530 		strb	r3, [sp, #5]
+ 835 0062 C0F30740 		ubfx	r0, r0, #16, #8
+ 836 0066 8DF80600 		strb	r0, [sp, #6]
+ 171:Core/Src/ws2812b_animations.c ****             
+ 172:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, fire_color);
+ 837              		.loc 1 172 13 is_stmt 1 view .LVU219
+ 838 006a 019A     		ldr	r2, [sp, #4]
+ 839 006c 2946     		mov	r1, r5
+ 840 006e 3046     		mov	r0, r6
+ 841 0070 FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 842              	.LVL68:
+ 843              	.LBE10:
+ 155:Core/Src/ws2812b_animations.c ****             // Create fire gradient - hotter at the start, cooler at the end
+ 844              		.loc 1 155 54 discriminator 2 view .LVU220
+ 845 0074 0135     		adds	r5, r5, #1
+ 846              	.LVL69:
+ 155:Core/Src/ws2812b_animations.c ****             // Create fire gradient - hotter at the start, cooler at the end
+ 847              		.loc 1 155 54 is_stmt 0 discriminator 2 view .LVU221
+ 848 0076 ADB2     		uxth	r5, r5
+ 849              	.LVL70:
+ 850              	.L44:
+ 155:Core/Src/ws2812b_animations.c ****             // Create fire gradient - hotter at the start, cooler at the end
+ 851              		.loc 1 155 32 is_stmt 1 discriminator 1 view .LVU222
+ 155:Core/Src/ws2812b_animations.c ****             // Create fire gradient - hotter at the start, cooler at the end
+ 852              		.loc 1 155 40 is_stmt 0 discriminator 1 view .LVU223
+ 853 0078 3389     		ldrh	r3, [r6, #8]
+ 155:Core/Src/ws2812b_animations.c ****             // Create fire gradient - hotter at the start, cooler at the end
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 21
+
+
+ 854              		.loc 1 155 32 discriminator 1 view .LVU224
+ 855 007a AB42     		cmp	r3, r5
+ 856 007c 07D9     		bls	.L53
+ 857              	.LBB11:
+ 157:Core/Src/ws2812b_animations.c ****             if (heat_factor < 64) heat_factor = 64;  // Minimum brightness
+ 858              		.loc 1 157 13 is_stmt 1 view .LVU225
+ 157:Core/Src/ws2812b_animations.c ****             if (heat_factor < 64) heat_factor = 64;  // Minimum brightness
+ 859              		.loc 1 157 39 is_stmt 0 view .LVU226
+ 860 007e 6B01     		lsls	r3, r5, #5
+ 861 0080 DBB2     		uxtb	r3, r3
+ 157:Core/Src/ws2812b_animations.c ****             if (heat_factor < 64) heat_factor = 64;  // Minimum brightness
+ 862              		.loc 1 157 21 view .LVU227
+ 863 0082 83F0FF03 		eor	r3, r3, #255
+ 864              	.LVL71:
+ 158:Core/Src/ws2812b_animations.c ****             
+ 865              		.loc 1 158 13 is_stmt 1 view .LVU228
+ 158:Core/Src/ws2812b_animations.c ****             
+ 866              		.loc 1 158 16 is_stmt 0 view .LVU229
+ 867 0086 3F2B     		cmp	r3, #63
+ 868 0088 C7D8     		bhi	.L46
+ 158:Core/Src/ws2812b_animations.c ****             
+ 869              		.loc 1 158 47 discriminator 1 view .LVU230
+ 870 008a 4023     		movs	r3, #64
+ 871              	.LVL72:
+ 158:Core/Src/ws2812b_animations.c ****             
+ 872              		.loc 1 158 47 discriminator 1 view .LVU231
+ 873 008c C5E7     		b	.L46
+ 874              	.LVL73:
+ 875              	.L53:
+ 158:Core/Src/ws2812b_animations.c ****             
+ 876              		.loc 1 158 47 discriminator 1 view .LVU232
+ 877              	.LBE11:
+ 878              	.LBE9:
+ 173:Core/Src/ws2812b_animations.c ****         }
+ 174:Core/Src/ws2812b_animations.c ****         
+ 175:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ 879              		.loc 1 175 9 is_stmt 1 view .LVU233
+ 880 008e 3046     		mov	r0, r6
+ 881 0090 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 882              	.LVL74:
+ 176:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 883              		.loc 1 176 9 view .LVU234
+ 884              		.loc 1 176 23 is_stmt 0 view .LVU235
+ 885 0094 FFF7FEFF 		bl	HAL_GetTick
+ 886              	.LVL75:
+ 887              		.loc 1 176 21 discriminator 1 view .LVU236
+ 888 0098 014B     		ldr	r3, .L54
+ 889 009a 1860     		str	r0, [r3]
+ 890              	.LVL76:
+ 891              	.L43:
+ 177:Core/Src/ws2812b_animations.c ****     }
+ 178:Core/Src/ws2812b_animations.c **** }
+ 892              		.loc 1 178 1 view .LVU237
+ 893 009c 03B0     		add	sp, sp, #12
+ 894              		.cfi_def_cfa_offset 20
+ 895              		@ sp needed
+ 896 009e F0BD     		pop	{r4, r5, r6, r7, pc}
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 22
+
+
+ 897              	.LVL77:
+ 898              	.L55:
+ 899              		.loc 1 178 1 view .LVU238
+ 900              		.align	2
+ 901              	.L54:
+ 902 00a0 00000000 		.word	last_update.8
+ 903              		.cfi_endproc
+ 904              	.LFE71:
+ 906              		.section	.text.WS2812B_Animation_Wave,"ax",%progbits
+ 907              		.align	1
+ 908              		.global	WS2812B_Animation_Wave
+ 909              		.syntax unified
+ 910              		.thumb
+ 911              		.thumb_func
+ 913              	WS2812B_Animation_Wave:
+ 914              	.LVL78:
+ 915              	.LFB72:
+ 179:Core/Src/ws2812b_animations.c **** 
+ 180:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Wave(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 916              		.loc 1 180 80 is_stmt 1 view -0
+ 917              		.cfi_startproc
+ 918              		@ args = 0, pretend = 0, frame = 8
+ 919              		@ frame_needed = 0, uses_anonymous_args = 0
+ 920              		.loc 1 180 80 is_stmt 0 view .LVU240
+ 921 0000 30B5     		push	{r4, r5, lr}
+ 922              		.cfi_def_cfa_offset 12
+ 923              		.cfi_offset 4, -12
+ 924              		.cfi_offset 5, -8
+ 925              		.cfi_offset 14, -4
+ 926 0002 83B0     		sub	sp, sp, #12
+ 927              		.cfi_def_cfa_offset 24
+ 928 0004 0546     		mov	r5, r0
+ 929 0006 0C46     		mov	r4, r1
+ 181:Core/Src/ws2812b_animations.c ****     static uint8_t offset = 0;
+ 930              		.loc 1 181 5 is_stmt 1 view .LVU241
+ 182:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 931              		.loc 1 182 5 view .LVU242
+ 183:Core/Src/ws2812b_animations.c ****     
+ 184:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 932              		.loc 1 184 5 view .LVU243
+ 933              		.loc 1 184 9 is_stmt 0 view .LVU244
+ 934 0008 FFF7FEFF 		bl	HAL_GetTick
+ 935              	.LVL79:
+ 936              		.loc 1 184 23 discriminator 1 view .LVU245
+ 937 000c 284B     		ldr	r3, .L62
+ 938 000e 1B68     		ldr	r3, [r3]
+ 939 0010 C01A     		subs	r0, r0, r3
+ 940              		.loc 1 184 8 discriminator 1 view .LVU246
+ 941 0012 A042     		cmp	r0, r4
+ 942 0014 49D8     		bhi	.L60
+ 943              	.LVL80:
+ 944              	.L56:
+ 185:Core/Src/ws2812b_animations.c ****         // Create wave effect flowing along the linear strip
+ 186:Core/Src/ws2812b_animations.c ****         for (uint16_t i = 0; i < handle->led_count; i++) {
+ 187:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ 188:Core/Src/ws2812b_animations.c ****             uint8_t wave_pos = (i * 36 + offset) % 256;  // 36 steps per LED for smooth wave
+ 189:Core/Src/ws2812b_animations.c ****             uint8_t brightness = 64 + (wave_pos * 191) / 255;  // 64-255 brightness
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 23
+
+
+ 190:Core/Src/ws2812b_animations.c ****             
+ 191:Core/Src/ws2812b_animations.c ****             RGBColor_t wave_color = {brightness, brightness, brightness};
+ 192:Core/Src/ws2812b_animations.c ****             wave_color = WS2812B_Timer_ScaleBrightness(wave_color);
+ 193:Core/Src/ws2812b_animations.c ****             
+ 194:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, wave_color);
+ 195:Core/Src/ws2812b_animations.c ****         }
+ 196:Core/Src/ws2812b_animations.c ****         
+ 197:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ 198:Core/Src/ws2812b_animations.c ****         offset = (offset + 3) % 256;  // Slower movement for linear strip
+ 199:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 200:Core/Src/ws2812b_animations.c ****     }
+ 201:Core/Src/ws2812b_animations.c **** }
+ 945              		.loc 1 201 1 view .LVU247
+ 946 0016 03B0     		add	sp, sp, #12
+ 947              		.cfi_remember_state
+ 948              		.cfi_def_cfa_offset 12
+ 949              		@ sp needed
+ 950 0018 30BD     		pop	{r4, r5, pc}
+ 951              	.LVL81:
+ 952              	.L59:
+ 953              		.cfi_restore_state
+ 954              	.LBB12:
+ 955              	.LBB13:
+ 188:Core/Src/ws2812b_animations.c ****             uint8_t brightness = 64 + (wave_pos * 191) / 255;  // 64-255 brightness
+ 956              		.loc 1 188 13 is_stmt 1 view .LVU248
+ 188:Core/Src/ws2812b_animations.c ****             uint8_t brightness = 64 + (wave_pos * 191) / 255;  // 64-255 brightness
+ 957              		.loc 1 188 35 is_stmt 0 view .LVU249
+ 958 001a 04EBC402 		add	r2, r4, r4, lsl #3
+ 188:Core/Src/ws2812b_animations.c ****             uint8_t brightness = 64 + (wave_pos * 191) / 255;  // 64-255 brightness
+ 959              		.loc 1 188 40 view .LVU250
+ 960 001e 254B     		ldr	r3, .L62+4
+ 961 0020 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 962 0022 03EB8203 		add	r3, r3, r2, lsl #2
+ 188:Core/Src/ws2812b_animations.c ****             uint8_t brightness = 64 + (wave_pos * 191) / 255;  // 64-255 brightness
+ 963              		.loc 1 188 50 view .LVU251
+ 964 0026 5A42     		rsbs	r2, r3, #0
+ 965 0028 DBB2     		uxtb	r3, r3
+ 966 002a D2B2     		uxtb	r2, r2
+ 967 002c 58BF     		it	pl
+ 968 002e 5342     		rsbpl	r3, r2, #0
+ 969              	.LVL82:
+ 189:Core/Src/ws2812b_animations.c ****             
+ 970              		.loc 1 189 13 is_stmt 1 view .LVU252
+ 189:Core/Src/ws2812b_animations.c ****             
+ 971              		.loc 1 189 49 is_stmt 0 view .LVU253
+ 972 0030 DBB2     		uxtb	r3, r3
+ 189:Core/Src/ws2812b_animations.c ****             
+ 973              		.loc 1 189 49 view .LVU254
+ 974 0032 03EB4302 		add	r2, r3, r3, lsl #1
+ 975 0036 C3EB8213 		rsb	r3, r3, r2, lsl #6
+ 976              	.LVL83:
+ 189:Core/Src/ws2812b_animations.c ****             
+ 977              		.loc 1 189 56 view .LVU255
+ 978 003a 1F4A     		ldr	r2, .L62+8
+ 979 003c 82FB0312 		smull	r1, r2, r2, r3
+ 980 0040 1A44     		add	r2, r2, r3
+ 981 0042 DB17     		asrs	r3, r3, #31
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 24
+
+
+ 982 0044 C3EBE213 		rsb	r3, r3, r2, asr #7
+ 189:Core/Src/ws2812b_animations.c ****             
+ 983              		.loc 1 189 37 view .LVU256
+ 984 0048 DBB2     		uxtb	r3, r3
+ 189:Core/Src/ws2812b_animations.c ****             
+ 985              		.loc 1 189 21 view .LVU257
+ 986 004a 4033     		adds	r3, r3, #64
+ 987 004c DBB2     		uxtb	r3, r3
+ 988              	.LVL84:
+ 191:Core/Src/ws2812b_animations.c ****             wave_color = WS2812B_Timer_ScaleBrightness(wave_color);
+ 989              		.loc 1 191 13 is_stmt 1 view .LVU258
+ 191:Core/Src/ws2812b_animations.c ****             wave_color = WS2812B_Timer_ScaleBrightness(wave_color);
+ 990              		.loc 1 191 24 is_stmt 0 view .LVU259
+ 991 004e 8DF80430 		strb	r3, [sp, #4]
+ 992 0052 8DF80530 		strb	r3, [sp, #5]
+ 993 0056 8DF80630 		strb	r3, [sp, #6]
+ 192:Core/Src/ws2812b_animations.c ****             
+ 994              		.loc 1 192 13 is_stmt 1 view .LVU260
+ 192:Core/Src/ws2812b_animations.c ****             
+ 995              		.loc 1 192 26 is_stmt 0 view .LVU261
+ 996 005a 0198     		ldr	r0, [sp, #4]
+ 997 005c FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 998              	.LVL85:
+ 192:Core/Src/ws2812b_animations.c ****             
+ 999              		.loc 1 192 26 view .LVU262
+ 1000 0060 8DF80400 		strb	r0, [sp, #4]
+ 1001              	.LVL86:
+ 192:Core/Src/ws2812b_animations.c ****             
+ 1002              		.loc 1 192 26 view .LVU263
+ 1003 0064 C0F30723 		ubfx	r3, r0, #8, #8
+ 1004 0068 8DF80530 		strb	r3, [sp, #5]
+ 1005              	.LVL87:
+ 192:Core/Src/ws2812b_animations.c ****             
+ 1006              		.loc 1 192 26 view .LVU264
+ 1007 006c C0F30740 		ubfx	r0, r0, #16, #8
+ 1008 0070 8DF80600 		strb	r0, [sp, #6]
+ 1009              	.LVL88:
+ 194:Core/Src/ws2812b_animations.c ****         }
+ 1010              		.loc 1 194 13 is_stmt 1 view .LVU265
+ 1011 0074 019A     		ldr	r2, [sp, #4]
+ 1012 0076 2146     		mov	r1, r4
+ 1013 0078 2846     		mov	r0, r5
+ 1014 007a FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 1015              	.LVL89:
+ 1016              	.LBE13:
+ 186:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ 1017              		.loc 1 186 54 discriminator 3 view .LVU266
+ 1018 007e 0134     		adds	r4, r4, #1
+ 1019              	.LVL90:
+ 186:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ 1020              		.loc 1 186 54 is_stmt 0 discriminator 3 view .LVU267
+ 1021 0080 A4B2     		uxth	r4, r4
+ 1022              	.LVL91:
+ 1023              	.L57:
+ 186:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ 1024              		.loc 1 186 32 is_stmt 1 discriminator 1 view .LVU268
+ 186:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 25
+
+
+ 1025              		.loc 1 186 40 is_stmt 0 discriminator 1 view .LVU269
+ 1026 0082 2B89     		ldrh	r3, [r5, #8]
+ 186:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ 1027              		.loc 1 186 32 discriminator 1 view .LVU270
+ 1028 0084 A342     		cmp	r3, r4
+ 1029 0086 C8D8     		bhi	.L59
+ 1030              	.LBE12:
+ 197:Core/Src/ws2812b_animations.c ****         offset = (offset + 3) % 256;  // Slower movement for linear strip
+ 1031              		.loc 1 197 9 is_stmt 1 view .LVU271
+ 1032 0088 2846     		mov	r0, r5
+ 1033 008a FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1034              	.LVL92:
+ 198:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 1035              		.loc 1 198 9 view .LVU272
+ 198:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 1036              		.loc 1 198 26 is_stmt 0 view .LVU273
+ 1037 008e 0949     		ldr	r1, .L62+4
+ 1038 0090 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 1039 0092 0333     		adds	r3, r3, #3
+ 198:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 1040              		.loc 1 198 31 view .LVU274
+ 1041 0094 5A42     		rsbs	r2, r3, #0
+ 1042 0096 DBB2     		uxtb	r3, r3
+ 1043 0098 D2B2     		uxtb	r2, r2
+ 1044 009a 58BF     		it	pl
+ 1045 009c 5342     		rsbpl	r3, r2, #0
+ 198:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 1046              		.loc 1 198 16 view .LVU275
+ 1047 009e 0B70     		strb	r3, [r1]
+ 199:Core/Src/ws2812b_animations.c ****     }
+ 1048              		.loc 1 199 9 is_stmt 1 view .LVU276
+ 199:Core/Src/ws2812b_animations.c ****     }
+ 1049              		.loc 1 199 23 is_stmt 0 view .LVU277
+ 1050 00a0 FFF7FEFF 		bl	HAL_GetTick
+ 1051              	.LVL93:
+ 199:Core/Src/ws2812b_animations.c ****     }
+ 1052              		.loc 1 199 21 discriminator 1 view .LVU278
+ 1053 00a4 024B     		ldr	r3, .L62
+ 1054 00a6 1860     		str	r0, [r3]
+ 1055              		.loc 1 201 1 view .LVU279
+ 1056 00a8 B5E7     		b	.L56
+ 1057              	.LVL94:
+ 1058              	.L60:
+ 1059              	.LBB14:
+ 186:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ 1060              		.loc 1 186 23 view .LVU280
+ 1061 00aa 0024     		movs	r4, #0
+ 1062              	.LVL95:
+ 186:Core/Src/ws2812b_animations.c ****             // Create wave pattern that flows along the line
+ 1063              		.loc 1 186 23 view .LVU281
+ 1064 00ac E9E7     		b	.L57
+ 1065              	.L63:
+ 1066 00ae 00BF     		.align	2
+ 1067              	.L62:
+ 1068 00b0 00000000 		.word	last_update.7
+ 1069 00b4 00000000 		.word	offset.6
+ 1070 00b8 81808080 		.word	-2139062143
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 26
+
+
+ 1071              	.LBE14:
+ 1072              		.cfi_endproc
+ 1073              	.LFE72:
+ 1075              		.section	.text.WS2812B_Animation_Sparkle,"ax",%progbits
+ 1076              		.align	1
+ 1077              		.global	WS2812B_Animation_Sparkle
+ 1078              		.syntax unified
+ 1079              		.thumb
+ 1080              		.thumb_func
+ 1082              	WS2812B_Animation_Sparkle:
+ 1083              	.LVL96:
+ 1084              	.LFB73:
+ 202:Core/Src/ws2812b_animations.c **** 
+ 203:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Sparkle(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 1085              		.loc 1 203 83 is_stmt 1 view -0
+ 1086              		.cfi_startproc
+ 1087              		@ args = 0, pretend = 0, frame = 8
+ 1088              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1089              		.loc 1 203 83 is_stmt 0 view .LVU283
+ 1090 0000 70B5     		push	{r4, r5, r6, lr}
+ 1091              		.cfi_def_cfa_offset 16
+ 1092              		.cfi_offset 4, -16
+ 1093              		.cfi_offset 5, -12
+ 1094              		.cfi_offset 6, -8
+ 1095              		.cfi_offset 14, -4
+ 1096 0002 82B0     		sub	sp, sp, #8
+ 1097              		.cfi_def_cfa_offset 24
+ 1098 0004 0546     		mov	r5, r0
+ 1099 0006 0C46     		mov	r4, r1
+ 204:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 1100              		.loc 1 204 5 is_stmt 1 view .LVU284
+ 205:Core/Src/ws2812b_animations.c ****     
+ 206:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 1101              		.loc 1 206 5 view .LVU285
+ 1102              		.loc 1 206 9 is_stmt 0 view .LVU286
+ 1103 0008 FFF7FEFF 		bl	HAL_GetTick
+ 1104              	.LVL97:
+ 1105              		.loc 1 206 23 discriminator 1 view .LVU287
+ 1106 000c 184B     		ldr	r3, .L70
+ 1107 000e 1B68     		ldr	r3, [r3]
+ 1108 0010 C01A     		subs	r0, r0, r3
+ 1109              		.loc 1 206 8 discriminator 1 view .LVU288
+ 1110 0012 A042     		cmp	r0, r4
+ 1111 0014 01D8     		bhi	.L69
+ 1112              	.LVL98:
+ 1113              	.L64:
+ 207:Core/Src/ws2812b_animations.c ****         // Clear all LEDs
+ 208:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_ClearAll(handle);
+ 209:Core/Src/ws2812b_animations.c ****         
+ 210:Core/Src/ws2812b_animations.c ****         // Add random sparkles
+ 211:Core/Src/ws2812b_animations.c ****         for (uint8_t i = 0; i < 3; i++) {  // 3 sparkles at a time
+ 212:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 213:Core/Src/ws2812b_animations.c ****             RGBColor_t sparkle_color = WS2812B_Timer_Color_White();
+ 214:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, pos, sparkle_color);
+ 215:Core/Src/ws2812b_animations.c ****         }
+ 216:Core/Src/ws2812b_animations.c ****         
+ 217:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 27
+
+
+ 218:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 219:Core/Src/ws2812b_animations.c ****     }
+ 220:Core/Src/ws2812b_animations.c **** }
+ 1114              		.loc 1 220 1 view .LVU289
+ 1115 0016 02B0     		add	sp, sp, #8
+ 1116              		.cfi_remember_state
+ 1117              		.cfi_def_cfa_offset 16
+ 1118              		@ sp needed
+ 1119 0018 70BD     		pop	{r4, r5, r6, pc}
+ 1120              	.LVL99:
+ 1121              	.L69:
+ 1122              		.cfi_restore_state
+ 208:Core/Src/ws2812b_animations.c ****         
+ 1123              		.loc 1 208 9 is_stmt 1 view .LVU290
+ 1124 001a 2846     		mov	r0, r5
+ 1125 001c FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 1126              	.LVL100:
+ 211:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 1127              		.loc 1 211 9 view .LVU291
+ 1128              	.LBB15:
+ 211:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 1129              		.loc 1 211 14 view .LVU292
+ 211:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 1130              		.loc 1 211 22 is_stmt 0 view .LVU293
+ 1131 0020 0026     		movs	r6, #0
+ 211:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 1132              		.loc 1 211 9 view .LVU294
+ 1133 0022 1AE0     		b	.L66
+ 1134              	.LVL101:
+ 1135              	.L67:
+ 1136              	.LBB16:
+ 212:Core/Src/ws2812b_animations.c ****             RGBColor_t sparkle_color = WS2812B_Timer_Color_White();
+ 1137              		.loc 1 212 13 is_stmt 1 view .LVU295
+ 212:Core/Src/ws2812b_animations.c ****             RGBColor_t sparkle_color = WS2812B_Timer_Color_White();
+ 1138              		.loc 1 212 28 is_stmt 0 view .LVU296
+ 1139 0024 FFF7FEFF 		bl	rand
+ 1140              	.LVL102:
+ 212:Core/Src/ws2812b_animations.c ****             RGBColor_t sparkle_color = WS2812B_Timer_Color_White();
+ 1141              		.loc 1 212 43 discriminator 1 view .LVU297
+ 1142 0028 2B89     		ldrh	r3, [r5, #8]
+ 212:Core/Src/ws2812b_animations.c ****             RGBColor_t sparkle_color = WS2812B_Timer_Color_White();
+ 1143              		.loc 1 212 35 discriminator 1 view .LVU298
+ 1144 002a 90FBF3F2 		sdiv	r2, r0, r3
+ 1145 002e 03FB1204 		mls	r4, r3, r2, r0
+ 212:Core/Src/ws2812b_animations.c ****             RGBColor_t sparkle_color = WS2812B_Timer_Color_White();
+ 1146              		.loc 1 212 22 discriminator 1 view .LVU299
+ 1147 0032 A4B2     		uxth	r4, r4
+ 1148              	.LVL103:
+ 213:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, pos, sparkle_color);
+ 1149              		.loc 1 213 13 is_stmt 1 view .LVU300
+ 213:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, pos, sparkle_color);
+ 1150              		.loc 1 213 40 is_stmt 0 view .LVU301
+ 1151 0034 FFF7FEFF 		bl	WS2812B_Timer_Color_White
+ 1152              	.LVL104:
+ 1153 0038 8DF80400 		strb	r0, [sp, #4]
+ 1154 003c C0F30723 		ubfx	r3, r0, #8, #8
+ 1155 0040 8DF80530 		strb	r3, [sp, #5]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 28
+
+
+ 1156 0044 C0F30743 		ubfx	r3, r0, #16, #8
+ 1157 0048 8DF80630 		strb	r3, [sp, #6]
+ 214:Core/Src/ws2812b_animations.c ****         }
+ 1158              		.loc 1 214 13 is_stmt 1 view .LVU302
+ 1159 004c 019A     		ldr	r2, [sp, #4]
+ 1160 004e 2146     		mov	r1, r4
+ 1161 0050 2846     		mov	r0, r5
+ 1162 0052 FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 1163              	.LVL105:
+ 1164              	.LBE16:
+ 211:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 1165              		.loc 1 211 37 discriminator 3 view .LVU303
+ 1166 0056 0136     		adds	r6, r6, #1
+ 1167              	.LVL106:
+ 211:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 1168              		.loc 1 211 37 is_stmt 0 discriminator 3 view .LVU304
+ 1169 0058 F6B2     		uxtb	r6, r6
+ 1170              	.LVL107:
+ 1171              	.L66:
+ 211:Core/Src/ws2812b_animations.c ****             uint16_t pos = rand() % handle->led_count;
+ 1172              		.loc 1 211 31 is_stmt 1 discriminator 1 view .LVU305
+ 1173 005a 022E     		cmp	r6, #2
+ 1174 005c E2D9     		bls	.L67
+ 1175              	.LBE15:
+ 217:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 1176              		.loc 1 217 9 view .LVU306
+ 1177 005e 2846     		mov	r0, r5
+ 1178 0060 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1179              	.LVL108:
+ 218:Core/Src/ws2812b_animations.c ****     }
+ 1180              		.loc 1 218 9 view .LVU307
+ 218:Core/Src/ws2812b_animations.c ****     }
+ 1181              		.loc 1 218 23 is_stmt 0 view .LVU308
+ 1182 0064 FFF7FEFF 		bl	HAL_GetTick
+ 1183              	.LVL109:
+ 218:Core/Src/ws2812b_animations.c ****     }
+ 1184              		.loc 1 218 21 discriminator 1 view .LVU309
+ 1185 0068 014B     		ldr	r3, .L70
+ 1186 006a 1860     		str	r0, [r3]
+ 1187              		.loc 1 220 1 view .LVU310
+ 1188 006c D3E7     		b	.L64
+ 1189              	.L71:
+ 1190 006e 00BF     		.align	2
+ 1191              	.L70:
+ 1192 0070 00000000 		.word	last_update.5
+ 1193              		.cfi_endproc
+ 1194              	.LFE73:
+ 1196              		.section	.text.WS2812B_Animation_KnightRider,"ax",%progbits
+ 1197              		.align	1
+ 1198              		.global	WS2812B_Animation_KnightRider
+ 1199              		.syntax unified
+ 1200              		.thumb
+ 1201              		.thumb_func
+ 1203              	WS2812B_Animation_KnightRider:
+ 1204              	.LVL110:
+ 1205              	.LFB74:
+ 221:Core/Src/ws2812b_animations.c **** 
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 29
+
+
+ 222:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_KnightRider(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 1206              		.loc 1 222 87 is_stmt 1 view -0
+ 1207              		.cfi_startproc
+ 1208              		@ args = 0, pretend = 0, frame = 8
+ 1209              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1210              		.loc 1 222 87 is_stmt 0 view .LVU312
+ 1211 0000 70B5     		push	{r4, r5, r6, lr}
+ 1212              		.cfi_def_cfa_offset 16
+ 1213              		.cfi_offset 4, -16
+ 1214              		.cfi_offset 5, -12
+ 1215              		.cfi_offset 6, -8
+ 1216              		.cfi_offset 14, -4
+ 1217 0002 82B0     		sub	sp, sp, #8
+ 1218              		.cfi_def_cfa_offset 24
+ 1219 0004 0546     		mov	r5, r0
+ 1220 0006 0C46     		mov	r4, r1
+ 223:Core/Src/ws2812b_animations.c ****     static uint16_t position = 0;
+ 1221              		.loc 1 223 5 is_stmt 1 view .LVU313
+ 224:Core/Src/ws2812b_animations.c ****     static uint8_t direction = 1;
+ 1222              		.loc 1 224 5 view .LVU314
+ 225:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 1223              		.loc 1 225 5 view .LVU315
+ 226:Core/Src/ws2812b_animations.c ****     
+ 227:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 1224              		.loc 1 227 5 view .LVU316
+ 1225              		.loc 1 227 9 is_stmt 0 view .LVU317
+ 1226 0008 FFF7FEFF 		bl	HAL_GetTick
+ 1227              	.LVL111:
+ 1228              		.loc 1 227 23 discriminator 1 view .LVU318
+ 1229 000c 304B     		ldr	r3, .L82
+ 1230 000e 1B68     		ldr	r3, [r3]
+ 1231 0010 C01A     		subs	r0, r0, r3
+ 1232              		.loc 1 227 8 discriminator 1 view .LVU319
+ 1233 0012 A042     		cmp	r0, r4
+ 1234 0014 01D8     		bhi	.L80
+ 1235              	.LVL112:
+ 1236              	.L72:
+ 228:Core/Src/ws2812b_animations.c ****         // Clear all LEDs
+ 229:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_ClearAll(handle);
+ 230:Core/Src/ws2812b_animations.c ****         
+ 231:Core/Src/ws2812b_animations.c ****         // Create Knight Rider effect with tail - perfect for linear strip
+ 232:Core/Src/ws2812b_animations.c ****         for (int8_t i = -1; i <= 1; i++) {  // Shorter tail for 8 LEDs
+ 233:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 234:Core/Src/ws2812b_animations.c ****             if (led_pos >= 0 && led_pos < handle->led_count) {
+ 235:Core/Src/ws2812b_animations.c ****                 // Calculate brightness based on distance from center
+ 236:Core/Src/ws2812b_animations.c ****                 uint8_t brightness = 128 - (abs(i) * 64);  // 128, 64, 0
+ 237:Core/Src/ws2812b_animations.c ****                 if (brightness > 0) {
+ 238:Core/Src/ws2812b_animations.c ****                     RGBColor_t rider_color = {brightness, 0, 0};  // Red
+ 239:Core/Src/ws2812b_animations.c ****                     rider_color = WS2812B_Timer_ScaleBrightness(rider_color);
+ 240:Core/Src/ws2812b_animations.c ****                     WS2812B_Timer_SetLED(handle, led_pos, rider_color);
+ 241:Core/Src/ws2812b_animations.c ****                 }
+ 242:Core/Src/ws2812b_animations.c ****             }
+ 243:Core/Src/ws2812b_animations.c ****         }
+ 244:Core/Src/ws2812b_animations.c ****         
+ 245:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ 246:Core/Src/ws2812b_animations.c ****         
+ 247:Core/Src/ws2812b_animations.c ****         // Update position - slower for linear strip
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 30
+
+
+ 248:Core/Src/ws2812b_animations.c ****         if (direction) {
+ 249:Core/Src/ws2812b_animations.c ****             position++;
+ 250:Core/Src/ws2812b_animations.c ****             if (position >= handle->led_count - 1) direction = 0;
+ 251:Core/Src/ws2812b_animations.c ****         } else {
+ 252:Core/Src/ws2812b_animations.c ****             position--;
+ 253:Core/Src/ws2812b_animations.c ****             if (position == 0) direction = 1;
+ 254:Core/Src/ws2812b_animations.c ****         }
+ 255:Core/Src/ws2812b_animations.c ****         
+ 256:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 257:Core/Src/ws2812b_animations.c ****     }
+ 258:Core/Src/ws2812b_animations.c **** }
+ 1237              		.loc 1 258 1 view .LVU320
+ 1238 0016 02B0     		add	sp, sp, #8
+ 1239              		.cfi_remember_state
+ 1240              		.cfi_def_cfa_offset 16
+ 1241              		@ sp needed
+ 1242 0018 70BD     		pop	{r4, r5, r6, pc}
+ 1243              	.LVL113:
+ 1244              	.L80:
+ 1245              		.cfi_restore_state
+ 229:Core/Src/ws2812b_animations.c ****         
+ 1246              		.loc 1 229 9 is_stmt 1 view .LVU321
+ 1247 001a 2846     		mov	r0, r5
+ 1248 001c FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 1249              	.LVL114:
+ 232:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 1250              		.loc 1 232 9 view .LVU322
+ 1251              	.LBB17:
+ 232:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 1252              		.loc 1 232 14 view .LVU323
+ 232:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 1253              		.loc 1 232 21 is_stmt 0 view .LVU324
+ 1254 0020 4FF0FF34 		mov	r4, #-1
+ 1255              	.LVL115:
+ 232:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 1256              		.loc 1 232 9 view .LVU325
+ 1257 0024 01E0     		b	.L74
+ 1258              	.LVL116:
+ 1259              	.L75:
+ 232:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 1260              		.loc 1 232 38 is_stmt 1 discriminator 2 view .LVU326
+ 1261 0026 0134     		adds	r4, r4, #1
+ 1262              	.LVL117:
+ 232:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 1263              		.loc 1 232 38 is_stmt 0 discriminator 2 view .LVU327
+ 1264 0028 64B2     		sxtb	r4, r4
+ 1265              	.LVL118:
+ 1266              	.L74:
+ 232:Core/Src/ws2812b_animations.c ****             int16_t led_pos = position + i;
+ 1267              		.loc 1 232 31 is_stmt 1 discriminator 1 view .LVU328
+ 1268 002a 012C     		cmp	r4, #1
+ 1269 002c 2EDC     		bgt	.L81
+ 1270              	.LBB18:
+ 233:Core/Src/ws2812b_animations.c ****             if (led_pos >= 0 && led_pos < handle->led_count) {
+ 1271              		.loc 1 233 13 view .LVU329
+ 233:Core/Src/ws2812b_animations.c ****             if (led_pos >= 0 && led_pos < handle->led_count) {
+ 1272              		.loc 1 233 40 is_stmt 0 view .LVU330
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 31
+
+
+ 1273 002e 294B     		ldr	r3, .L82+4
+ 1274 0030 1B88     		ldrh	r3, [r3]
+ 1275 0032 2344     		add	r3, r3, r4
+ 1276 0034 9EB2     		uxth	r6, r3
+ 233:Core/Src/ws2812b_animations.c ****             if (led_pos >= 0 && led_pos < handle->led_count) {
+ 1277              		.loc 1 233 21 view .LVU331
+ 1278 0036 1BB2     		sxth	r3, r3
+ 1279              	.LVL119:
+ 234:Core/Src/ws2812b_animations.c ****                 // Calculate brightness based on distance from center
+ 1280              		.loc 1 234 13 is_stmt 1 view .LVU332
+ 234:Core/Src/ws2812b_animations.c ****                 // Calculate brightness based on distance from center
+ 1281              		.loc 1 234 16 is_stmt 0 view .LVU333
+ 1282 0038 002B     		cmp	r3, #0
+ 1283 003a F4DB     		blt	.L75
+ 234:Core/Src/ws2812b_animations.c ****                 // Calculate brightness based on distance from center
+ 1284              		.loc 1 234 49 discriminator 1 view .LVU334
+ 1285 003c 2A89     		ldrh	r2, [r5, #8]
+ 234:Core/Src/ws2812b_animations.c ****                 // Calculate brightness based on distance from center
+ 1286              		.loc 1 234 30 discriminator 1 view .LVU335
+ 1287 003e 9342     		cmp	r3, r2
+ 1288 0040 F1DA     		bge	.L75
+ 1289              	.LBB19:
+ 236:Core/Src/ws2812b_animations.c ****                 if (brightness > 0) {
+ 1290              		.loc 1 236 17 is_stmt 1 view .LVU336
+ 236:Core/Src/ws2812b_animations.c ****                 if (brightness > 0) {
+ 1291              		.loc 1 236 45 is_stmt 0 view .LVU337
+ 1292 0042 84EAE473 		eor	r3, r4, r4, asr #31
+ 1293              	.LVL120:
+ 236:Core/Src/ws2812b_animations.c ****                 if (brightness > 0) {
+ 1294              		.loc 1 236 45 view .LVU338
+ 1295 0046 A3EBE473 		sub	r3, r3, r4, asr #31
+ 1296 004a DBB2     		uxtb	r3, r3
+ 236:Core/Src/ws2812b_animations.c ****                 if (brightness > 0) {
+ 1297              		.loc 1 236 42 view .LVU339
+ 1298 004c C3F10203 		rsb	r3, r3, #2
+ 236:Core/Src/ws2812b_animations.c ****                 if (brightness > 0) {
+ 1299              		.loc 1 236 25 view .LVU340
+ 1300 0050 9B01     		lsls	r3, r3, #6
+ 1301              	.LVL121:
+ 237:Core/Src/ws2812b_animations.c ****                     RGBColor_t rider_color = {brightness, 0, 0};  // Red
+ 1302              		.loc 1 237 17 is_stmt 1 view .LVU341
+ 237:Core/Src/ws2812b_animations.c ****                     RGBColor_t rider_color = {brightness, 0, 0};  // Red
+ 1303              		.loc 1 237 20 is_stmt 0 view .LVU342
+ 1304 0052 13F0FF03 		ands	r3, r3, #255
+ 1305              	.LVL122:
+ 237:Core/Src/ws2812b_animations.c ****                     RGBColor_t rider_color = {brightness, 0, 0};  // Red
+ 1306              		.loc 1 237 20 view .LVU343
+ 1307 0056 E6D0     		beq	.L75
+ 1308              	.LBB20:
+ 238:Core/Src/ws2812b_animations.c ****                     rider_color = WS2812B_Timer_ScaleBrightness(rider_color);
+ 1309              		.loc 1 238 21 is_stmt 1 view .LVU344
+ 238:Core/Src/ws2812b_animations.c ****                     rider_color = WS2812B_Timer_ScaleBrightness(rider_color);
+ 1310              		.loc 1 238 32 is_stmt 0 view .LVU345
+ 1311 0058 8DF80430 		strb	r3, [sp, #4]
+ 1312 005c 0023     		movs	r3, #0
+ 1313 005e 8DF80530 		strb	r3, [sp, #5]
+ 1314 0062 8DF80630 		strb	r3, [sp, #6]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 32
+
+
+ 239:Core/Src/ws2812b_animations.c ****                     WS2812B_Timer_SetLED(handle, led_pos, rider_color);
+ 1315              		.loc 1 239 21 is_stmt 1 view .LVU346
+ 239:Core/Src/ws2812b_animations.c ****                     WS2812B_Timer_SetLED(handle, led_pos, rider_color);
+ 1316              		.loc 1 239 35 is_stmt 0 view .LVU347
+ 1317 0066 0198     		ldr	r0, [sp, #4]
+ 1318 0068 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 1319              	.LVL123:
+ 1320 006c 8DF80400 		strb	r0, [sp, #4]
+ 1321 0070 C0F30723 		ubfx	r3, r0, #8, #8
+ 1322 0074 8DF80530 		strb	r3, [sp, #5]
+ 1323 0078 C0F30740 		ubfx	r0, r0, #16, #8
+ 1324 007c 8DF80600 		strb	r0, [sp, #6]
+ 240:Core/Src/ws2812b_animations.c ****                 }
+ 1325              		.loc 1 240 21 is_stmt 1 view .LVU348
+ 1326 0080 019A     		ldr	r2, [sp, #4]
+ 1327 0082 3146     		mov	r1, r6
+ 1328 0084 2846     		mov	r0, r5
+ 1329 0086 FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 1330              	.LVL124:
+ 1331 008a CCE7     		b	.L75
+ 1332              	.LVL125:
+ 1333              	.L81:
+ 240:Core/Src/ws2812b_animations.c ****                 }
+ 1334              		.loc 1 240 21 is_stmt 0 view .LVU349
+ 1335              	.LBE20:
+ 1336              	.LBE19:
+ 1337              	.LBE18:
+ 1338              	.LBE17:
+ 245:Core/Src/ws2812b_animations.c ****         
+ 1339              		.loc 1 245 9 is_stmt 1 view .LVU350
+ 1340 008c 2846     		mov	r0, r5
+ 1341 008e FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1342              	.LVL126:
+ 248:Core/Src/ws2812b_animations.c ****             position++;
+ 1343              		.loc 1 248 9 view .LVU351
+ 248:Core/Src/ws2812b_animations.c ****             position++;
+ 1344              		.loc 1 248 13 is_stmt 0 view .LVU352
+ 1345 0092 114B     		ldr	r3, .L82+8
+ 1346 0094 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 248:Core/Src/ws2812b_animations.c ****             position++;
+ 1347              		.loc 1 248 12 view .LVU353
+ 1348 0096 83B1     		cbz	r3, .L77
+ 249:Core/Src/ws2812b_animations.c ****             if (position >= handle->led_count - 1) direction = 0;
+ 1349              		.loc 1 249 13 is_stmt 1 view .LVU354
+ 249:Core/Src/ws2812b_animations.c ****             if (position >= handle->led_count - 1) direction = 0;
+ 1350              		.loc 1 249 21 is_stmt 0 view .LVU355
+ 1351 0098 0E4A     		ldr	r2, .L82+4
+ 1352 009a 1388     		ldrh	r3, [r2]
+ 1353 009c 0133     		adds	r3, r3, #1
+ 1354 009e 9BB2     		uxth	r3, r3
+ 1355 00a0 1380     		strh	r3, [r2]	@ movhi
+ 250:Core/Src/ws2812b_animations.c ****         } else {
+ 1356              		.loc 1 250 13 is_stmt 1 view .LVU356
+ 250:Core/Src/ws2812b_animations.c ****         } else {
+ 1357              		.loc 1 250 35 is_stmt 0 view .LVU357
+ 1358 00a2 2A89     		ldrh	r2, [r5, #8]
+ 250:Core/Src/ws2812b_animations.c ****         } else {
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 33
+
+
+ 1359              		.loc 1 250 47 view .LVU358
+ 1360 00a4 013A     		subs	r2, r2, #1
+ 250:Core/Src/ws2812b_animations.c ****         } else {
+ 1361              		.loc 1 250 16 view .LVU359
+ 1362 00a6 9342     		cmp	r3, r2
+ 1363 00a8 02DB     		blt	.L78
+ 250:Core/Src/ws2812b_animations.c ****         } else {
+ 1364              		.loc 1 250 52 is_stmt 1 discriminator 1 view .LVU360
+ 250:Core/Src/ws2812b_animations.c ****         } else {
+ 1365              		.loc 1 250 62 is_stmt 0 discriminator 1 view .LVU361
+ 1366 00aa 0B4B     		ldr	r3, .L82+8
+ 1367 00ac 0022     		movs	r2, #0
+ 1368 00ae 1A70     		strb	r2, [r3]
+ 1369              	.L78:
+ 256:Core/Src/ws2812b_animations.c ****     }
+ 1370              		.loc 1 256 9 is_stmt 1 view .LVU362
+ 256:Core/Src/ws2812b_animations.c ****     }
+ 1371              		.loc 1 256 23 is_stmt 0 view .LVU363
+ 1372 00b0 FFF7FEFF 		bl	HAL_GetTick
+ 1373              	.LVL127:
+ 256:Core/Src/ws2812b_animations.c ****     }
+ 1374              		.loc 1 256 21 discriminator 1 view .LVU364
+ 1375 00b4 064B     		ldr	r3, .L82
+ 1376 00b6 1860     		str	r0, [r3]
+ 1377              		.loc 1 258 1 view .LVU365
+ 1378 00b8 ADE7     		b	.L72
+ 1379              	.L77:
+ 252:Core/Src/ws2812b_animations.c ****             if (position == 0) direction = 1;
+ 1380              		.loc 1 252 13 is_stmt 1 view .LVU366
+ 252:Core/Src/ws2812b_animations.c ****             if (position == 0) direction = 1;
+ 1381              		.loc 1 252 21 is_stmt 0 view .LVU367
+ 1382 00ba 064A     		ldr	r2, .L82+4
+ 1383 00bc 1388     		ldrh	r3, [r2]
+ 1384 00be 013B     		subs	r3, r3, #1
+ 1385 00c0 9BB2     		uxth	r3, r3
+ 1386 00c2 1380     		strh	r3, [r2]	@ movhi
+ 253:Core/Src/ws2812b_animations.c ****         }
+ 1387              		.loc 1 253 13 is_stmt 1 view .LVU368
+ 253:Core/Src/ws2812b_animations.c ****         }
+ 1388              		.loc 1 253 16 is_stmt 0 view .LVU369
+ 1389 00c4 002B     		cmp	r3, #0
+ 1390 00c6 F3D1     		bne	.L78
+ 253:Core/Src/ws2812b_animations.c ****         }
+ 1391              		.loc 1 253 32 is_stmt 1 discriminator 1 view .LVU370
+ 253:Core/Src/ws2812b_animations.c ****         }
+ 1392              		.loc 1 253 42 is_stmt 0 discriminator 1 view .LVU371
+ 1393 00c8 034B     		ldr	r3, .L82+8
+ 1394 00ca 0122     		movs	r2, #1
+ 1395 00cc 1A70     		strb	r2, [r3]
+ 1396 00ce EFE7     		b	.L78
+ 1397              	.L83:
+ 1398              		.align	2
+ 1399              	.L82:
+ 1400 00d0 00000000 		.word	last_update.4
+ 1401 00d4 00000000 		.word	position.3
+ 1402 00d8 00000000 		.word	direction.2
+ 1403              		.cfi_endproc
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 34
+
+
+ 1404              	.LFE74:
+ 1406              		.section	.text.WS2812B_Animation_LinearFlow,"ax",%progbits
+ 1407              		.align	1
+ 1408              		.global	WS2812B_Animation_LinearFlow
+ 1409              		.syntax unified
+ 1410              		.thumb
+ 1411              		.thumb_func
+ 1413              	WS2812B_Animation_LinearFlow:
+ 1414              	.LVL128:
+ 1415              	.LFB75:
+ 259:Core/Src/ws2812b_animations.c **** 
+ 260:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_LinearFlow(WS2812B_Timer_Handle_t* handle, uint32_t delay_ms) {
+ 1416              		.loc 1 260 86 is_stmt 1 view -0
+ 1417              		.cfi_startproc
+ 1418              		@ args = 0, pretend = 0, frame = 8
+ 1419              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1420              		.loc 1 260 86 is_stmt 0 view .LVU373
+ 1421 0000 30B5     		push	{r4, r5, lr}
+ 1422              		.cfi_def_cfa_offset 12
+ 1423              		.cfi_offset 4, -12
+ 1424              		.cfi_offset 5, -8
+ 1425              		.cfi_offset 14, -4
+ 1426 0002 83B0     		sub	sp, sp, #12
+ 1427              		.cfi_def_cfa_offset 24
+ 1428 0004 0546     		mov	r5, r0
+ 1429 0006 0C46     		mov	r4, r1
+ 261:Core/Src/ws2812b_animations.c ****     static uint8_t offset = 0;
+ 1430              		.loc 1 261 5 is_stmt 1 view .LVU374
+ 262:Core/Src/ws2812b_animations.c ****     static uint32_t last_update = 0;
+ 1431              		.loc 1 262 5 view .LVU375
+ 263:Core/Src/ws2812b_animations.c ****     
+ 264:Core/Src/ws2812b_animations.c ****     if (HAL_GetTick() - last_update > delay_ms) {
+ 1432              		.loc 1 264 5 view .LVU376
+ 1433              		.loc 1 264 9 is_stmt 0 view .LVU377
+ 1434 0008 FFF7FEFF 		bl	HAL_GetTick
+ 1435              	.LVL129:
+ 1436              		.loc 1 264 23 discriminator 1 view .LVU378
+ 1437 000c 2A4B     		ldr	r3, .L93
+ 1438 000e 1B68     		ldr	r3, [r3]
+ 1439 0010 C01A     		subs	r0, r0, r3
+ 1440              		.loc 1 264 8 discriminator 1 view .LVU379
+ 1441 0012 A042     		cmp	r0, r4
+ 1442 0014 4ED9     		bls	.L84
+ 1443              	.LBB21:
+ 265:Core/Src/ws2812b_animations.c ****         // Create flowing effect along the linear strip
+ 266:Core/Src/ws2812b_animations.c ****         for (uint16_t i = 0; i < handle->led_count; i++) {
+ 1444              		.loc 1 266 23 view .LVU380
+ 1445 0016 0024     		movs	r4, #0
+ 1446              	.LVL130:
+ 1447              		.loc 1 266 23 view .LVU381
+ 1448 0018 20E0     		b	.L85
+ 1449              	.LVL131:
+ 1450              	.L87:
+ 1451              	.LBB22:
+ 267:Core/Src/ws2812b_animations.c ****             // Create flowing gradient that moves along the line
+ 268:Core/Src/ws2812b_animations.c ****             uint8_t flow_pos = (i * 8 + offset) % 256;
+ 269:Core/Src/ws2812b_animations.c ****             
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 35
+
+
+ 270:Core/Src/ws2812b_animations.c ****             // Create smooth color transition
+ 271:Core/Src/ws2812b_animations.c ****             RGBColor_t flow_color;
+ 272:Core/Src/ws2812b_animations.c ****             if (flow_pos < 128) {
+ 273:Core/Src/ws2812b_animations.c ****                 // First half: blue to green
+ 274:Core/Src/ws2812b_animations.c ****                 flow_color.red = 0;
+ 275:Core/Src/ws2812b_animations.c ****                 flow_color.green = flow_pos * 2;
+ 276:Core/Src/ws2812b_animations.c ****                 flow_color.blue = 255 - flow_pos * 2;
+ 277:Core/Src/ws2812b_animations.c ****             } else {
+ 278:Core/Src/ws2812b_animations.c ****                 // Second half: green to red
+ 279:Core/Src/ws2812b_animations.c ****                 flow_pos -= 128;
+ 1452              		.loc 1 279 17 is_stmt 1 view .LVU382
+ 1453              		.loc 1 279 26 is_stmt 0 view .LVU383
+ 1454 001a 82F08002 		eor	r2, r2, #128
+ 1455              	.LVL132:
+ 280:Core/Src/ws2812b_animations.c ****                 flow_color.red = flow_pos * 2;
+ 1456              		.loc 1 280 17 is_stmt 1 view .LVU384
+ 1457              		.loc 1 280 32 is_stmt 0 view .LVU385
+ 1458 001e 5200     		lsls	r2, r2, #1
+ 1459              	.LVL133:
+ 1460              		.loc 1 280 32 view .LVU386
+ 1461 0020 D2B2     		uxtb	r2, r2
+ 1462 0022 8DF80420 		strb	r2, [sp, #4]
+ 281:Core/Src/ws2812b_animations.c ****                 flow_color.green = 255 - flow_pos * 2;
+ 1463              		.loc 1 281 17 is_stmt 1 view .LVU387
+ 1464              		.loc 1 281 40 is_stmt 0 view .LVU388
+ 1465 0026 82F0FF02 		eor	r2, r2, #255
+ 1466              		.loc 1 281 34 view .LVU389
+ 1467 002a 8DF80520 		strb	r2, [sp, #5]
+ 282:Core/Src/ws2812b_animations.c ****                 flow_color.blue = 0;
+ 1468              		.loc 1 282 17 is_stmt 1 view .LVU390
+ 1469              		.loc 1 282 33 is_stmt 0 view .LVU391
+ 1470 002e 0023     		movs	r3, #0
+ 1471              	.LVL134:
+ 1472              		.loc 1 282 33 view .LVU392
+ 1473 0030 8DF80630 		strb	r3, [sp, #6]
+ 1474              	.LVL135:
+ 1475              	.L88:
+ 283:Core/Src/ws2812b_animations.c ****             }
+ 284:Core/Src/ws2812b_animations.c ****             
+ 285:Core/Src/ws2812b_animations.c ****             flow_color = WS2812B_Timer_ScaleBrightness(flow_color);
+ 1476              		.loc 1 285 13 is_stmt 1 view .LVU393
+ 1477              		.loc 1 285 26 is_stmt 0 view .LVU394
+ 1478 0034 0198     		ldr	r0, [sp, #4]
+ 1479 0036 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 1480              	.LVL136:
+ 1481 003a 8DF80400 		strb	r0, [sp, #4]
+ 1482 003e C0F30723 		ubfx	r3, r0, #8, #8
+ 1483 0042 8DF80530 		strb	r3, [sp, #5]
+ 1484 0046 C0F30740 		ubfx	r0, r0, #16, #8
+ 1485 004a 8DF80600 		strb	r0, [sp, #6]
+ 286:Core/Src/ws2812b_animations.c ****             WS2812B_Timer_SetLED(handle, i, flow_color);
+ 1486              		.loc 1 286 13 is_stmt 1 view .LVU395
+ 1487 004e 019A     		ldr	r2, [sp, #4]
+ 1488 0050 2146     		mov	r1, r4
+ 1489 0052 2846     		mov	r0, r5
+ 1490 0054 FFF7FEFF 		bl	WS2812B_Timer_SetLED
+ 1491              	.LVL137:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 36
+
+
+ 1492              	.LBE22:
+ 266:Core/Src/ws2812b_animations.c ****             // Create flowing gradient that moves along the line
+ 1493              		.loc 1 266 54 discriminator 2 view .LVU396
+ 1494 0058 0134     		adds	r4, r4, #1
+ 1495              	.LVL138:
+ 266:Core/Src/ws2812b_animations.c ****             // Create flowing gradient that moves along the line
+ 1496              		.loc 1 266 54 is_stmt 0 discriminator 2 view .LVU397
+ 1497 005a A4B2     		uxth	r4, r4
+ 1498              	.LVL139:
+ 1499              	.L85:
+ 266:Core/Src/ws2812b_animations.c ****             // Create flowing gradient that moves along the line
+ 1500              		.loc 1 266 32 is_stmt 1 discriminator 1 view .LVU398
+ 266:Core/Src/ws2812b_animations.c ****             // Create flowing gradient that moves along the line
+ 1501              		.loc 1 266 40 is_stmt 0 discriminator 1 view .LVU399
+ 1502 005c 2B89     		ldrh	r3, [r5, #8]
+ 266:Core/Src/ws2812b_animations.c ****             // Create flowing gradient that moves along the line
+ 1503              		.loc 1 266 32 discriminator 1 view .LVU400
+ 1504 005e A342     		cmp	r3, r4
+ 1505 0060 18D9     		bls	.L92
+ 1506              	.LBB23:
+ 268:Core/Src/ws2812b_animations.c ****             
+ 1507              		.loc 1 268 13 is_stmt 1 view .LVU401
+ 268:Core/Src/ws2812b_animations.c ****             
+ 1508              		.loc 1 268 39 is_stmt 0 view .LVU402
+ 1509 0062 164B     		ldr	r3, .L93+4
+ 1510 0064 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1511 0066 03EBC403 		add	r3, r3, r4, lsl #3
+ 268:Core/Src/ws2812b_animations.c ****             
+ 1512              		.loc 1 268 49 view .LVU403
+ 1513 006a 5A42     		rsbs	r2, r3, #0
+ 1514 006c DBB2     		uxtb	r3, r3
+ 1515 006e D2B2     		uxtb	r2, r2
+ 1516 0070 58BF     		it	pl
+ 1517 0072 5342     		rsbpl	r3, r2, #0
+ 268:Core/Src/ws2812b_animations.c ****             
+ 1518              		.loc 1 268 21 view .LVU404
+ 1519 0074 DAB2     		uxtb	r2, r3
+ 1520              	.LVL140:
+ 271:Core/Src/ws2812b_animations.c ****             if (flow_pos < 128) {
+ 1521              		.loc 1 271 13 is_stmt 1 view .LVU405
+ 272:Core/Src/ws2812b_animations.c ****                 // First half: blue to green
+ 1522              		.loc 1 272 13 view .LVU406
+ 272:Core/Src/ws2812b_animations.c ****                 // First half: blue to green
+ 1523              		.loc 1 272 16 is_stmt 0 view .LVU407
+ 1524 0076 13F0800F 		tst	r3, #128
+ 1525 007a CED1     		bne	.L87
+ 274:Core/Src/ws2812b_animations.c ****                 flow_color.green = flow_pos * 2;
+ 1526              		.loc 1 274 17 is_stmt 1 view .LVU408
+ 274:Core/Src/ws2812b_animations.c ****                 flow_color.green = flow_pos * 2;
+ 1527              		.loc 1 274 32 is_stmt 0 view .LVU409
+ 1528 007c 0023     		movs	r3, #0
+ 1529 007e 8DF80430 		strb	r3, [sp, #4]
+ 275:Core/Src/ws2812b_animations.c ****                 flow_color.blue = 255 - flow_pos * 2;
+ 1530              		.loc 1 275 17 is_stmt 1 view .LVU410
+ 275:Core/Src/ws2812b_animations.c ****                 flow_color.blue = 255 - flow_pos * 2;
+ 1531              		.loc 1 275 34 is_stmt 0 view .LVU411
+ 1532 0082 5200     		lsls	r2, r2, #1
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 37
+
+
+ 1533              	.LVL141:
+ 275:Core/Src/ws2812b_animations.c ****                 flow_color.blue = 255 - flow_pos * 2;
+ 1534              		.loc 1 275 34 view .LVU412
+ 1535 0084 D2B2     		uxtb	r2, r2
+ 1536 0086 8DF80520 		strb	r2, [sp, #5]
+ 276:Core/Src/ws2812b_animations.c ****             } else {
+ 1537              		.loc 1 276 17 is_stmt 1 view .LVU413
+ 276:Core/Src/ws2812b_animations.c ****             } else {
+ 1538              		.loc 1 276 39 is_stmt 0 view .LVU414
+ 1539 008a 82F0FF02 		eor	r2, r2, #255
+ 276:Core/Src/ws2812b_animations.c ****             } else {
+ 1540              		.loc 1 276 33 view .LVU415
+ 1541 008e 8DF80620 		strb	r2, [sp, #6]
+ 1542 0092 CFE7     		b	.L88
+ 1543              	.LVL142:
+ 1544              	.L92:
+ 276:Core/Src/ws2812b_animations.c ****             } else {
+ 1545              		.loc 1 276 33 view .LVU416
+ 1546              	.LBE23:
+ 1547              	.LBE21:
+ 287:Core/Src/ws2812b_animations.c ****         }
+ 288:Core/Src/ws2812b_animations.c ****         
+ 289:Core/Src/ws2812b_animations.c ****         WS2812B_Timer_Update(handle);
+ 1548              		.loc 1 289 9 is_stmt 1 view .LVU417
+ 1549 0094 2846     		mov	r0, r5
+ 1550 0096 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1551              	.LVL143:
+ 290:Core/Src/ws2812b_animations.c ****         offset = (offset + 4) % 256;  // Smooth flow speed
+ 1552              		.loc 1 290 9 view .LVU418
+ 1553              		.loc 1 290 26 is_stmt 0 view .LVU419
+ 1554 009a 0849     		ldr	r1, .L93+4
+ 1555 009c 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 1556 009e 0433     		adds	r3, r3, #4
+ 1557              		.loc 1 290 31 view .LVU420
+ 1558 00a0 5A42     		rsbs	r2, r3, #0
+ 1559 00a2 DBB2     		uxtb	r3, r3
+ 1560 00a4 D2B2     		uxtb	r2, r2
+ 1561 00a6 58BF     		it	pl
+ 1562 00a8 5342     		rsbpl	r3, r2, #0
+ 1563              		.loc 1 290 16 view .LVU421
+ 1564 00aa 0B70     		strb	r3, [r1]
+ 291:Core/Src/ws2812b_animations.c ****         last_update = HAL_GetTick();
+ 1565              		.loc 1 291 9 is_stmt 1 view .LVU422
+ 1566              		.loc 1 291 23 is_stmt 0 view .LVU423
+ 1567 00ac FFF7FEFF 		bl	HAL_GetTick
+ 1568              	.LVL144:
+ 1569              		.loc 1 291 21 discriminator 1 view .LVU424
+ 1570 00b0 014B     		ldr	r3, .L93
+ 1571 00b2 1860     		str	r0, [r3]
+ 1572              	.LVL145:
+ 1573              	.L84:
+ 292:Core/Src/ws2812b_animations.c ****     }
+ 293:Core/Src/ws2812b_animations.c **** }
+ 1574              		.loc 1 293 1 view .LVU425
+ 1575 00b4 03B0     		add	sp, sp, #12
+ 1576              		.cfi_def_cfa_offset 12
+ 1577              		@ sp needed
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 38
+
+
+ 1578 00b6 30BD     		pop	{r4, r5, pc}
+ 1579              	.LVL146:
+ 1580              	.L94:
+ 1581              		.loc 1 293 1 view .LVU426
+ 1582              		.align	2
+ 1583              	.L93:
+ 1584 00b8 00000000 		.word	last_update.1
+ 1585 00bc 00000000 		.word	offset.0
+ 1586              		.cfi_endproc
+ 1587              	.LFE75:
+ 1589              		.section	.text.WS2812B_Animation_Demo,"ax",%progbits
+ 1590              		.align	1
+ 1591              		.global	WS2812B_Animation_Demo
+ 1592              		.syntax unified
+ 1593              		.thumb
+ 1594              		.thumb_func
+ 1596              	WS2812B_Animation_Demo:
+ 1597              	.LVL147:
+ 1598              	.LFB76:
+ 294:Core/Src/ws2812b_animations.c **** 
+ 295:Core/Src/ws2812b_animations.c **** // ============================================================================
+ 296:Core/Src/ws2812b_animations.c **** // DEMO FUNCTIONS
+ 297:Core/Src/ws2812b_animations.c **** // ============================================================================
+ 298:Core/Src/ws2812b_animations.c **** 
+ 299:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_Demo(WS2812B_Timer_Handle_t* handle) {
+ 1599              		.loc 1 299 61 is_stmt 1 view -0
+ 1600              		.cfi_startproc
+ 1601              		@ args = 0, pretend = 0, frame = 8
+ 1602              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1603              		.loc 1 299 61 is_stmt 0 view .LVU428
+ 1604 0000 30B5     		push	{r4, r5, lr}
+ 1605              		.cfi_def_cfa_offset 12
+ 1606              		.cfi_offset 4, -12
+ 1607              		.cfi_offset 5, -8
+ 1608              		.cfi_offset 14, -4
+ 1609 0002 83B0     		sub	sp, sp, #12
+ 1610              		.cfi_def_cfa_offset 24
+ 1611 0004 0446     		mov	r4, r0
+ 300:Core/Src/ws2812b_animations.c ****     // ============================================================================
+ 301:Core/Src/ws2812b_animations.c ****     // WS2812B LINEAR STRIP ANIMATION DEMO
+ 302:Core/Src/ws2812b_animations.c ****     // ============================================================================
+ 303:Core/Src/ws2812b_animations.c ****     // Optimized for 8 LEDs in a line - each animation runs for about 4 seconds
+ 304:Core/Src/ws2812b_animations.c ****     // All animations flow smoothly along the linear strip
+ 305:Core/Src/ws2812b_animations.c ****     
+ 306:Core/Src/ws2812b_animations.c ****     // 1. Linear Flow - smooth color gradient flowing along the line
+ 307:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1612              		.loc 1 307 5 is_stmt 1 view .LVU429
+ 1613              	.LBB24:
+ 1614              		.loc 1 307 10 view .LVU430
+ 1615              	.LVL148:
+ 1616              		.loc 1 307 14 is_stmt 0 view .LVU431
+ 1617 0006 0025     		movs	r5, #0
+ 1618              		.loc 1 307 5 view .LVU432
+ 1619 0008 07E0     		b	.L96
+ 1620              	.LVL149:
+ 1621              	.L97:
+ 308:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_LinearFlow(handle, 100);
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 39
+
+
+ 1622              		.loc 1 308 9 is_stmt 1 view .LVU433
+ 1623 000a 6421     		movs	r1, #100
+ 1624 000c 2046     		mov	r0, r4
+ 1625 000e FFF7FEFF 		bl	WS2812B_Animation_LinearFlow
+ 1626              	.LVL150:
+ 309:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1627              		.loc 1 309 9 view .LVU434
+ 1628 0012 6420     		movs	r0, #100
+ 1629 0014 FFF7FEFF 		bl	HAL_Delay
+ 1630              	.LVL151:
+ 307:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_LinearFlow(handle, 100);
+ 1631              		.loc 1 307 30 discriminator 3 view .LVU435
+ 1632 0018 0135     		adds	r5, r5, #1
+ 1633              	.LVL152:
+ 1634              	.L96:
+ 307:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_LinearFlow(handle, 100);
+ 1635              		.loc 1 307 23 discriminator 1 view .LVU436
+ 1636 001a 272D     		cmp	r5, #39
+ 1637 001c F5DD     		ble	.L97
+ 1638              	.LBE24:
+ 1639              	.LBB25:
+ 310:Core/Src/ws2812b_animations.c ****     }
+ 311:Core/Src/ws2812b_animations.c ****     
+ 312:Core/Src/ws2812b_animations.c ****     // 2. Knight Rider - red light moving back and forth (perfect for linear strip)
+ 313:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1640              		.loc 1 313 14 is_stmt 0 view .LVU437
+ 1641 001e 0025     		movs	r5, #0
+ 1642              	.LVL153:
+ 1643              		.loc 1 313 14 view .LVU438
+ 1644 0020 07E0     		b	.L98
+ 1645              	.LVL154:
+ 1646              	.L99:
+ 314:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_KnightRider(handle, 100);
+ 1647              		.loc 1 314 9 is_stmt 1 view .LVU439
+ 1648 0022 6421     		movs	r1, #100
+ 1649 0024 2046     		mov	r0, r4
+ 1650 0026 FFF7FEFF 		bl	WS2812B_Animation_KnightRider
+ 1651              	.LVL155:
+ 315:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1652              		.loc 1 315 9 view .LVU440
+ 1653 002a 6420     		movs	r0, #100
+ 1654 002c FFF7FEFF 		bl	HAL_Delay
+ 1655              	.LVL156:
+ 313:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_KnightRider(handle, 100);
+ 1656              		.loc 1 313 30 discriminator 3 view .LVU441
+ 1657 0030 0135     		adds	r5, r5, #1
+ 1658              	.LVL157:
+ 1659              	.L98:
+ 313:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_KnightRider(handle, 100);
+ 1660              		.loc 1 313 23 discriminator 1 view .LVU442
+ 1661 0032 272D     		cmp	r5, #39
+ 1662 0034 F5DD     		ble	.L99
+ 1663              	.LBE25:
+ 1664              	.LBB26:
+ 316:Core/Src/ws2812b_animations.c ****     }
+ 317:Core/Src/ws2812b_animations.c ****     
+ 318:Core/Src/ws2812b_animations.c ****     // 3. Rainbow - flowing rainbow colors along the line
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 40
+
+
+ 319:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1665              		.loc 1 319 14 is_stmt 0 view .LVU443
+ 1666 0036 0025     		movs	r5, #0
+ 1667              	.LVL158:
+ 1668              		.loc 1 319 14 view .LVU444
+ 1669 0038 07E0     		b	.L100
+ 1670              	.LVL159:
+ 1671              	.L101:
+ 320:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Rainbow(handle, 100);
+ 1672              		.loc 1 320 9 is_stmt 1 view .LVU445
+ 1673 003a 6421     		movs	r1, #100
+ 1674 003c 2046     		mov	r0, r4
+ 1675 003e FFF7FEFF 		bl	WS2812B_Animation_Rainbow
+ 1676              	.LVL160:
+ 321:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1677              		.loc 1 321 9 view .LVU446
+ 1678 0042 6420     		movs	r0, #100
+ 1679 0044 FFF7FEFF 		bl	HAL_Delay
+ 1680              	.LVL161:
+ 319:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Rainbow(handle, 100);
+ 1681              		.loc 1 319 30 discriminator 3 view .LVU447
+ 1682 0048 0135     		adds	r5, r5, #1
+ 1683              	.LVL162:
+ 1684              	.L100:
+ 319:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Rainbow(handle, 100);
+ 1685              		.loc 1 319 23 discriminator 1 view .LVU448
+ 1686 004a 272D     		cmp	r5, #39
+ 1687 004c F5DD     		ble	.L101
+ 1688              	.LBE26:
+ 1689              	.LBB27:
+ 322:Core/Src/ws2812b_animations.c ****     }
+ 323:Core/Src/ws2812b_animations.c ****     
+ 324:Core/Src/ws2812b_animations.c ****     // 4. Fire - fire effect flowing from start to end of strip
+ 325:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1690              		.loc 1 325 14 is_stmt 0 view .LVU449
+ 1691 004e 0025     		movs	r5, #0
+ 1692              	.LVL163:
+ 1693              		.loc 1 325 14 view .LVU450
+ 1694 0050 07E0     		b	.L102
+ 1695              	.LVL164:
+ 1696              	.L103:
+ 326:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Fire(handle, 100);
+ 1697              		.loc 1 326 9 is_stmt 1 view .LVU451
+ 1698 0052 6421     		movs	r1, #100
+ 1699 0054 2046     		mov	r0, r4
+ 1700 0056 FFF7FEFF 		bl	WS2812B_Animation_Fire
+ 1701              	.LVL165:
+ 327:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1702              		.loc 1 327 9 view .LVU452
+ 1703 005a 6420     		movs	r0, #100
+ 1704 005c FFF7FEFF 		bl	HAL_Delay
+ 1705              	.LVL166:
+ 325:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Fire(handle, 100);
+ 1706              		.loc 1 325 30 discriminator 3 view .LVU453
+ 1707 0060 0135     		adds	r5, r5, #1
+ 1708              	.LVL167:
+ 1709              	.L102:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 41
+
+
+ 325:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Fire(handle, 100);
+ 1710              		.loc 1 325 23 discriminator 1 view .LVU454
+ 1711 0062 272D     		cmp	r5, #39
+ 1712 0064 F5DD     		ble	.L103
+ 1713              	.LBE27:
+ 1714              	.LBB28:
+ 328:Core/Src/ws2812b_animations.c ****     }
+ 329:Core/Src/ws2812b_animations.c ****     
+ 330:Core/Src/ws2812b_animations.c ****     // 5. Wave - white wave pattern flowing along the line
+ 331:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1715              		.loc 1 331 14 is_stmt 0 view .LVU455
+ 1716 0066 0025     		movs	r5, #0
+ 1717              	.LVL168:
+ 1718              		.loc 1 331 14 view .LVU456
+ 1719 0068 07E0     		b	.L104
+ 1720              	.LVL169:
+ 1721              	.L105:
+ 332:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Wave(handle, 100);
+ 1722              		.loc 1 332 9 is_stmt 1 view .LVU457
+ 1723 006a 6421     		movs	r1, #100
+ 1724 006c 2046     		mov	r0, r4
+ 1725 006e FFF7FEFF 		bl	WS2812B_Animation_Wave
+ 1726              	.LVL170:
+ 333:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1727              		.loc 1 333 9 view .LVU458
+ 1728 0072 6420     		movs	r0, #100
+ 1729 0074 FFF7FEFF 		bl	HAL_Delay
+ 1730              	.LVL171:
+ 331:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Wave(handle, 100);
+ 1731              		.loc 1 331 30 discriminator 3 view .LVU459
+ 1732 0078 0135     		adds	r5, r5, #1
+ 1733              	.LVL172:
+ 1734              	.L104:
+ 331:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Wave(handle, 100);
+ 1735              		.loc 1 331 23 discriminator 1 view .LVU460
+ 1736 007a 272D     		cmp	r5, #39
+ 1737 007c F5DD     		ble	.L105
+ 1738              	.LBE28:
+ 1739              	.LBB29:
+ 334:Core/Src/ws2812b_animations.c ****     }
+ 335:Core/Src/ws2812b_animations.c ****     
+ 336:Core/Src/ws2812b_animations.c ****     // 6. Chase - green light moving from LED to LED
+ 337:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1740              		.loc 1 337 14 is_stmt 0 view .LVU461
+ 1741 007e 0025     		movs	r5, #0
+ 1742              	.LVL173:
+ 1743              		.loc 1 337 14 view .LVU462
+ 1744 0080 14E0     		b	.L106
+ 1745              	.LVL174:
+ 1746              	.L107:
+ 338:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Chase(handle, WS2812B_Timer_Color_Green(), 100);
+ 1747              		.loc 1 338 9 is_stmt 1 view .LVU463
+ 1748 0082 FFF7FEFF 		bl	WS2812B_Timer_Color_Green
+ 1749              	.LVL175:
+ 1750 0086 8DF80000 		strb	r0, [sp]
+ 1751 008a C0F30723 		ubfx	r3, r0, #8, #8
+ 1752 008e 8DF80130 		strb	r3, [sp, #1]
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 42
+
+
+ 1753 0092 C0F30740 		ubfx	r0, r0, #16, #8
+ 1754 0096 8DF80200 		strb	r0, [sp, #2]
+ 1755              		.loc 1 338 9 is_stmt 0 discriminator 1 view .LVU464
+ 1756 009a 6422     		movs	r2, #100
+ 1757 009c 0099     		ldr	r1, [sp]
+ 1758 009e 2046     		mov	r0, r4
+ 1759 00a0 FFF7FEFF 		bl	WS2812B_Animation_Chase
+ 1760              	.LVL176:
+ 339:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1761              		.loc 1 339 9 is_stmt 1 view .LVU465
+ 1762 00a4 6420     		movs	r0, #100
+ 1763 00a6 FFF7FEFF 		bl	HAL_Delay
+ 1764              	.LVL177:
+ 337:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Chase(handle, WS2812B_Timer_Color_Green(), 100);
+ 1765              		.loc 1 337 30 discriminator 3 view .LVU466
+ 1766 00aa 0135     		adds	r5, r5, #1
+ 1767              	.LVL178:
+ 1768              	.L106:
+ 337:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Chase(handle, WS2812B_Timer_Color_Green(), 100);
+ 1769              		.loc 1 337 23 discriminator 1 view .LVU467
+ 1770 00ac 272D     		cmp	r5, #39
+ 1771 00ae E8DD     		ble	.L107
+ 1772              	.LBE29:
+ 1773              	.LBB30:
+ 340:Core/Src/ws2812b_animations.c ****     }
+ 341:Core/Src/ws2812b_animations.c ****     
+ 342:Core/Src/ws2812b_animations.c ****     // 7. Breathing Blue - all LEDs breathing together
+ 343:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1774              		.loc 1 343 14 is_stmt 0 view .LVU468
+ 1775 00b0 0025     		movs	r5, #0
+ 1776              	.LVL179:
+ 1777              		.loc 1 343 14 view .LVU469
+ 1778 00b2 14E0     		b	.L108
+ 1779              	.LVL180:
+ 1780              	.L109:
+ 344:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Breath(handle, WS2812B_Timer_Color_Blue(), 100);
+ 1781              		.loc 1 344 9 is_stmt 1 view .LVU470
+ 1782 00b4 FFF7FEFF 		bl	WS2812B_Timer_Color_Blue
+ 1783              	.LVL181:
+ 1784 00b8 8DF80400 		strb	r0, [sp, #4]
+ 1785 00bc C0F30723 		ubfx	r3, r0, #8, #8
+ 1786 00c0 8DF80530 		strb	r3, [sp, #5]
+ 1787 00c4 C0F30740 		ubfx	r0, r0, #16, #8
+ 1788 00c8 8DF80600 		strb	r0, [sp, #6]
+ 1789              		.loc 1 344 9 is_stmt 0 discriminator 1 view .LVU471
+ 1790 00cc 6422     		movs	r2, #100
+ 1791 00ce 0199     		ldr	r1, [sp, #4]
+ 1792 00d0 2046     		mov	r0, r4
+ 1793 00d2 FFF7FEFF 		bl	WS2812B_Animation_Breath
+ 1794              	.LVL182:
+ 345:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1795              		.loc 1 345 9 is_stmt 1 view .LVU472
+ 1796 00d6 6420     		movs	r0, #100
+ 1797 00d8 FFF7FEFF 		bl	HAL_Delay
+ 1798              	.LVL183:
+ 343:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Breath(handle, WS2812B_Timer_Color_Blue(), 100);
+ 1799              		.loc 1 343 30 discriminator 3 view .LVU473
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 43
+
+
+ 1800 00dc 0135     		adds	r5, r5, #1
+ 1801              	.LVL184:
+ 1802              	.L108:
+ 343:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Breath(handle, WS2812B_Timer_Color_Blue(), 100);
+ 1803              		.loc 1 343 23 discriminator 1 view .LVU474
+ 1804 00de 272D     		cmp	r5, #39
+ 1805 00e0 E8DD     		ble	.L109
+ 1806              	.LBE30:
+ 1807              	.LBB31:
+ 346:Core/Src/ws2812b_animations.c ****     }
+ 347:Core/Src/ws2812b_animations.c ****     
+ 348:Core/Src/ws2812b_animations.c ****     // 8. Sparkle - random white sparkles along the strip
+ 349:Core/Src/ws2812b_animations.c ****     for (int i = 0; i < 40; i++) {
+ 1808              		.loc 1 349 14 is_stmt 0 view .LVU475
+ 1809 00e2 0025     		movs	r5, #0
+ 1810              	.LVL185:
+ 1811              		.loc 1 349 14 view .LVU476
+ 1812 00e4 07E0     		b	.L110
+ 1813              	.LVL186:
+ 1814              	.L111:
+ 350:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Sparkle(handle, 100);
+ 1815              		.loc 1 350 9 is_stmt 1 view .LVU477
+ 1816 00e6 6421     		movs	r1, #100
+ 1817 00e8 2046     		mov	r0, r4
+ 1818 00ea FFF7FEFF 		bl	WS2812B_Animation_Sparkle
+ 1819              	.LVL187:
+ 351:Core/Src/ws2812b_animations.c ****         HAL_Delay(100);
+ 1820              		.loc 1 351 9 view .LVU478
+ 1821 00ee 6420     		movs	r0, #100
+ 1822 00f0 FFF7FEFF 		bl	HAL_Delay
+ 1823              	.LVL188:
+ 349:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Sparkle(handle, 100);
+ 1824              		.loc 1 349 30 discriminator 3 view .LVU479
+ 1825 00f4 0135     		adds	r5, r5, #1
+ 1826              	.LVL189:
+ 1827              	.L110:
+ 349:Core/Src/ws2812b_animations.c ****         WS2812B_Animation_Sparkle(handle, 100);
+ 1828              		.loc 1 349 23 discriminator 1 view .LVU480
+ 1829 00f6 272D     		cmp	r5, #39
+ 1830 00f8 F5DD     		ble	.L111
+ 1831              	.LBE31:
+ 352:Core/Src/ws2812b_animations.c ****     }
+ 353:Core/Src/ws2812b_animations.c **** }
+ 1832              		.loc 1 353 1 is_stmt 0 view .LVU481
+ 1833 00fa 03B0     		add	sp, sp, #12
+ 1834              		.cfi_def_cfa_offset 12
+ 1835              		@ sp needed
+ 1836 00fc 30BD     		pop	{r4, r5, pc}
+ 1837              		.loc 1 353 1 view .LVU482
+ 1838              		.cfi_endproc
+ 1839              	.LFE76:
+ 1841              		.section	.text.WS2812B_Animation_BrightnessTest,"ax",%progbits
+ 1842              		.align	1
+ 1843              		.global	WS2812B_Animation_BrightnessTest
+ 1844              		.syntax unified
+ 1845              		.thumb
+ 1846              		.thumb_func
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 44
+
+
+ 1848              	WS2812B_Animation_BrightnessTest:
+ 1849              	.LVL190:
+ 1850              	.LFB77:
+ 354:Core/Src/ws2812b_animations.c **** 
+ 355:Core/Src/ws2812b_animations.c **** void WS2812B_Animation_BrightnessTest(WS2812B_Timer_Handle_t* handle) {
+ 1851              		.loc 1 355 71 is_stmt 1 view -0
+ 1852              		.cfi_startproc
+ 1853              		@ args = 0, pretend = 0, frame = 48
+ 1854              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1855              		.loc 1 355 71 is_stmt 0 view .LVU484
+ 1856 0000 30B5     		push	{r4, r5, lr}
+ 1857              		.cfi_def_cfa_offset 12
+ 1858              		.cfi_offset 4, -12
+ 1859              		.cfi_offset 5, -8
+ 1860              		.cfi_offset 14, -4
+ 1861 0002 8DB0     		sub	sp, sp, #52
+ 1862              		.cfi_def_cfa_offset 64
+ 1863 0004 0446     		mov	r4, r0
+ 356:Core/Src/ws2812b_animations.c ****     // ============================================================================
+ 357:Core/Src/ws2812b_animations.c ****     // WS2812B BRIGHTNESS DEBUG TEST
+ 358:Core/Src/ws2812b_animations.c ****     // ============================================================================
+ 359:Core/Src/ws2812b_animations.c ****     // Simple test to verify brightness control is working
+ 360:Core/Src/ws2812b_animations.c ****     
+ 361:Core/Src/ws2812b_animations.c ****     // Test 1: All LEDs red at controlled brightness
+ 362:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 1864              		.loc 1 362 5 is_stmt 1 view .LVU485
+ 1865 0006 FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 1866              	.LVL191:
+ 363:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, WS2812B_Timer_Color_Red());
+ 1867              		.loc 1 363 5 view .LVU486
+ 1868 000a FFF7FEFF 		bl	WS2812B_Timer_Color_Red
+ 1869              	.LVL192:
+ 1870 000e 8DF82000 		strb	r0, [sp, #32]
+ 1871 0012 C0F30723 		ubfx	r3, r0, #8, #8
+ 1872 0016 8DF82130 		strb	r3, [sp, #33]
+ 1873 001a C0F30740 		ubfx	r0, r0, #16, #8
+ 1874 001e 8DF82200 		strb	r0, [sp, #34]
+ 1875              		.loc 1 363 5 is_stmt 0 discriminator 1 view .LVU487
+ 1876 0022 0899     		ldr	r1, [sp, #32]
+ 1877 0024 2046     		mov	r0, r4
+ 1878 0026 FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 1879              	.LVL193:
+ 364:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 1880              		.loc 1 364 5 is_stmt 1 view .LVU488
+ 1881 002a 2046     		mov	r0, r4
+ 1882 002c FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1883              	.LVL194:
+ 365:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 1884              		.loc 1 365 5 view .LVU489
+ 1885 0030 40F6B830 		movw	r0, #3000
+ 1886 0034 FFF7FEFF 		bl	HAL_Delay
+ 1887              	.LVL195:
+ 366:Core/Src/ws2812b_animations.c ****     
+ 367:Core/Src/ws2812b_animations.c ****     // Test 2: All LEDs green at controlled brightness
+ 368:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 1888              		.loc 1 368 5 view .LVU490
+ 1889 0038 2046     		mov	r0, r4
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 45
+
+
+ 1890 003a FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 1891              	.LVL196:
+ 369:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, WS2812B_Timer_Color_Green());
+ 1892              		.loc 1 369 5 view .LVU491
+ 1893 003e FFF7FEFF 		bl	WS2812B_Timer_Color_Green
+ 1894              	.LVL197:
+ 1895 0042 8DF82400 		strb	r0, [sp, #36]
+ 1896 0046 C0F30723 		ubfx	r3, r0, #8, #8
+ 1897 004a 8DF82530 		strb	r3, [sp, #37]
+ 1898 004e C0F30740 		ubfx	r0, r0, #16, #8
+ 1899 0052 8DF82600 		strb	r0, [sp, #38]
+ 1900              		.loc 1 369 5 is_stmt 0 discriminator 1 view .LVU492
+ 1901 0056 0999     		ldr	r1, [sp, #36]
+ 1902 0058 2046     		mov	r0, r4
+ 1903 005a FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 1904              	.LVL198:
+ 370:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 1905              		.loc 1 370 5 is_stmt 1 view .LVU493
+ 1906 005e 2046     		mov	r0, r4
+ 1907 0060 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1908              	.LVL199:
+ 371:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 1909              		.loc 1 371 5 view .LVU494
+ 1910 0064 40F6B830 		movw	r0, #3000
+ 1911 0068 FFF7FEFF 		bl	HAL_Delay
+ 1912              	.LVL200:
+ 372:Core/Src/ws2812b_animations.c ****     
+ 373:Core/Src/ws2812b_animations.c ****     // Test 3: All LEDs blue at controlled brightness
+ 374:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 1913              		.loc 1 374 5 view .LVU495
+ 1914 006c 2046     		mov	r0, r4
+ 1915 006e FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 1916              	.LVL201:
+ 375:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, WS2812B_Timer_Color_Blue());
+ 1917              		.loc 1 375 5 view .LVU496
+ 1918 0072 FFF7FEFF 		bl	WS2812B_Timer_Color_Blue
+ 1919              	.LVL202:
+ 1920 0076 8DF82800 		strb	r0, [sp, #40]
+ 1921 007a C0F30723 		ubfx	r3, r0, #8, #8
+ 1922 007e 8DF82930 		strb	r3, [sp, #41]
+ 1923 0082 C0F30740 		ubfx	r0, r0, #16, #8
+ 1924 0086 8DF82A00 		strb	r0, [sp, #42]
+ 1925              		.loc 1 375 5 is_stmt 0 discriminator 1 view .LVU497
+ 1926 008a 0A99     		ldr	r1, [sp, #40]
+ 1927 008c 2046     		mov	r0, r4
+ 1928 008e FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 1929              	.LVL203:
+ 376:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 1930              		.loc 1 376 5 is_stmt 1 view .LVU498
+ 1931 0092 2046     		mov	r0, r4
+ 1932 0094 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1933              	.LVL204:
+ 377:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 1934              		.loc 1 377 5 view .LVU499
+ 1935 0098 40F6B830 		movw	r0, #3000
+ 1936 009c FFF7FEFF 		bl	HAL_Delay
+ 1937              	.LVL205:
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 46
+
+
+ 378:Core/Src/ws2812b_animations.c ****     
+ 379:Core/Src/ws2812b_animations.c ****     // Test 4: All LEDs white at controlled brightness
+ 380:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 1938              		.loc 1 380 5 view .LVU500
+ 1939 00a0 2046     		mov	r0, r4
+ 1940 00a2 FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 1941              	.LVL206:
+ 381:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, WS2812B_Timer_Color_White());
+ 1942              		.loc 1 381 5 view .LVU501
+ 1943 00a6 FFF7FEFF 		bl	WS2812B_Timer_Color_White
+ 1944              	.LVL207:
+ 1945 00aa 8DF82C00 		strb	r0, [sp, #44]
+ 1946 00ae C0F30723 		ubfx	r3, r0, #8, #8
+ 1947 00b2 8DF82D30 		strb	r3, [sp, #45]
+ 1948 00b6 C0F30740 		ubfx	r0, r0, #16, #8
+ 1949 00ba 8DF82E00 		strb	r0, [sp, #46]
+ 1950              		.loc 1 381 5 is_stmt 0 discriminator 1 view .LVU502
+ 1951 00be 0B99     		ldr	r1, [sp, #44]
+ 1952 00c0 2046     		mov	r0, r4
+ 1953 00c2 FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 1954              	.LVL208:
+ 382:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 1955              		.loc 1 382 5 is_stmt 1 view .LVU503
+ 1956 00c6 2046     		mov	r0, r4
+ 1957 00c8 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1958              	.LVL209:
+ 383:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 1959              		.loc 1 383 5 view .LVU504
+ 1960 00cc 40F6B830 		movw	r0, #3000
+ 1961 00d0 FFF7FEFF 		bl	HAL_Delay
+ 1962              	.LVL210:
+ 384:Core/Src/ws2812b_animations.c ****     
+ 385:Core/Src/ws2812b_animations.c ****     // Test 5: Turn all off
+ 386:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearAll(handle);
+ 1963              		.loc 1 386 5 view .LVU505
+ 1964 00d4 2046     		mov	r0, r4
+ 1965 00d6 FFF7FEFF 		bl	WS2812B_Timer_ClearAll
+ 1966              	.LVL211:
+ 387:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 1967              		.loc 1 387 5 view .LVU506
+ 1968 00da 2046     		mov	r0, r4
+ 1969 00dc FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1970              	.LVL212:
+ 388:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 1971              		.loc 1 388 5 view .LVU507
+ 1972 00e0 40F6B830 		movw	r0, #3000
+ 1973 00e4 FFF7FEFF 		bl	HAL_Delay
+ 1974              	.LVL213:
+ 389:Core/Src/ws2812b_animations.c ****     
+ 390:Core/Src/ws2812b_animations.c ****     // Test 6: Manual brightness test - very dim red
+ 391:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 1975              		.loc 1 391 5 view .LVU508
+ 1976 00e8 2046     		mov	r0, r4
+ 1977 00ea FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 1978              	.LVL214:
+ 392:Core/Src/ws2812b_animations.c ****     RGBColor_t dim_red = {16, 0, 0};  // Very dim red (16/255 = 6%)
+ 1979              		.loc 1 392 5 view .LVU509
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 47
+
+
+ 1980              		.loc 1 392 16 is_stmt 0 view .LVU510
+ 1981 00ee 1023     		movs	r3, #16
+ 1982 00f0 8DF81C30 		strb	r3, [sp, #28]
+ 1983 00f4 0025     		movs	r5, #0
+ 1984 00f6 8DF81D50 		strb	r5, [sp, #29]
+ 1985 00fa 8DF81E50 		strb	r5, [sp, #30]
+ 393:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, dim_red);
+ 1986              		.loc 1 393 5 is_stmt 1 view .LVU511
+ 1987 00fe 0799     		ldr	r1, [sp, #28]
+ 1988 0100 2046     		mov	r0, r4
+ 1989 0102 FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 1990              	.LVL215:
+ 394:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 1991              		.loc 1 394 5 view .LVU512
+ 1992 0106 2046     		mov	r0, r4
+ 1993 0108 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 1994              	.LVL216:
+ 395:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 1995              		.loc 1 395 5 view .LVU513
+ 1996 010c 40F6B830 		movw	r0, #3000
+ 1997 0110 FFF7FEFF 		bl	HAL_Delay
+ 1998              	.LVL217:
+ 396:Core/Src/ws2812b_animations.c ****     
+ 397:Core/Src/ws2812b_animations.c ****     // Test 7: Manual brightness test - medium red
+ 398:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 1999              		.loc 1 398 5 view .LVU514
+ 2000 0114 2046     		mov	r0, r4
+ 2001 0116 FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 2002              	.LVL218:
+ 399:Core/Src/ws2812b_animations.c ****     RGBColor_t medium_red = {64, 0, 0};  // Medium red (64/255 = 25%)
+ 2003              		.loc 1 399 5 view .LVU515
+ 2004              		.loc 1 399 16 is_stmt 0 view .LVU516
+ 2005 011a 4023     		movs	r3, #64
+ 2006 011c 8DF81830 		strb	r3, [sp, #24]
+ 2007 0120 8DF81950 		strb	r5, [sp, #25]
+ 2008 0124 8DF81A50 		strb	r5, [sp, #26]
+ 400:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, medium_red);
+ 2009              		.loc 1 400 5 is_stmt 1 view .LVU517
+ 2010 0128 0699     		ldr	r1, [sp, #24]
+ 2011 012a 2046     		mov	r0, r4
+ 2012 012c FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 2013              	.LVL219:
+ 401:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 2014              		.loc 1 401 5 view .LVU518
+ 2015 0130 2046     		mov	r0, r4
+ 2016 0132 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 2017              	.LVL220:
+ 402:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 2018              		.loc 1 402 5 view .LVU519
+ 2019 0136 40F6B830 		movw	r0, #3000
+ 2020 013a FFF7FEFF 		bl	HAL_Delay
+ 2021              	.LVL221:
+ 403:Core/Src/ws2812b_animations.c ****     
+ 404:Core/Src/ws2812b_animations.c ****     // Test 8: Manual brightness test - bright red
+ 405:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 2022              		.loc 1 405 5 view .LVU520
+ 2023 013e 2046     		mov	r0, r4
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 48
+
+
+ 2024 0140 FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 2025              	.LVL222:
+ 406:Core/Src/ws2812b_animations.c ****     RGBColor_t bright_red = {128, 0, 0};  // Bright red (128/255 = 50%)
+ 2026              		.loc 1 406 5 view .LVU521
+ 2027              		.loc 1 406 16 is_stmt 0 view .LVU522
+ 2028 0144 8023     		movs	r3, #128
+ 2029 0146 8DF81430 		strb	r3, [sp, #20]
+ 2030 014a 8DF81550 		strb	r5, [sp, #21]
+ 2031 014e 8DF81650 		strb	r5, [sp, #22]
+ 407:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, bright_red);
+ 2032              		.loc 1 407 5 is_stmt 1 view .LVU523
+ 2033 0152 0599     		ldr	r1, [sp, #20]
+ 2034 0154 2046     		mov	r0, r4
+ 2035 0156 FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 2036              	.LVL223:
+ 408:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 2037              		.loc 1 408 5 view .LVU524
+ 2038 015a 2046     		mov	r0, r4
+ 2039 015c FFF7FEFF 		bl	WS2812B_Timer_Update
+ 2040              	.LVL224:
+ 409:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 2041              		.loc 1 409 5 view .LVU525
+ 2042 0160 40F6B830 		movw	r0, #3000
+ 2043 0164 FFF7FEFF 		bl	HAL_Delay
+ 2044              	.LVL225:
+ 410:Core/Src/ws2812b_animations.c ****     
+ 411:Core/Src/ws2812b_animations.c ****     // Test 9: Test scaling function directly
+ 412:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 2045              		.loc 1 412 5 view .LVU526
+ 2046 0168 2046     		mov	r0, r4
+ 2047 016a FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 2048              	.LVL226:
+ 413:Core/Src/ws2812b_animations.c ****     RGBColor_t full_red = {255, 0, 0};  // Full red (255)
+ 2049              		.loc 1 413 5 view .LVU527
+ 2050              		.loc 1 413 16 is_stmt 0 view .LVU528
+ 2051 016e FF23     		movs	r3, #255
+ 2052 0170 8DF81030 		strb	r3, [sp, #16]
+ 2053 0174 8DF81150 		strb	r5, [sp, #17]
+ 2054 0178 8DF81250 		strb	r5, [sp, #18]
+ 414:Core/Src/ws2812b_animations.c ****     RGBColor_t scaled_red = WS2812B_Timer_ScaleBrightness(full_red);
+ 2055              		.loc 1 414 5 is_stmt 1 view .LVU529
+ 2056              		.loc 1 414 29 is_stmt 0 view .LVU530
+ 2057 017c 0498     		ldr	r0, [sp, #16]
+ 2058 017e FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 2059              	.LVL227:
+ 2060 0182 8DF80C00 		strb	r0, [sp, #12]
+ 2061 0186 C0F30723 		ubfx	r3, r0, #8, #8
+ 2062 018a 8DF80D30 		strb	r3, [sp, #13]
+ 2063 018e C0F30740 		ubfx	r0, r0, #16, #8
+ 2064 0192 8DF80E00 		strb	r0, [sp, #14]
+ 415:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, scaled_red);
+ 2065              		.loc 1 415 5 is_stmt 1 view .LVU531
+ 2066 0196 0399     		ldr	r1, [sp, #12]
+ 2067 0198 2046     		mov	r0, r4
+ 2068 019a FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 2069              	.LVL228:
+ 416:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 49
+
+
+ 2070              		.loc 1 416 5 view .LVU532
+ 2071 019e 2046     		mov	r0, r4
+ 2072 01a0 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 2073              	.LVL229:
+ 417:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 2074              		.loc 1 417 5 view .LVU533
+ 2075 01a4 40F6B830 		movw	r0, #3000
+ 2076 01a8 FFF7FEFF 		bl	HAL_Delay
+ 2077              	.LVL230:
+ 418:Core/Src/ws2812b_animations.c ****     
+ 419:Core/Src/ws2812b_animations.c ****     // Test 10: Test scaling function with full white
+ 420:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_ClearBuffer(handle);  // Clear buffer first
+ 2078              		.loc 1 420 5 view .LVU534
+ 2079 01ac 2046     		mov	r0, r4
+ 2080 01ae FFF7FEFF 		bl	WS2812B_Timer_ClearBuffer
+ 2081              	.LVL231:
+ 421:Core/Src/ws2812b_animations.c ****     RGBColor_t full_white = {255, 255, 255};  // Full white (255,255,255)
+ 2082              		.loc 1 421 5 view .LVU535
+ 2083              		.loc 1 421 16 is_stmt 0 view .LVU536
+ 2084 01b2 104B     		ldr	r3, .L115
+ 2085 01b4 1B68     		ldr	r3, [r3]
+ 2086 01b6 ADF80830 		strh	r3, [sp, #8]	@ movhi
+ 2087 01ba 1B0C     		lsrs	r3, r3, #16
+ 2088 01bc 8DF80A30 		strb	r3, [sp, #10]
+ 422:Core/Src/ws2812b_animations.c ****     RGBColor_t scaled_white = WS2812B_Timer_ScaleBrightness(full_white);
+ 2089              		.loc 1 422 5 is_stmt 1 view .LVU537
+ 2090              		.loc 1 422 31 is_stmt 0 view .LVU538
+ 2091 01c0 0298     		ldr	r0, [sp, #8]
+ 2092 01c2 FFF7FEFF 		bl	WS2812B_Timer_ScaleBrightness
+ 2093              	.LVL232:
+ 2094 01c6 8DF80400 		strb	r0, [sp, #4]
+ 2095 01ca C0F30723 		ubfx	r3, r0, #8, #8
+ 2096 01ce 8DF80530 		strb	r3, [sp, #5]
+ 2097 01d2 C0F30740 		ubfx	r0, r0, #16, #8
+ 2098 01d6 8DF80600 		strb	r0, [sp, #6]
+ 423:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_SetAllLEDs(handle, scaled_white);
+ 2099              		.loc 1 423 5 is_stmt 1 view .LVU539
+ 2100 01da 0199     		ldr	r1, [sp, #4]
+ 2101 01dc 2046     		mov	r0, r4
+ 2102 01de FFF7FEFF 		bl	WS2812B_Timer_SetAllLEDs
+ 2103              	.LVL233:
+ 424:Core/Src/ws2812b_animations.c ****     WS2812B_Timer_Update(handle);
+ 2104              		.loc 1 424 5 view .LVU540
+ 2105 01e2 2046     		mov	r0, r4
+ 2106 01e4 FFF7FEFF 		bl	WS2812B_Timer_Update
+ 2107              	.LVL234:
+ 425:Core/Src/ws2812b_animations.c ****     HAL_Delay(3000);
+ 2108              		.loc 1 425 5 view .LVU541
+ 2109 01e8 40F6B830 		movw	r0, #3000
+ 2110 01ec FFF7FEFF 		bl	HAL_Delay
+ 2111              	.LVL235:
+ 426:Core/Src/ws2812b_animations.c ****     
+ 427:Core/Src/ws2812b_animations.c **** 
+ 428:Core/Src/ws2812b_animations.c **** }...
+ 2112              		.loc 1 428 1 is_stmt 0 view .LVU542
+ 2113 01f0 0DB0     		add	sp, sp, #52
+ 2114              		.cfi_def_cfa_offset 12
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 50
+
+
+ 2115              		@ sp needed
+ 2116 01f2 30BD     		pop	{r4, r5, pc}
+ 2117              	.LVL236:
+ 2118              	.L116:
+ 2119              		.loc 1 428 1 view .LVU543
+ 2120              		.align	2
+ 2121              	.L115:
+ 2122 01f4 00000000 		.word	.LANCHOR0
+ 2123              		.cfi_endproc
+ 2124              	.LFE77:
+ 2126              		.section	.bss.offset.0,"aw",%nobits
+ 2129              	offset.0:
+ 2130 0000 00       		.space	1
+ 2131              		.section	.bss.last_update.1,"aw",%nobits
+ 2132              		.align	2
+ 2135              	last_update.1:
+ 2136 0000 00000000 		.space	4
+ 2137              		.section	.data.direction.2,"aw"
+ 2140              	direction.2:
+ 2141 0000 01       		.byte	1
+ 2142              		.section	.bss.position.3,"aw",%nobits
+ 2143              		.align	1
+ 2146              	position.3:
+ 2147 0000 0000     		.space	2
+ 2148              		.section	.bss.last_update.4,"aw",%nobits
+ 2149              		.align	2
+ 2152              	last_update.4:
+ 2153 0000 00000000 		.space	4
+ 2154              		.section	.bss.last_update.5,"aw",%nobits
+ 2155              		.align	2
+ 2158              	last_update.5:
+ 2159 0000 00000000 		.space	4
+ 2160              		.section	.bss.offset.6,"aw",%nobits
+ 2163              	offset.6:
+ 2164 0000 00       		.space	1
+ 2165              		.section	.bss.last_update.7,"aw",%nobits
+ 2166              		.align	2
+ 2169              	last_update.7:
+ 2170 0000 00000000 		.space	4
+ 2171              		.section	.bss.last_update.8,"aw",%nobits
+ 2172              		.align	2
+ 2175              	last_update.8:
+ 2176 0000 00000000 		.space	4
+ 2177              		.section	.data.direction.9,"aw"
+ 2180              	direction.9:
+ 2181 0000 01       		.byte	1
+ 2182              		.section	.bss.brightness.10,"aw",%nobits
+ 2185              	brightness.10:
+ 2186 0000 00       		.space	1
+ 2187              		.section	.bss.last_update.11,"aw",%nobits
+ 2188              		.align	2
+ 2191              	last_update.11:
+ 2192 0000 00000000 		.space	4
+ 2193              		.section	.data.direction.12,"aw"
+ 2196              	direction.12:
+ 2197 0000 01       		.byte	1
+ 2198              		.section	.bss.brightness.13,"aw",%nobits
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 51
+
+
+ 2201              	brightness.13:
+ 2202 0000 00       		.space	1
+ 2203              		.section	.bss.last_update.14,"aw",%nobits
+ 2204              		.align	2
+ 2207              	last_update.14:
+ 2208 0000 00000000 		.space	4
+ 2209              		.section	.bss.position.15,"aw",%nobits
+ 2210              		.align	1
+ 2213              	position.15:
+ 2214 0000 0000     		.space	2
+ 2215              		.section	.bss.last_update.16,"aw",%nobits
+ 2216              		.align	2
+ 2219              	last_update.16:
+ 2220 0000 00000000 		.space	4
+ 2221              		.section	.bss.offset.17,"aw",%nobits
+ 2224              	offset.17:
+ 2225 0000 00       		.space	1
+ 2226              		.section	.bss.last_update.18,"aw",%nobits
+ 2227              		.align	2
+ 2230              	last_update.18:
+ 2231 0000 00000000 		.space	4
+ 2232              		.section	.rodata
+ 2233              		.align	2
+ 2234              		.set	.LANCHOR0,. + 0
+ 2235              	.LC0:
+ 2236 0000 FF       		.byte	-1
+ 2237 0001 FF       		.byte	-1
+ 2238 0002 FF       		.byte	-1
+ 2239              		.text
+ 2240              	.Letext0:
+ 2241              		.file 2 "C:/Users/PanTalir/AppData/Roaming/Cursor/User/globalStorage/bmd.stm32-for-vscode/@xpack-d
+ 2242              		.file 3 "C:/Users/PanTalir/AppData/Roaming/Cursor/User/globalStorage/bmd.stm32-for-vscode/@xpack-d
+ 2243              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 2244              		.file 5 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 2245              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 2246              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
+ 2247              		.file 8 "Core/Inc/ws2812b_timer.h"
+ 2248              		.file 9 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 2249              		.file 10 "C:/Users/PanTalir/AppData/Roaming/Cursor/User/globalStorage/bmd.stm32-for-vscode/@xpack-
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 52
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 ws2812b_animations.c
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:19     .text.WS2812B_Animation_ColorWheel:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:25     .text.WS2812B_Animation_ColorWheel:00000000 WS2812B_Animation_ColorWheel
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:143    .text.WS2812B_Animation_ScaleBrightness:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:149    .text.WS2812B_Animation_ScaleBrightness:00000000 WS2812B_Animation_ScaleBrightness
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:173    .text.WS2812B_Animation_ScaleBrightness:00000014 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:178    .text.WS2812B_Animation_Rainbow:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:184    .text.WS2812B_Animation_Rainbow:00000000 WS2812B_Animation_Rainbow
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:309    .text.WS2812B_Animation_Rainbow:00000080 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2230   .bss.last_update.18:00000000 last_update.18
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2224   .bss.offset.17:00000000 offset.17
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:316    .text.WS2812B_Animation_Chase:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:322    .text.WS2812B_Animation_Chase:00000000 WS2812B_Animation_Chase
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:412    .text.WS2812B_Animation_Chase:00000058 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2219   .bss.last_update.16:00000000 last_update.16
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2213   .bss.position.15:00000000 position.15
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:418    .text.WS2812B_Animation_Fade:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:424    .text.WS2812B_Animation_Fade:00000000 WS2812B_Animation_Fade
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:563    .text.WS2812B_Animation_Fade:00000094 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2207   .bss.last_update.14:00000000 last_update.14
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2201   .bss.brightness.13:00000000 brightness.13
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2196   .data.direction.12:00000000 direction.12
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:571    .text.WS2812B_Animation_Breath:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:577    .text.WS2812B_Animation_Breath:00000000 WS2812B_Animation_Breath
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:726    .text.WS2812B_Animation_Breath:000000a0 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2191   .bss.last_update.11:00000000 last_update.11
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2185   .bss.brightness.10:00000000 brightness.10
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2180   .data.direction.9:00000000 direction.9
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:734    .text.WS2812B_Animation_Fire:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:740    .text.WS2812B_Animation_Fire:00000000 WS2812B_Animation_Fire
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:902    .text.WS2812B_Animation_Fire:000000a0 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2175   .bss.last_update.8:00000000 last_update.8
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:907    .text.WS2812B_Animation_Wave:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:913    .text.WS2812B_Animation_Wave:00000000 WS2812B_Animation_Wave
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1068   .text.WS2812B_Animation_Wave:000000b0 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2169   .bss.last_update.7:00000000 last_update.7
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2163   .bss.offset.6:00000000 offset.6
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1076   .text.WS2812B_Animation_Sparkle:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1082   .text.WS2812B_Animation_Sparkle:00000000 WS2812B_Animation_Sparkle
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1192   .text.WS2812B_Animation_Sparkle:00000070 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2158   .bss.last_update.5:00000000 last_update.5
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1197   .text.WS2812B_Animation_KnightRider:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1203   .text.WS2812B_Animation_KnightRider:00000000 WS2812B_Animation_KnightRider
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1400   .text.WS2812B_Animation_KnightRider:000000d0 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2152   .bss.last_update.4:00000000 last_update.4
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2146   .bss.position.3:00000000 position.3
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2140   .data.direction.2:00000000 direction.2
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1407   .text.WS2812B_Animation_LinearFlow:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1413   .text.WS2812B_Animation_LinearFlow:00000000 WS2812B_Animation_LinearFlow
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1584   .text.WS2812B_Animation_LinearFlow:000000b8 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2135   .bss.last_update.1:00000000 last_update.1
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2129   .bss.offset.0:00000000 offset.0
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1590   .text.WS2812B_Animation_Demo:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1596   .text.WS2812B_Animation_Demo:00000000 WS2812B_Animation_Demo
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1842   .text.WS2812B_Animation_BrightnessTest:00000000 $t
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:1848   .text.WS2812B_Animation_BrightnessTest:00000000 WS2812B_Animation_BrightnessTest
+ARM GAS  C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s 			page 53
+
+
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2122   .text.WS2812B_Animation_BrightnessTest:000001f4 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2130   .bss.offset.0:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2132   .bss.last_update.1:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2143   .bss.position.3:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2149   .bss.last_update.4:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2155   .bss.last_update.5:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2164   .bss.offset.6:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2166   .bss.last_update.7:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2172   .bss.last_update.8:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2186   .bss.brightness.10:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2188   .bss.last_update.11:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2202   .bss.brightness.13:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2204   .bss.last_update.14:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2210   .bss.position.15:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2216   .bss.last_update.16:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2225   .bss.offset.17:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2227   .bss.last_update.18:00000000 $d
+C:\Users\PanTalir\AppData\Local\Temp\ccT8q9Zg.s:2233   .rodata:00000000 $d
+
+UNDEFINED SYMBOLS
+WS2812B_Timer_ScaleBrightness
+HAL_GetTick
+WS2812B_Timer_SetLED
+WS2812B_Timer_Update
+WS2812B_Timer_ClearAll
+WS2812B_Timer_SetAllLEDs
+rand
+WS2812B_Timer_Color_White
+HAL_Delay
+WS2812B_Timer_Color_Green
+WS2812B_Timer_Color_Blue
+WS2812B_Timer_ClearBuffer
+WS2812B_Timer_Color_Red
